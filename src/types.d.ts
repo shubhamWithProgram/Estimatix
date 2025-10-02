@@ -3,4 +3,8 @@ declare module '*.jsx' {
   export default component
 }
 
+declare module 'virtual:pwa-register' {
+  export function registerSW(opts?: any): () => void
+}
+
 

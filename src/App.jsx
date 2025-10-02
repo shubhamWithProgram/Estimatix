@@ -141,6 +141,11 @@ export default function App() {
     { label: 'Final Quotation', value: `₹ ${results.finalCost.toFixed(2)}` },
   ], [results, profile])
 
+  // Language support (English/Hindi)
+  const [lang, setLang] = useState(localStorage.getItem('lang') || 'en')
+  useEffect(() => { localStorage.setItem('lang', lang) }, [lang])
+  const t = (en, hi) => lang === 'hi' ? hi : en
+
   function toggleTheme() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
   }
@@ -265,10 +270,14 @@ export default function App() {
           <div className="d-flex align-items-center gap-2">
             <div>
               <h1 className="h5 mb-0">Venkatesh Aluminium and Glass</h1>
-              <small className="text-body-secondary">Windows & Doors • Weight & Cost Estimator</small>
+              <small className="text-body-secondary">{t('Windows & Doors • Weight & Cost Estimator', 'खिड़की व दरवाजे • वजन व लागत अनुमापक')}</small>
             </div>
           </div>
           <div className="d-flex align-items-center gap-2">
+            <select className="form-select form-select-sm w-auto" value={lang} onChange={e=>setLang(e.target.value)} aria-label="Language">
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+            </select>
             <button
               onClick={toggleTheme}
               className="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1"
@@ -288,7 +297,7 @@ export default function App() {
                 className="card-header fw-semibold text-white rounded-top-4" 
                 style={{ background: 'linear-gradient(135deg, #0d6efd, #20c997)', fontSize: '0.95rem', letterSpacing: '0.5px' }}
               >
-                Project Setup
+                {t('Project Setup','प्रोजेक्ट सेटअप')}
               </div>
               <div className="card-body">
                 <div className="row g-2 g-sm-3">
@@ -306,23 +315,23 @@ export default function App() {
                 </div>
                 <div className="row g-2 mt-3">
                   <div className="col-8 col-md-6">
-                    <input className="form-control" placeholder="Project name" value={projectName} onChange={e=>setProjectName(e.target.value)} />
+                    <input className="form-control" placeholder={t('Project name','प्रोजेक्ट नाम')} value={projectName} onChange={e=>setProjectName(e.target.value)} />
                   </div>
                   <div className="col-4 col-md-6 d-flex gap-2">
                     {/* fixed invalid tag <buttonc> */}
-                    <button className="btn btn-primary" onClick={saveProject}>Save</button>
-                    <button className="btn btn-outline-primary" onClick={generateShare}>Share</button>
+                    <button className="btn btn-primary" onClick={saveProject}>{t('Save','सेव')}</button>
+                    <button className="btn btn-outline-primary" onClick={generateShare}>{t('Share','शेयर')}</button>
                   </div>
                 </div>
               </div>
             </Card>
 
             <Card>
-              <div className="card-header bg-body-tertiary"><strong>📏 Dimensions</strong></div>
+              <div className="card-header bg-body-tertiary"><strong>📏 {t('Dimensions','माप')}</strong></div>
               <div className="card-body">
                 <div className="row g-3">
                   <div className="col-md-6">
-                    <label className="form-label">Width</label>
+                    <label className="form-label">{t('Width','चौड़ाई')}</label>
                     <div className="input-group">
                       <input
                         type="number"
@@ -335,10 +344,10 @@ export default function App() {
                       />
                       <span className="input-group-text">mm</span>
                     </div>
-                    <div className="form-text">Measure visible frame width.</div>
+                    <div className="form-text">{t('Measure visible frame width.','दिखने वाले फ्रेम की चौड़ाई नापें।')}</div>
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Height</label>
+                    <label className="form-label">{t('Height','ऊँचाई')}</label>
                     <div className="input-group">
                       <input
                         type="number"
@@ -351,25 +360,25 @@ export default function App() {
                       />
                       <span className="input-group-text">mm</span>
                     </div>
-                    <div className="form-text">Measure visible frame height.</div>
+                    <div className="form-text">{t('Measure visible frame height.','दिखने वाले फ्रेम की ऊँचाई नापें।')}</div>
                   </div>
                 </div>
               </div>
             </Card>
 
             <Card>
-              <div className="card-header bg-body-tertiary"><strong>⚙️ Configuration</strong></div>
+              <div className="card-header bg-body-tertiary"><strong>⚙️ {t('Configuration','कॉन्फ़िगरेशन')}</strong></div>
               <div className="card-body">
                 <div className="row g-3">
                   <div className="col-md-6">
-                    <label className="form-label">🪟 Glass type</label>
+                    <label className="form-label">🪟 {t('Glass type','काँच प्रकार')}</label>
                     <select className="form-select" value={glassType} onChange={e => setGlassType(e.target.value)}>
                       {['Clear','Toughened','Reflective','Double Glazed'].map(opt => (<option key={opt} value={opt}>{opt}</option>))}
                     </select>
-                    <div className="form-text">Density auto: {results.baseDensity.toFixed(2)} kg/m²</div>
+                    <div className="form-text">{t('Density auto:','घनत्व:')} {results.baseDensity.toFixed(2)} kg/m²</div>
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Glass thickness ({glassType==='Double Glazed' ? 'fixed 24mm' : `${thicknessMm}mm`})</label>
+                    <label className="form-label">{t('Glass thickness','काँच मोटाई')} ({glassType==='Double Glazed' ? 'fixed 24mm' : `${thicknessMm}mm`})</label>
                     {glassType==='Double Glazed' ? (
                       <input type="text" className="form-control" value="24" disabled />
                     ) : (
@@ -377,7 +386,7 @@ export default function App() {
                     )}
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Profile</label>
+                    <label className="form-label">{t('Profile','प्रोफ़ाइल')}</label>
                     <select className="form-select" value={profile} onChange={e => setProfile(e.target.value)} aria-label="Aluminium profile">
                       {['Series 45','Series 60','Series 75','Sliding Light','Sliding Heavy'].map(opt => (
                         <option key={opt} value={opt}>{opt} = {PROFILE_WEIGHT_PER_M[opt]} kg/m</option>
@@ -385,13 +394,13 @@ export default function App() {
                     </select>
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Finish</label>
+                    <label className="form-label">{t('Finish','फिनिश')}</label>
                     <select className="form-select" value={finish} onChange={e=>setFinish(e.target.value)}>
                       {['Powder Coated','Anodized'].map(opt => (<option key={opt} value={opt}>{opt}</option>))}
                     </select>
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Accessories (kg)</label>
+                    <label className="form-label">{t('Accessories (kg)','एक्सेसरीज़ (किग्रा)')}</label>
                     <div className="input-group">
                       <span className="input-group-text">kg</span>
                       <input
@@ -404,10 +413,10 @@ export default function App() {
                         min={0}
                       />
                     </div>
-                    <div className="form-text">Manual accessories weight.</div>
+                    <div className="form-text">{t('Manual accessories weight.','एक्सेसरीज़ का मैनुअल वज़न।')}</div>
                   </div>
                   <div className="col-md-6 col-lg-6">
-                    <label className="form-label">Cost per Kg</label>
+                    <label className="form-label">{t('Cost per Kg','क़ीमत प्रति किग्रा')}</label>
                     <div className="input-group">
                       <span className="input-group-text">₹</span>
                       <input
@@ -429,10 +438,10 @@ export default function App() {
                       value={costPerKg || '0'}
                       onChange={e=>setCostPerKg(e.target.value)}
                     />
-                    <div className="form-text">Market average ~ ₹250–₹350/kg. Adjust as needed.</div>
+                    <div className="form-text">{t('Market average ~ ₹250–₹350/kg. Adjust as needed.','मार्केट औसत ~ ₹250–₹350/किग्रा. आवश्यकतानुसार बदलें।')}</div>
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Profit Margin (%)</label>
+                    <label className="form-label">{t('Profit Margin (%)','मुनाफ़ा मार्जिन (%)')}</label>
                     <input
                       type="number"
                       className="form-control"
@@ -443,7 +452,7 @@ export default function App() {
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Discount (%)</label>
+                    <label className="form-label">{t('Discount (%)','छूट (%)')}</label>
                     <input
                       type="number"
                       className="form-control"
@@ -459,16 +468,16 @@ export default function App() {
 
             <Card>
                 <div className="card-header bg-body-tertiary">
-                  <strong>📄 Quotation Builder</strong>
+                  <strong>📄 {t('Quotation Builder','कोटेशन बिल्डर')}</strong>
                 </div>
                 <div className="card-body">
                   <div className="row g-3">
                     <div className="col-md-6">
-                      <label className="form-label">Customer Name</label>
+                      <label className="form-label">{t('Customer Name','ग्राहक नाम')}</label>
                       <input type="text" className="form-control" value={customerName} onChange={e => setCustomerName(e.target.value)} />
                     </div>
                     <div className="col-md-6">
-                      <label className="form-label">Customer Address / Site</label>
+                      <label className="form-label">{t('Customer Address / Site','ग्राहक पता / साइट')}</label>
                       <input type="text" className="form-control" value={customerAddress} onChange={e => setCustomerAddress(e.target.value)} />
                     </div>
 
@@ -477,16 +486,16 @@ export default function App() {
                       <input type="number" className="form-control" value={gstPercent} onChange={e => setGstPercent(e.target.value)} />
                     </div>
                     <div className="col-md-4">
-                      <label className="form-label">Delivery Charge (₹)</label>
+                      <label className="form-label">{t('Delivery Charge (₹)','डिलीवरी शुल्क (₹)')}</label>
                       <input type="number" className="form-control" value={deliveryCharge} onChange={e => setDeliveryCharge(e.target.value)} />
                     </div>
                     <div className="col-md-4">
-                      <label className="form-label">Labor Charge (₹)</label>
+                      <label className="form-label">{t('Labor Charge (₹)','मजदूरी शुल्क (₹)')}</label>
                       <input type="number" className="form-control" value={laborCharge} onChange={e => setLaborCharge(e.target.value)} />
                     </div>
 
                     <div className="col-12">
-                      <label className="form-label">Terms & Conditions</label>
+                      <label className="form-label">{t('Terms & Conditions','नियम व शर्तें')}</label>
                       <textarea className="form-control" rows={4} value={terms} onChange={e => setTerms(e.target.value)} />
                     </div>
                   </div>
@@ -567,6 +576,21 @@ export default function App() {
         </div>
       </main>
         <footer className="py-4 text-center small text-body-secondary">© {new Date().getFullYear()} Venkatesh Aluminium and Glass • Designed by <span><b>Shubham Joshi</b></span></footer>
+
+      {/* Sticky bottom summary bar */}
+      <div className="position-fixed bottom-0 start-0 end-0 bg-body border-top shadow-sm" style={{zIndex:1050}}>
+        <div className="container py-2 d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2">
+          <div className="flex-fill">
+            <div className="small text-body-secondary">{t('Grand Total','कुल योग')}</div>
+            <div className="fs-5 fw-bold">₹ {quotation.grandTotal.toFixed(2)}</div>
+          </div>
+          <div className="d-flex gap-2">
+            <button className="btn btn-outline-secondary" onClick={generateShare}>{t('Share','शेयर')}</button>
+            <button className="btn btn-danger" onClick={exportPDF}>PDF</button>
+            <button className="btn btn-success" onClick={exportExcel}>Excel</button>
+          </div>
+        </div>
+      </div>
 
       {/* Share Modal */}
       <div className="modal fade" id="shareModal" tabIndex="-1" aria-hidden="true">

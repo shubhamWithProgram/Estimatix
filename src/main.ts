@@ -15,3 +15,10 @@ import App from './App.jsx'
 ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
   React.createElement(React.StrictMode, null, React.createElement(App, null))
 )
+
+// Register PWA service worker (vite-plugin-pwa)
+if ('serviceWorker' in navigator) {
+  import('virtual:pwa-register').then(({ registerSW }) => {
+    registerSW({ immediate: true, onRegisteredSW: () => {}, onNeedRefresh() {}, onOfflineReady() {} })
+  }).catch(() => {})
+}
