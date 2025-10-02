@@ -319,22 +319,24 @@ export default function App() {
               <small className="text-body-secondary">{t('Windows & Doors • Weight & Cost Estimator', 'खिड़की व दरवाजे • वजन व लागत अनुमापक')}</small>
             </div>
           </div>
-          <div className="d-flex align-items-center gap-2">
+          <div className="btn-toolbar gap-2 justify-content-end">
             <div className="btn-group btn-group-sm" role="group" aria-label="Unit toggle">
               <button className={`btn btn-outline-secondary ${unit==='mm'?'active':''}`} onClick={()=>setUnit('mm')}>mm</button>
-              <button className={`btn btn-outline-secondary ${unit==='inch'?'active':''}`} onClick={()=>setUnit('inch')}>inch</button>
+              <button className={`btn btn-outline-secondary ${unit==='inch'?'active':''}`} onClick={()=>setUnit('inch')}>in</button>
             </div>
-            <select className="form-select form-select-sm w-auto" value={lang} onChange={e=>setLang(e.target.value)} aria-label="Language">
-              <option value="en">English</option>
-              <option value="hi">हिंदी</option>
-            </select>
-            <button
-              onClick={toggleTheme}
-              className="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1"
-              title="Toggle light/dark"
-            >
-              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
-            </button>
+            <div className="btn-group btn-group-sm" role="group">
+              <select className="form-select form-select-sm" style={{minWidth:30}} value={lang} onChange={e=>setLang(e.target.value)} aria-label="Language">
+                <option value="en">EN</option>
+                <option value="hi">HI</option>
+              </select>
+              <button
+                onClick={toggleTheme}
+                className="btn btn-outline-secondary"
+                title="Toggle light/dark"
+              >
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -657,17 +659,22 @@ export default function App() {
 
       {/* Sticky bottom summary bar */}
       <div className="position-fixed bottom-0 start-0 end-0 bg-body border-top shadow-sm" style={{zIndex:1050}}>
-        <div className="container py-2 d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2">
-          <div className="flex-fill">
+        <div className="container py-2 d-flex flex-wrap align-items-center gap-2">
+          <div className="me-auto">
             <div className="small text-body-secondary">{t('Grand Total','कुल योग')}</div>
-            <div className="fs-5 fw-bold">₹ {quotation.grandTotal.toFixed(2)}</div>
+            <div className="fs-5 fw-bold m-0">₹ {quotation.grandTotal.toFixed(2)}</div>
           </div>
-          <div className="d-flex gap-2">
-            <button className="btn btn-outline-secondary d-inline-flex align-items-center gap-1" onClick={generateShare}>Share</button>
-            <button className="btn btn-success d-inline-flex align-items-center gap-1" onClick={async()=>{ try{ await (await exportPDFBlob()); await shareViaWhatsApp() } catch { shareViaWhatsApp() } }}>WhatsApp</button>
-            <button className="btn btn-outline-primary d-inline-flex align-items-center gap-1" onClick={shareViaEmail}>Email</button>
-            <button className="btn btn-danger" onClick={exportPDF}>PDF</button>
-            <button className="btn btn-success" onClick={exportExcel}>Excel</button>
+          <button className="btn btn-success btn-sm px-3 d-flex align-items-center gap-1" onClick={async()=>{ try{ await (await exportPDFBlob()); await shareViaWhatsApp() } catch { shareViaWhatsApp() } }}><i className="bi bi-whatsapp"></i> {t('WhatsApp','व्हाट्सएप')}</button>
+          <div className="btn-group dropup">
+            <button type="button" className="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              {t('Export','एक्सपोर्ट')}
+            </button>
+            <ul className="dropdown-menu dropdown-menu-end">
+              <li><button className="dropdown-item" onClick={generateShare}>{t('Share Link','लिंक शेयर')}</button></li>
+              <li><button className="dropdown-item" onClick={exportPDF}>PDF</button></li>
+              <li><button className="dropdown-item" onClick={exportExcel}>Excel</button></li>
+              <li><button className="dropdown-item" onClick={shareViaEmail}>{t('Email','ईमेल')}</button></li>
+            </ul>
           </div>
         </div>
       </div>
