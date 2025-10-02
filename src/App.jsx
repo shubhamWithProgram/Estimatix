@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import { Ruler, Settings, FileText } from 'lucide-react'
 // Lazy-load heavy libs to reduce initial bundle size
 let _jsPDF
 async function getJspdf() {
@@ -65,6 +66,17 @@ export default function App() {
   const [profitMargin, setProfitMargin] = useState('10')
   const [discount, setDiscount] = useState('0')
   const [recommendation, setRecommendation] = useState('')
+
+  // Unit system: 'mm' or 'inch'
+  const [unit, setUnit] = useState(localStorage.getItem('unit') || 'mm')
+  useEffect(() => { localStorage.setItem('unit', unit) }, [unit])
+  const mmPerInch = 25.4
+  const toDisplay = (mm) => unit === 'mm' ? String(mm) : (Number(mm) / mmPerInch).toFixed(3)
+  const fromDisplay = (val) => {
+    const n = Number(val)
+    if (!isFinite(n)) return '0'
+    return unit === 'mm' ? String(n) : String(Math.round(n * mmPerInch))
+  }
 
   const [customerName, setCustomerName] = useState('')
   const [customerAddress, setCustomerAddress] = useState('')
@@ -203,10 +215,7 @@ export default function App() {
     modal.show()
   }
 
-  const exportPDF = async () => {
-    const jsPDF = await getJspdf()
-    const doc = new jsPDF()
-
+  function buildPdf(doc) {
     // Company Branding
     doc.setFontSize(16)
     doc.text("Venkatesh Aluminium", 14, 20)
@@ -245,8 +254,45 @@ export default function App() {
     doc.setFontSize(10)
     doc.text("Terms & Conditions:", 14, y)
     doc.text(terms.split("\n"), 14, y + 6)
+  }
 
+  async function exportPDFBlob() {
+    const jsPDF = await getJspdf()
+    const doc = new jsPDF()
+    buildPdf(doc)
+    return doc.output('blob')
+  }
+
+  const exportPDF = async () => {
+    const jsPDF = await getJspdf()
+    const doc = new jsPDF()
+    buildPdf(doc)
     doc.save(`${projectName || "Quotation"}.pdf`)
+  }
+
+  // Share helpers
+  async function shareViaWhatsApp() {
+    try {
+      const blob = await exportPDFBlob()
+      const file = new File([blob], `${projectName || 'Quotation'}.pdf`, { type: 'application/pdf' })
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Quotation', text: projectName || 'Quotation' })
+        return
+      }
+    } catch {}
+    // Fallback to link share
+    const params = new URLSearchParams({ w: String(widthMm), h: String(heightMm), gt: glassType, t: String(thicknessMm), p: profile, f: finish, c: String(costPerKg), a: String(accessoriesKg) }).toString()
+    const url = `${location.origin}/venkatesh_aluminium/?${params}`
+    const wa = `https://wa.me/?text=${encodeURIComponent(`Quotation: ${projectName || ''}\n${url}`)}`
+    window.open(wa, '_blank')
+  }
+
+  function shareViaEmail() {
+    const subject = encodeURIComponent(projectName || 'Quotation')
+    const bodyTop = `Final Amount: ₹ ${quotation.grandTotal.toFixed(2)}\nProfile: ${profile}\nGlass: ${glassType} ${thicknessMm}mm\n`
+    const params = new URLSearchParams({ w: String(widthMm), h: String(heightMm), gt: glassType, t: String(thicknessMm), p: profile, f: finish, c: String(costPerKg), a: String(accessoriesKg) }).toString()
+    const url = `${location.origin}/venkatesh_aluminium/?${params}`
+    window.location.href = `mailto:?subject=${subject}&body=${encodeURIComponent(bodyTop)}%0A${encodeURIComponent(url)}`
   }
 
   
@@ -274,6 +320,10 @@ export default function App() {
             </div>
           </div>
           <div className="d-flex align-items-center gap-2">
+            <div className="btn-group btn-group-sm" role="group" aria-label="Unit toggle">
+              <button className={`btn btn-outline-secondary ${unit==='mm'?'active':''}`} onClick={()=>setUnit('mm')}>mm</button>
+              <button className={`btn btn-outline-secondary ${unit==='inch'?'active':''}`} onClick={()=>setUnit('inch')}>inch</button>
+            </div>
             <select className="form-select form-select-sm w-auto" value={lang} onChange={e=>setLang(e.target.value)} aria-label="Language">
               <option value="en">English</option>
               <option value="hi">हिंदी</option>
@@ -336,13 +386,13 @@ export default function App() {
                       <input
                         type="number"
                         className="form-control"
-                        value={widthMm}
-                        onChange={e => setWidthMm(e.target.value)}
+                        value={toDisplay(widthMm)}
+                        onChange={e => setWidthMm(fromDisplay(e.target.value))}
                         placeholder="0"
                         aria-label="Width in millimeters"
                         min={0}
                       />
-                      <span className="input-group-text">mm</span>
+                      <span className="input-group-text">{unit==='mm'?'mm':'in'}</span>
                     </div>
                     <div className="form-text">{t('Measure visible frame width.','दिखने वाले फ्रेम की चौड़ाई नापें।')}</div>
                   </div>
@@ -352,13 +402,13 @@ export default function App() {
                       <input
                         type="number"
                         className="form-control"
-                        value={heightMm}
-                        onChange={e => setHeightMm(e.target.value)}
+                        value={toDisplay(heightMm)}
+                        onChange={e => setHeightMm(fromDisplay(e.target.value))}
                         placeholder="0"
                         aria-label="Height in millimeters"
                         min={0}
                       />
-                      <span className="input-group-text">mm</span>
+                      <span className="input-group-text">{unit==='mm'?'mm':'in'}</span>
                     </div>
                     <div className="form-text">{t('Measure visible frame height.','दिखने वाले फ्रेम की ऊँचाई नापें।')}</div>
                   </div>
@@ -505,7 +555,7 @@ export default function App() {
 
           <aside className="col-lg-5">
             <div className="card shadow mb-4">
-              <div className="card-header bg-body-tertiary"><strong>Results</strong></div>
+              <div className="card-header bg-body-tertiary"><strong>📄 Results</strong></div>
               <div className="card-body p-0">
                 <ul className="list-group list-group-flush">
                   {rows.map(r => (
@@ -560,12 +610,40 @@ export default function App() {
               <div className="card-header bg-body-tertiary"><strong>Recent Calculations</strong></div>
               <div className="card-body p-0">
                 <ul className="list-group list-group-flush" id="recentList">
-                  {recentEstimates.slice(0,6).map(it => (
-                    <li key={it.ts} className="list-group-item d-flex justify-content-between align-items-center">
-                      <button className="btn btn-link p-0" onClick={()=>loadProject(it)} title="Load project">{it.name}</button>
-                      <span className="text-body-secondary small">{new Date(it.ts).toLocaleDateString()}</span>
-                    </li>
-                  ))}
+                  {recentEstimates.slice(0,6).map(it => {
+                    let startX = 0
+                    const onTouchStart = (e) => { startX = e.touches[0].clientX }
+                    const onTouchEnd = (e) => {
+                      const dx = e.changedTouches[0].clientX - startX
+                      if (dx < -60) {
+                        if (confirm('Delete this estimate?')) {
+                          const list = recentEstimates.filter(x => x.ts !== it.ts)
+                          localStorage.setItem('estimates', JSON.stringify(list))
+                          setRecentEstimates(list)
+                        }
+                      } else if (dx > 60) {
+                        const copy = { ...it, ts: Date.now(), name: `${it.name} (copy)` }
+                        const list = [copy, ...recentEstimates]
+                        localStorage.setItem('estimates', JSON.stringify(list.slice(0,20)))
+                        setRecentEstimates(list.slice(0,20))
+                      }
+                    }
+                    const onContextMenu = (e) => {
+                      e.preventDefault()
+                      const name = prompt('Rename', it.name)
+                      if (name && name.trim()) {
+                        const list = recentEstimates.map(x => x.ts === it.ts ? { ...x, name } : x)
+                        localStorage.setItem('estimates', JSON.stringify(list))
+                        setRecentEstimates(list)
+                      }
+                    }
+                    return (
+                      <li key={it.ts} className="list-group-item d-flex justify-content-between align-items-center" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onContextMenu={onContextMenu}>
+                        <button className="btn btn-link p-0" onClick={()=>loadProject(it)} title="Load project">{it.name}</button>
+                        <span className="text-body-secondary small">{new Date(it.ts).toLocaleDateString()}</span>
+                      </li>
+                    )
+                  })}
                   {!recentEstimates.length && (
                     <li className="list-group-item text-body-secondary small">No saved estimates yet.</li>
                   )}
@@ -585,7 +663,9 @@ export default function App() {
             <div className="fs-5 fw-bold">₹ {quotation.grandTotal.toFixed(2)}</div>
           </div>
           <div className="d-flex gap-2">
-            <button className="btn btn-outline-secondary" onClick={generateShare}>{t('Share','शेयर')}</button>
+            <button className="btn btn-outline-secondary d-inline-flex align-items-center gap-1" onClick={generateShare}>Share</button>
+            <button className="btn btn-success d-inline-flex align-items-center gap-1" onClick={async()=>{ try{ await (await exportPDFBlob()); await shareViaWhatsApp() } catch { shareViaWhatsApp() } }}>WhatsApp</button>
+            <button className="btn btn-outline-primary d-inline-flex align-items-center gap-1" onClick={shareViaEmail}>Email</button>
             <button className="btn btn-danger" onClick={exportPDF}>PDF</button>
             <button className="btn btn-success" onClick={exportExcel}>Excel</button>
           </div>
