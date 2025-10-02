@@ -1,0 +1,3 @@
+/* Project global styles (Bootstrap is loaded via CDN in index.html) */
+html, body, #app { height: 100%; }
+body { margin: 0; }
