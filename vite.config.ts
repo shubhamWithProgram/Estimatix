@@ -3,7 +3,24 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  // For GitHub Pages under a subpath use: base: '/your-repo-name/'
+  // For truly relative assets (works on file servers), keep './' but note it disables preload hints.
+  base: './',
+  build: {
+    outDir: 'build',        // <— create build/ instead of dist/
+    emptyOutDir: true,      // <— clean build/ before each build
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('xlsx')) return 'vendor-xlsx'
+            if (id.includes('jspdf')) return 'vendor-jspdf'
+            if (id.match(/react|react-dom/)) return 'vendor-react'
+            return 'vendor'
+          }
+        }
+      }
+    }
+  }
 })
-
-
-

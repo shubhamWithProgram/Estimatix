@@ -1,6 +1,22 @@
 import { useMemo, useState, useEffect } from 'react'
-import { jsPDF } from 'jspdf'
-import * as XLSX from 'xlsx'
+// Lazy-load heavy libs to reduce initial bundle size
+let _jsPDF
+async function getJspdf() {
+  if (!_jsPDF) {
+    const mod = await import('jspdf')
+    _jsPDF = mod.jsPDF
+  }
+  return _jsPDF
+}
+
+let _XLSX
+async function getXlsx() {
+  if (!_XLSX) {
+    const mod = await import('xlsx')
+    _XLSX = mod
+  }
+  return _XLSX
+}
 import { saveAs } from 'file-saver'
 
 const GLASS_WEIGHT_PER_M2 = {
@@ -129,7 +145,8 @@ export default function App() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
   }
 
-  function exportExcel() {
+  async function exportExcel() {
+    const XLSX = await getXlsx()
     const data = [
       ['Field', 'Value'],
       ['Width (mm)', widthMm],
@@ -155,6 +172,7 @@ export default function App() {
     const list = JSON.parse(localStorage.getItem('estimates') || '[]')
     list.unshift(item)
     localStorage.setItem('estimates', JSON.stringify(list.slice(0,20)))
+    setRecentEstimates(list.slice(0,20))
     setProjectName('')
   }
 
@@ -180,7 +198,8 @@ export default function App() {
     modal.show()
   }
 
-  const exportPDF = () => {
+  const exportPDF = async () => {
+    const jsPDF = await getJspdf()
     const doc = new jsPDF()
 
     // Company Branding
@@ -227,9 +246,16 @@ export default function App() {
 
   
 
-  // Read once; don't recompute on every keystroke (avoids unnecessary DOM thrash)
-  const recentEstimates = useMemo(() => {
+  // Track recent estimates and keep in sync after save/load
+  const [recentEstimates, setRecentEstimates] = useState(() => {
     try { return JSON.parse(localStorage.getItem('estimates') || '[]') } catch { return [] }
+  })
+  useEffect(() => {
+    const handler = () => {
+      try { setRecentEstimates(JSON.parse(localStorage.getItem('estimates') || '[]')) } catch { /* noop */ }
+    }
+    window.addEventListener('storage', handler)
+    return () => window.removeEventListener('storage', handler)
   }, [])
 
   return (
