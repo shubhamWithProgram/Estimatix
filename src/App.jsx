@@ -163,23 +163,143 @@ export default function Calculator() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
   }
 
-  async function exportExcel() {
-    const XLSX = await getXlsx()
-    const data = [
-      ['Field', 'Value'],
-      ['Width (mm)', widthMm],
-      ['Height (mm)', heightMm],
-      ['Glass Type', glassType],
-      ['Profile', profile],
-      ['Cost per Kg (₹)', costPerKg],
-      ...rows.map(r => [r.label, r.value]),
-    ]
-    const ws = XLSX.utils.aoa_to_sheet(data)
-    const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Calculation')
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
-    saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'aluminium-calculation.xlsx')
+async function exportExcel() {
+  const XLSX = await getXlsx();
+
+  const wb = XLSX.utils.book_new();
+  const wsData = [];
+
+  // 1️⃣ Header
+  wsData.push(['|| JAI VENKATESH ||']);
+  wsData.push(['VENKATESH ALUMINIUM']);
+  wsData.push(['Windows & Doors • Glass Solutions']);
+  wsData.push(['Ram Nagar, Dhule | +91 9673705228 | venkateshaluminum@gmail.com']);
+  wsData.push([]);
+
+  // 2️⃣ Quotation Info
+  const dateStr = new Date().toLocaleDateString();
+  const quoteNo = `Q${Date.now().toString().slice(-6)}`;
+  wsData.push(['Quotation', quoteNo]);
+  wsData.push(['Date', dateStr]);
+  wsData.push(['Project', projectName || '']);
+  wsData.push([]);
+
+  // 3️⃣ Customer Info
+  wsData.push(['BILL TO']);
+  wsData.push(['Customer Name', customerName]);
+  wsData.push(['Customer Address / Site', customerAddress]);
+  wsData.push([]);
+
+  // 4️⃣ Project Specs
+  wsData.push(['PROJECT SPECIFICATIONS']);
+  wsData.push(['Dimensions (mm)', `${widthMm} x ${heightMm}`]);
+  wsData.push(['Glass Type', glassType]);
+  wsData.push(['Glass Thickness (mm)', thicknessMm]);
+  wsData.push(['Profile', profile]);
+  wsData.push(['Finish', finish]);
+  wsData.push(['Glass Area (m²)', results.areaM2.toFixed(3)]);
+  wsData.push(['Glass Weight (kg)', results.glassWeight.toFixed(2)]);
+  wsData.push(['Aluminium Weight (kg)', results.aluminiumWeight.toFixed(2)]);
+  wsData.push(['Accessories (kg)', results.accessories.toFixed(2)]);
+  wsData.push(['Total Weight (kg)', results.totalWeight.toFixed(2)]);
+  wsData.push([]);
+
+  // 5️⃣ Components Table Header
+  wsData.push(['Component', 'Weight (kg)', 'Amount (₹)']);
+  wsData.push([
+    'Glass', 
+    results.glassWeight.toFixed(2), 
+    (results.glassWeight * (Number(costPerKg) || 0) * (finish==='Anodized'?1.08:1.05) || 0).toFixed(2)
+  ]);
+  wsData.push([
+    'Aluminium Profile', 
+    results.aluminiumWeight.toFixed(2), 
+    (results.aluminiumWeight * (Number(costPerKg) || 0) * (finish==='Anodized'?1.08:1.05) || 0).toFixed(2)
+  ]);
+  wsData.push([
+    'Accessories', 
+    results.accessories.toFixed(2), 
+    (results.accessories * (Number(costPerKg) || 0) || 0).toFixed(2)
+  ]);
+  wsData.push([]);
+
+  // 6️⃣ Totals
+  const subtotal = results.finalCost + (Number(deliveryCharge) || 0) + (Number(laborCharge) || 0);
+  const gstAmount = subtotal * ((Number(gstPercent) || 0) / 100);
+  const grandTotal = subtotal + gstAmount;
+
+  wsData.push(['Final Quotation', results.finalCost.toFixed(2)]);
+  wsData.push(['Delivery Charge', deliveryCharge]);
+  wsData.push(['Labor Charge', laborCharge]);
+  wsData.push(['Subtotal', subtotal.toFixed(2)]);
+  wsData.push([`GST (${gstPercent}%)`, gstAmount.toFixed(2)]);
+  wsData.push(['Grand Total', grandTotal.toFixed(2)]);
+  wsData.push([]);
+
+  // 7️⃣ Terms & Conditions
+  wsData.push(['TERMS & CONDITIONS']);
+  wsData.push(...terms.split('\n').map(line => [line]));
+
+  // Create worksheet
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+  // Column widths
+  ws['!cols'] = [{ wch: 25 }, { wch: 20 }, { wch: 15 }];
+
+  // Style headers and totals
+  const headerColor = 'FF008060';  // Dark green for PDF header color
+  const tableHeaderColor = 'FF008080'; // Teal for table header
+  const totalBgColor = 'FF00C080'; // Greenish for totals
+
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  for(let R = range.s.r; R <= range.e.r; ++R) {
+    for(let C = range.s.c; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({r:R, c:C});
+      const cell = ws[cellAddress];
+      if(!cell) continue;
+
+      // Bold first row (JAI VENKATESH header)
+      if(R <= 3) {
+        cell.s = { font: { bold: true, color: { rgb: 'FF000000' }, sz: 14 } };
+      }
+
+      // Components Table Header
+      if(R === wsData.findIndex(r=>r[0]==='Component')) {
+        cell.s = { 
+          font: { bold: true, color: { rgb: 'FFFFFFFF' } },
+          fill: { fgColor: { rgb: tableHeaderColor } },
+          alignment: { horizontal: 'center', vertical: 'center' },
+          border: { 
+            top: {style:'thin'}, bottom:{style:'thin'}, left:{style:'thin'}, right:{style:'thin'}
+          }
+        };
+      }
+
+      // Grand Total row
+      const grandTotalRow = wsData.findIndex(r=>r[0]==='Grand Total');
+      if(R === grandTotalRow) {
+        cell.s = {
+          font: { bold: true, color: { rgb: 'FFFFFFFF' } },
+          fill: { fgColor: { rgb: totalBgColor } },
+          alignment: { horizontal: 'right', vertical: 'center' },
+          border: { top:{style:'thin'}, bottom:{style:'thin'}, left:{style:'thin'}, right:{style:'thin'}}
+        };
+      }
+
+      // Add borders for all data cells
+      if(!cell.s) cell.s = {};
+      cell.s.border = {
+        top:{style:'thin'}, bottom:{style:'thin'}, left:{style:'thin'}, right:{style:'thin'}
+      };
+    }
   }
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Quotation');
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array', cellStyles:true });
+  saveAs(new Blob([wbout], { type: 'application/octet-stream' }), `${projectName || 'Quotation'}.xlsx`);
+}
+
+
 
   function saveProject() {
     const item = {
