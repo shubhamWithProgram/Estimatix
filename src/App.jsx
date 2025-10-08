@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect } from 'react'
-import { Ruler, Settings, FileText } from 'lucide-react'
 // Lazy-load heavy libs to reduce initial bundle size
 let _jsPDF
 async function getJspdf() {
@@ -19,6 +18,8 @@ async function getXlsx() {
   return _XLSX
 }
 import { saveAs } from 'file-saver'
+import {dejavuFontBase64} from './DejaVuSans-base64.js';
+
 
 const GLASS_WEIGHT_PER_M2 = {
   '4mm': 10,
@@ -47,7 +48,7 @@ const Card = ({ children }) => (
   </div>
 )
 
-export default function App() {
+export default function Calculator() {
   // Keep inputs as strings; parse only in calculations to avoid remounts / focus loss.
   const [widthMm, setWidthMm] = useState('0')
   const [heightMm, setHeightMm] = useState('0')
@@ -215,58 +216,296 @@ export default function App() {
     modal.show()
   }
 
-  function buildPdf(doc) {
-    // Company Branding
-    doc.setFontSize(16)
-    doc.text("Venkatesh Aluminium", 14, 20)
-    doc.setFontSize(10)
-    doc.text("Ram Nagar, Dhule - 400001", 14, 28)
-    doc.text("Phone: +91 9673705228 | Email: venkateshaluminum@gmail.com", 14, 34)
-    doc.line(14, 38, 200, 38)
+async function getJspdf() {
+  const { jsPDF } = await import('jspdf');
+  return jsPDF;
+}
 
-    // Customer
-    doc.setFontSize(12)
-    doc.text(`Quotation for: ${customerName}`, 14, 48)
-    doc.text(`Address: ${customerAddress}`, 14, 55)
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 62)
-    doc.line(14, 66, 200, 66)
 
-    // Summary
-    doc.setFontSize(12)
-    let y = 76
-    doc.text(`Profile: ${profile}`, 14, y); y+=8
-    doc.text(`Glass Area: ${results.areaM2.toFixed(3)} m²`, 14, y); y+=8
-    doc.text(`Glass Weight: ${results.glassWeight.toFixed(2)} kg`, 14, y); y+=8
-    doc.text(`Aluminium Weight: ${results.aluminiumWeight.toFixed(2)} kg`, 14, y); y+=8
-    doc.text(`Accessories: ${results.accessories.toFixed(2)} kg`, 14, y); y+=8
-    doc.text(`Total Weight: ${results.totalWeight.toFixed(2)} kg`, 14, y); y+=8
-    doc.text(`Final Quotation: ₹ ${results.finalCost.toFixed(2)}`, 14, y); y+=8
-    doc.text(`Delivery: ₹ ${deliveryCharge}`, 14, y); y+=8
-    doc.text(`Labor: ₹ ${laborCharge}`, 14, y); y+=8
-    doc.text(`Subtotal: ₹ ${quotation.subtotal.toFixed(2)}`, 14, y); y+=8
-    doc.text(`GST (${gstPercent}%): ₹ ${quotation.gstAmount.toFixed(2)}`, 14, y); y+=8
+function buildPdf(doc, {
+  widthMm, 
+    heightMm, 
+    glassType, 
+    thicknessMm, 
+    profile, 
+    finish, 
+    customerName, 
+    customerAddress, 
+    results, 
+    quotation, 
+    deliveryCharge, 
+    laborCharge, 
+    gstPercent, 
+    terms, 
+    projectName 
+} = {}) {
 
-    doc.setFont(undefined, "bold")
-    doc.text(`Grand Total: ₹ ${quotation.grandTotal.toFixed(2)}`, 14, y); y+=12
-    doc.setFont(undefined, "normal")
+  const pageW = 210, pageH = 297;
+  const margin = 16;
+  const usableW = pageW - margin * 2;
 
-    // Terms
-    doc.setFontSize(10)
-    doc.text("Terms & Conditions:", 14, y)
-    doc.text(terms.split("\n"), 14, y + 6)
-  }
+  // 🎨 Theme colors
+  const primary = [0, 128, 96];
+  const accent = [230, 247, 239];
+  const gray = [60, 60, 60];
+
+  // ✅ Font
+  doc.addFileToVFS('DejaVuSans.ttf', dejavuFontBase64);
+  doc.addFont('DejaVuSans.ttf', 'DejaVuSans', 'normal');
+  doc.addFont('DejaVuSans.ttf', 'DejaVuSans', 'bold');
+  doc.setFont('DejaVuSans', 'normal');
+
+  // 🧭 Header Box first
+  doc.setFillColor(...accent);
+  doc.rect(0, 0, pageW, 35, 'F');
+  const headerText = '|| JAI VENKATESH ||';
+  doc.setFont('DejaVuSans', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(...primary); // set color for text
+  const textWidth = doc.getTextWidth(headerText);
+  const xh = (pageW - textWidth) / 2;
+  doc.text(headerText, xh, 12); // y = 12 mm from top
+  // 🧭 Header
+  doc.setFillColor(...accent);
+  doc.rect(0, 0, pageW, 35, 'F');
+
+  doc.setFont('DejaVuSans', 'bold');
+  doc.setTextColor(...primary);
+  doc.setFontSize(16);
+  doc.text('VENKATESH ALUMINIUM', margin, 18);
+
+  doc.setFont('DejaVuSans', 'normal');
+  doc.setFontSize(9);
+  doc.text('Windows & Doors • Glass Solutions', margin, 26);
+  doc.text('Ram Nagar, Dhule | +91 9673705228 | venkateshaluminum@gmail.com', margin, 32);
+
+  doc.setFont('DejaVuSans', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(...primary);
+  doc.text('QUOTATION', pageW - margin - 45, 20);
+
+  // 🧾 Bill To
+  let y = 50;
+  doc.setDrawColor(200);
+  doc.roundedRect(margin, y, usableW, 30, 2, 2);
+
+  doc.setFont('DejaVuSans', 'bold');
+  doc.setTextColor(...gray);
+  doc.text('BILL TO', margin + 4, y + 8);
+
+  doc.setFont('DejaVuSans', 'bold');
+const key1 = 'Customer Name:';
+doc.text(key1, margin + 4, y + 16);
+
+doc.setFont('DejaVuSans', 'normal');
+const key1Width = doc.getTextWidth(key1); // get width of the key text
+doc.text(customerName || '', margin + 4 + key1Width + 2, y + 16); // add 2 units spacing between key and value
+
+  doc.setFont('DejaVuSans', 'bold');
+  doc.text('Customer Address / Site:', margin + 4, y + 24);
+
+  doc.setFont('DejaVuSans', 'normal');
+  doc.text(customerAddress || '', margin + 50, y + 24);
+
+  const dateStr = new Date().toLocaleDateString();
+  const quoteNo = `Q${Date.now().toString().slice(-6)}`;
+  doc.text(`Date: ${dateStr}`, pageW - margin - 60, y + 10);
+  doc.text(`Quote #: ${quoteNo}`, pageW - margin - 60, y + 20);
+
+  // 📋 Project Specifications
+  y += 42;
+  doc.setFillColor(242, 242, 242);
+  doc.rect(margin, y, usableW, 10, 'F');
+  doc.setFont('DejaVuSans', 'bold');
+  doc.setTextColor(...gray);
+  doc.text('PROJECT SPECIFICATIONS', margin + 4, y + 7);
+
+  // Specs table
+  y += 15;
+  doc.setFont('DejaVuSans', 'normal');
+  const specs = [
+    ['Dimensions', `${widthMm} x ${heightMm} mm`],
+    ['Glass', `${glassType} (${thicknessMm}mm)`],
+    ['Profile', profile],
+    ['Finish', finish],
+    ['Glass Area', `${(results.areaM2 || 0).toFixed(3)} m²`],
+    ['Glass Weight', `${(results.glassWeight || 0).toFixed(2)} kg`],
+    ['Aluminium Weight', `${(results.aluminiumWeight || 0).toFixed(2)} kg`],
+    ['Accessories', `${(results.accessories || 0).toFixed(2)} kg`],
+    ['Total Weight', `${(results.totalWeight || 0).toFixed(2)} kg`]
+  ];
+
+  specs.forEach(([key, val], i) => {
+    const rowY = y + i * 6;
+    doc.text(`${key}:`, margin + 4, rowY);
+    doc.text(`${val}`, margin + usableW / 2, rowY);
+  });
+
+  y += specs.length * 6 + 12;
+
+  // 📊 Table Header
+  const tableY = y;
+  const colWidths = [usableW * 0.5, usableW * 0.25, usableW * 0.25];
+  const rowH = 8;
+
+  doc.setFillColor(...primary);
+  doc.setTextColor(255, 255, 255);
+  doc.rect(margin, tableY, usableW, rowH, 'F');
+  doc.setFont('DejaVuSans', 'bold');
+
+  let x = margin + 4;
+  doc.text('Component', x, tableY + 6);
+  x += colWidths[0];
+  doc.text('Weight (kg)', x + colWidths[1] / 2, tableY + 6, { align: 'center' });
+  x += colWidths[1];
+  doc.text('Amount (₹)', x + colWidths[2] / 2, tableY + 6, { align: 'center' });
+
+  // 📋 Table Rows
+  const rows = [
+    ['Glass', (results.glassWeight || 0).toFixed(2), (results.glassCost || 0).toFixed(2)],
+    ['Aluminium Profile', (results.aluminiumWeight || 0).toFixed(2), (results.profileCost || 0).toFixed(2)],
+    ['Accessories', (results.accessories || 0).toFixed(2), (results.accessoryCost || 0).toFixed(2)]
+  ];
+
+  let curY = tableY + rowH;
+  doc.setFont('DejaVuSans', 'normal');
+  doc.setFontSize(9);
+
+  rows.forEach((r, i) => {
+    if (i % 2 === 0) {
+      doc.setFillColor(...accent);
+      doc.rect(margin, curY, usableW, rowH, 'F');
+    }
+    doc.setDrawColor(220);
+    doc.rect(margin, curY, usableW, rowH);
+
+    doc.setTextColor(...gray);
+    let rx = margin + 4;
+    doc.text(r[0], rx, curY + 6);
+    rx += colWidths[0];
+    doc.text(r[1], rx + colWidths[1] / 2, curY + 6, { align: 'center' });
+    rx += colWidths[1];
+    doc.text(`₹ ${r[2]}`, rx + colWidths[2] / 2, curY + 6, { align: 'center' });
+
+    curY += rowH;
+  });
+
+  // 💰 Totals Box
+  curY += 9;
+  const totalsX = pageW - margin - 90;
+  const totalsW = 90;
+
+  doc.roundedRect(totalsX, curY, totalsW, 48, 2, 2, 'S');
+
+  doc.setFontSize(8.5);
+  doc.setFont('DejaVuSans', 'normal');
+  doc.setTextColor(...gray);
+
+    const totals = [
+  ['Final Quotation', Number(results.finalCost) || 0],
+  ['Delivery', Number(deliveryCharge) || 0],
+  ['Labor', Number(laborCharge) || 0],
+  ['Subtotal', Number(quotation?.subtotal) || (Number(results.finalCost) + Number(deliveryCharge) + Number(laborCharge))],
+  [`GST (${gstPercent}%)`, Number(quotation?.gstAmount) || 0],
+  ['Grand Total', Number(quotation?.grandTotal) || 0]
+];
+
+  let tY = curY + 8;
+  totals.forEach(([label, value], i) => {
+    if (i === totals.length - 1) {
+      doc.setFillColor(...primary);
+      doc.rect(totalsX, tY - 4, totalsW, 10, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('DejaVuSans', 'bold');
+    } else {
+      doc.setTextColor(...gray);
+      doc.setFont('DejaVuSans', 'normal');
+    }
+    doc.text(label, totalsX + 6, tY);
+    doc.text(`₹ ${(value || 0).toFixed(2)}`, totalsX + totalsW - 6, tY, { align: 'right' });
+    tY += 8;
+  });
+
+  // 📜 Terms & Conditions (Beside Totals Box)
+  const termsBoxX = margin;
+  const termsBoxY = curY;
+  const termsBoxW = pageW - margin * 2 - totalsW - 6; // left side of totals box
+  const termsBoxH = 48; // align height with totals box
+
+  doc.roundedRect(termsBoxX, termsBoxY, termsBoxW, termsBoxH, 2, 2, 'S');
+
+  doc.setFont('DejaVuSans', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(...gray);
+  doc.text('TERMS & CONDITIONS', termsBoxX + 4, termsBoxY + 8);
+
+  doc.setFont('DejaVuSans', 'normal');
+  doc.setFontSize(8.5);
+  const splitTerms = doc.splitTextToSize(terms, termsBoxW - 8);
+  doc.text(splitTerms, termsBoxX + 4, termsBoxY + 14);
+
+  // Footer
+  const footerY = pageH - 20;
+  doc.setDrawColor(220);
+  doc.line(margin, footerY - 6, pageW - margin, footerY - 6);
+
+  doc.setFontSize(8);
+  doc.setFont('DejaVuSans', 'normal');
+  doc.setTextColor(...gray);
+  doc.text('If you have any questions about this quotation, please contact:', margin, footerY);
+  doc.text('Venkatesh Aluminium | +91 9673705228 | venkateshaluminum@gmail.com', margin, footerY + 5);
+
+  doc.setFont('DejaVuSans', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(...primary);
+  doc.text('Thank you for your business!', pageW / 2, footerY + 14, { align: 'center' });
+}
+
+
 
   async function exportPDFBlob() {
     const jsPDF = await getJspdf()
     const doc = new jsPDF()
-    buildPdf(doc)
+    buildPdf(doc, { 
+    widthMm, 
+    heightMm, 
+    glassType, 
+    thicknessMm, 
+    profile, 
+    finish, 
+    customerName, 
+    customerAddress, 
+    results, 
+    quotation, 
+    deliveryCharge, 
+    laborCharge, 
+    gstPercent, 
+    terms, 
+    projectName 
+  })
     return doc.output('blob')
   }
 
   const exportPDF = async () => {
     const jsPDF = await getJspdf()
     const doc = new jsPDF()
-    buildPdf(doc)
+     buildPdf(doc, { 
+    widthMm, 
+    heightMm, 
+    glassType, 
+    thicknessMm, 
+    profile, 
+    finish, 
+    customerName, 
+    customerAddress, 
+    results, 
+    quotation, 
+    deliveryCharge, 
+    laborCharge, 
+    gstPercent, 
+    terms, 
+    projectName 
+  })
     doc.save(`${projectName || "Quotation"}.pdf`)
   }
 

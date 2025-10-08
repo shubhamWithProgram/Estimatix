@@ -1,7 +1,7 @@
 import './style.css'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+import App from './App'
 // Initialize theme once at startup
 (() => {
   try {
