@@ -673,7 +673,7 @@ doc.text(customerName || '', margin + 4 + key1Width + 2, y + 16); // add 2 units
                     {glassType==='Double Glazed' ? (
                       <input type="text" className="form-control" value="24" disabled />
                     ) : (
-                      <input type="range" min={4} max={12} step={1} className="form-range" value={thicknessMm} onChange={e=>setThicknessMm(Number(e.target.value))} />
+                      <input type="range" min={3.5} max={12} step={0.5} className="form-range" value={thicknessMm} onChange={e=>setThicknessMm(Number(e.target.value))} />
                     )}
                   </div>
                   <div className="col-md-6">
