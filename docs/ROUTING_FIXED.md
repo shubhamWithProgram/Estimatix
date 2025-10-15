@@ -48,16 +48,14 @@ Your Venkatesh Aluminium Calculator SAAS application now has **fully functional 
 - ✅ All routes now work correctly
 
 ### 2. **Firebase Integration**  
-- ✅ Updated with your **real Firebase keys**:
-  - API Key: `AIzaSyBvxEHXO_sat6tnBSsMHqM3a2KVW01VklU`
+- ✅ Updated with your real Firebase keys (configured in .env file)
   - Project ID: `venkateshaluminiumcalc`
   - Auth Domain: `venkateshaluminiumcalc.firebaseapp.com`
 - ✅ Disabled emulators for production use
 - ✅ Authentication ready for real users
 
 ### 3. **Stripe Integration**
-- ✅ Updated with your **real Stripe test key**:
-  - Publishable Key: `pk_test_51RvHNR6yTzr40bPCkbiMXPVmwV1dG2h75fPuktZJM3VSRpcdOQbur5U8jrO2thn9QGN0W7LMxwmQC97FWf4YvFnx00yQZ1oS4o`
+- ✅ Updated with your real Stripe test keys (configured securely)
 - ✅ Payment system ready for testing
 
 ### 4. **Component Structure**
@@ -112,7 +110,7 @@ Your Venkatesh Aluminium Calculator SAAS application now has **fully functional 
    npm install
    firebase deploy --only functions
    firebase functions:secrets:set STRIPE_SECRET_KEY
-   # Enter: sk_test_51RvHNR6yTzr40bPCyWPeg4tkaFoq9AQVn749s0kdV46Moie1OWOlhzADa5nqftETowgIomGxwrnkFFcjQqt1gzEQ000zzRuKZE
+   # Enter your Stripe secret key when prompted
    ```
 
 ## 🎯 **YOUR SAAS IS READY!**

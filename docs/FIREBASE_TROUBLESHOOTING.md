@@ -38,13 +38,13 @@ This error typically occurs when Firebase Authentication is not properly set up 
 
 ```javascript
 const firebaseConfig = {
-  apiKey: "AIzaSyBvxEHXO_sat6tnBSsMHqM3a2KVW01VklU",
-  authDomain: "venkateshaluminiumcalc.firebaseapp.com",
-  projectId: "venkateshaluminiumcalc",
-  storageBucket: "venkateshaluminiumcalc.firebasestorage.app",
-  messagingSenderId: "383864958193",
-  appId: "1:383864958193:web:9ea57f9d944cd537f20d50",
-  measurementId: "G-LLHR3CH0WE"
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project.firebasestorage.app",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID"
 };
 ```
 
