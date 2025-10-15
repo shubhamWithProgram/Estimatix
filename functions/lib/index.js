@@ -15,6 +15,15 @@ const STRIPE_SECRET_KEY = (0, params_1.defineSecret)("STRIPE_SECRET_KEY");
 // ---------- HTTP: Create Checkout Session ----------
 exports.createCheckoutSession = (0, https_1.onRequest)({ cors: true, secrets: [STRIPE_SECRET_KEY] }, async (req, res) => {
     var _a, _b, _c;
+    // Set CORS headers explicitly
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // Handle preflight request
+    if (req.method === 'OPTIONS') {
+        res.status(204).send('');
+        return;
+    }
     try {
         const { priceId, successUrl, cancelUrl } = ((_a = req.body) !== null && _a !== void 0 ? _a : {});
         const userId = (req.headers.authorization || "").replace("Bearer ", "").trim();
@@ -71,6 +80,15 @@ exports.createCheckoutSession = (0, https_1.onRequest)({ cors: true, secrets: [S
 // ---------- HTTP: Customer Portal ----------
 exports.createPortalSession = (0, https_1.onRequest)({ cors: true, secrets: [STRIPE_SECRET_KEY] }, async (req, res) => {
     var _a, _b, _c;
+    // Set CORS headers explicitly
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // Handle preflight request
+    if (req.method === 'OPTIONS') {
+        res.status(204).send('');
+        return;
+    }
     try {
         const { returnUrl } = ((_a = req.body) !== null && _a !== void 0 ? _a : {});
         const userId = (req.headers.authorization || "").replace("Bearer ", "").trim();
