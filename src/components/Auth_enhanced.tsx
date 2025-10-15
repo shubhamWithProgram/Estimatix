@@ -51,13 +51,11 @@ interface FloatingInputProps {
   showPasswordToggle?: boolean;
   showPassword?: boolean;
   onTogglePassword?: () => void;
-  autoFocus?: boolean;
 }
 
 const FloatingInput = ({ 
   id, type, label, value, onChange, icon, required = false, 
-  placeholder = '', showPasswordToggle = false, showPassword = false, onTogglePassword,
-  autoFocus = false
+  placeholder = '', showPasswordToggle = false, showPassword = false, onTogglePassword 
 }: FloatingInputProps) => {
   const [isFocused, setIsFocused] = useState(false)
   
@@ -94,7 +92,6 @@ const FloatingInput = ({
           value={value}
           onChange={onChange}
           required={required}
-          autoFocus={autoFocus}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           style={{
@@ -103,9 +100,7 @@ const FloatingInput = ({
             border: '2px solid #e9ecef',
             fontSize: '15px',
             paddingRight: showPasswordToggle ? '45px' : '16px',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            background: '#ffffff',
-            color: '#495057'
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
           whileFocus={{
             borderColor: '#667eea',
@@ -409,7 +404,6 @@ export function Login() {
                     icon="bi-envelope"
                     placeholder="you@example.com"
                     required
-                    autoFocus
                   />
 
                   {/* Password Input with Toggle */}
@@ -568,34 +562,19 @@ export function Login() {
                 {/* Footer Links */}
                 <div style={{
                   textAlign: 'center',
-                  fontSize: '13px',
-                  padding: '18px',
-                  background: 'rgba(255, 255, 255, 0.9)',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(102, 126, 234, 0.15)'
+                  fontSize: '12px',
+                  color: '#adb5bd',
+                  padding: '16px',
+                  background: 'rgba(255, 255, 255, 0.5)',
+                  borderRadius: '12px'
                 }}>
-                  <a href="#" style={{ 
-                    color: '#667eea', 
-                    textDecoration: 'none', 
-                    margin: '0 10px',
-                    fontWeight: 600
-                  }}>Privacy</a>
-                  <span style={{ color: '#adb5bd', fontWeight: 'bold' }}>•</span>
-                  <a href="#" style={{ 
-                    color: '#667eea', 
-                    textDecoration: 'none', 
-                    margin: '0 10px',
-                    fontWeight: 600
-                  }}>Terms</a>
-                  <span style={{ color: '#adb5bd', fontWeight: 'bold' }}>•</span>
-                  <a href="#" style={{ 
-                    color: '#667eea', 
-                    textDecoration: 'none', 
-                    margin: '0 10px',
-                    fontWeight: 600
-                  }}>Help</a>
-                  <div style={{ marginTop: '12px', fontSize: '12px', color: '#6c757d' }}>
-                    <i className="bi bi-check-circle-fill me-1" style={{ color: '#28a745' }}></i>
+                  <a href="#" style={{ color: '#6c757d', textDecoration: 'none', margin: '0 8px' }}>Privacy</a>
+                  <span>•</span>
+                  <a href="#" style={{ color: '#6c757d', textDecoration: 'none', margin: '0 8px' }}>Terms</a>
+                  <span>•</span>
+                  <a href="#" style={{ color: '#6c757d', textDecoration: 'none', margin: '0 8px' }}>Help</a>
+                  <div style={{ marginTop: '8px', fontSize: '11px' }}>
+                    <i className="bi bi-check-circle me-1" style={{ color: '#28a745' }}></i>
                     GDPR Compliant
                   </div>
                 </div>
@@ -1086,34 +1065,19 @@ export function Signup() {
                 {/* Footer Links */}
                 <div style={{
                   textAlign: 'center',
-                  fontSize: '13px',
-                  padding: '18px',
-                  background: 'rgba(255, 255, 255, 0.9)',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(102, 126, 234, 0.15)'
+                  fontSize: '12px',
+                  color: '#adb5bd',
+                  padding: '16px',
+                  background: 'rgba(255, 255, 255, 0.5)',
+                  borderRadius: '12px'
                 }}>
-                  <a href="#" style={{ 
-                    color: '#667eea', 
-                    textDecoration: 'none', 
-                    margin: '0 10px',
-                    fontWeight: 600
-                  }}>Privacy</a>
-                  <span style={{ color: '#adb5bd', fontWeight: 'bold' }}>•</span>
-                  <a href="#" style={{ 
-                    color: '#667eea', 
-                    textDecoration: 'none', 
-                    margin: '0 10px',
-                    fontWeight: 600
-                  }}>Terms</a>
-                  <span style={{ color: '#adb5bd', fontWeight: 'bold' }}>•</span>
-                  <a href="#" style={{ 
-                    color: '#667eea', 
-                    textDecoration: 'none', 
-                    margin: '0 10px',
-                    fontWeight: 600
-                  }}>Help</a>
-                  <div style={{ marginTop: '12px', fontSize: '12px', color: '#6c757d' }}>
-                    <i className="bi bi-check-circle-fill me-1" style={{ color: '#28a745' }}></i>
+                  <a href="#" style={{ color: '#6c757d', textDecoration: 'none', margin: '0 8px' }}>Privacy</a>
+                  <span>•</span>
+                  <a href="#" style={{ color: '#6c757d', textDecoration: 'none', margin: '0 8px' }}>Terms</a>
+                  <span>•</span>
+                  <a href="#" style={{ color: '#6c757d', textDecoration: 'none', margin: '0 8px' }}>Help</a>
+                  <div style={{ marginTop: '8px', fontSize: '11px' }}>
+                    <i className="bi bi-check-circle me-1" style={{ color: '#28a745' }}></i>
                     GDPR Compliant
                   </div>
                 </div>

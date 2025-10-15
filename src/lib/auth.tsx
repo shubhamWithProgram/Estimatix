@@ -1,13 +1,14 @@
-// Authentication context and hooks
+// Professional Authentication Context with Firebase
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { 
-  User, 
+  type User, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  updateProfile
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
@@ -36,7 +37,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, displayName?: string) => Promise<void>
   signInWithGoogle: () => Promise<void>
   logout: () => Promise<void>
-  updateProfile: (updates: Partial<UserProfile>) => Promise<void>
+  updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -49,68 +50,119 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Listen to auth state changes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user)
-      
-      if (user) {
-        // Fetch user profile from Firestore
-        const profileDoc = await getDoc(doc(db, 'users', user.uid))
-        if (profileDoc.exists()) {
-          setUserProfile(profileDoc.data() as UserProfile)
-        } else {
-          // Create new user profile
-          const newProfile: UserProfile = {
-            uid: user.uid,
-            email: user.email!,
-            displayName: user.displayName || undefined,
-            photoURL: user.photoURL || undefined,
-            createdAt: Date.now(),
-            updatedAt: Date.now()
+    let unsubscribe: () => void
+    
+    try {
+      unsubscribe = onAuthStateChanged(auth, async (user) => {
+        setUser(user)
+        
+        if (user) {
+          try {
+            // Fetch user profile from Firestore
+            const profileDoc = await getDoc(doc(db, 'users', user.uid))
+            if (profileDoc.exists()) {
+              setUserProfile(profileDoc.data() as UserProfile)
+            } else {
+              // Create new user profile
+              const newProfile: UserProfile = {
+                uid: user.uid,
+                email: user.email!,
+                displayName: user.displayName || undefined,
+                photoURL: user.photoURL || undefined,
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+              }
+              await setDoc(doc(db, 'users', user.uid), newProfile)
+              setUserProfile(newProfile)
+            }
+          } catch (error) {
+            console.warn('Firestore not configured properly:', error)
+            // Create a basic profile without Firestore
+            setUserProfile({
+              uid: user.uid,
+              email: user.email!,
+              displayName: user.displayName || undefined,
+              photoURL: user.photoURL || undefined,
+              createdAt: Date.now(),
+              updatedAt: Date.now()
+            })
           }
-          await setDoc(doc(db, 'users', user.uid), newProfile)
-          setUserProfile(newProfile)
+        } else {
+          setUserProfile(null)
         }
-      } else {
-        setUserProfile(null)
-      }
-      
+        
+        setLoading(false)
+      })
+    } catch (error) {
+      console.warn('Firebase Auth not configured properly:', error)
+      // Set loading to false even if auth fails to initialize
       setLoading(false)
-    })
+    }
 
-    return unsubscribe
+    // Set a timeout to ensure loading doesn't hang forever
+    const timeoutId = setTimeout(() => {
+      console.warn('Auth initialization timeout - setting loading to false')
+      setLoading(false)
+    }, 5000) // 5 second timeout
+
+    return () => {
+      if (unsubscribe) unsubscribe()
+      clearTimeout(timeoutId)
+    }
   }, [])
 
   // Sign in with email/password
   const signIn = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password)
+    try {
+      await signInWithEmailAndPassword(auth, email, password)
+      console.log('✅ User signed in successfully')
+    } catch (error: any) {
+      console.error('❌ Sign in failed:', error.code)
+      throw error
+    }
   }
 
   // Sign up with email/password
   const signUp = async (email: string, password: string, displayName?: string) => {
-    const { user } = await createUserWithEmailAndPassword(auth, email, password)
-    
-    // Update display name if provided
-    if (displayName) {
-      await user.updateProfile({ displayName })
+    try {
+      const { user } = await createUserWithEmailAndPassword(auth, email, password)
+      
+      // Update display name if provided
+      if (displayName && user) {
+        await updateProfile(user, { displayName })
+      }
+    } catch (error) {
+      console.error('Sign up error:', error)
+      throw error
     }
   }
 
   // Sign in with Google
   const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider()
-    await signInWithPopup(auth, provider)
+    try {
+      const provider = new GoogleAuthProvider()
+      await signInWithPopup(auth, provider)
+    } catch (error) {
+      console.error('Google sign in error:', error)
+      throw error
+    }
   }
 
   // Sign out
   const logout = async () => {
-    await signOut(auth)
+    try {
+      await signOut(auth)
+    } catch (error) {
+      console.error('Sign out error:', error)
+      throw error
+    }
   }
 
   // Update user profile
-  const updateProfile = async (updates: Partial<UserProfile>) => {
-    if (!user) throw new Error('No user logged in')
+  const updateUserProfile = async (updates: Partial<UserProfile>) => {
+    if (!user || !userProfile) throw new Error('No user logged in')
     
-    const updatedProfile = {
+    const updatedProfile: UserProfile = {
       ...userProfile,
       ...updates,
       updatedAt: Date.now()
@@ -128,7 +180,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signInWithGoogle,
     logout,
-    updateProfile
+    updateUserProfile
   }
 
   return (
