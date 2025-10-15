@@ -1,5 +1,4 @@
 // Billing badge component for header
-import React from 'react'
 import { useAuth } from '../lib/auth'
 import { SUBSCRIPTION_PLANS } from '../lib/stripe'
 
@@ -14,7 +13,7 @@ export default function BillingBadge({ className = '' }: BillingBadgeProps) {
     return null
   }
 
-  const plan = SUBSCRIPTION_PLANS[userProfile.subscription.plan.toUpperCase() as keyof typeof SUBSCRIPTION_PLANS]
+  const plan = userProfile.subscription.plan ? SUBSCRIPTION_PLANS[userProfile.subscription.plan as keyof typeof SUBSCRIPTION_PLANS] : null
   const status = userProfile.subscription.status
 
   // Determine badge color based on plan and status
