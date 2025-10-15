@@ -1,106 +1,187 @@
-// Main App component with routing
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './lib/auth'
-import  ProtectedRoute  from './components/ProtectedRoute'
-import Billing from './components/Billing'
-import BillingBadge from './components/BillingBadge'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { Login, Signup } from './components/Auth'
-import Calculator from './App' // Assuming Calculator is defined in a separate file
+import { ForgotPassword } from './components/ForgotPassword'
+import Dashboard from './components/Dashboard'
+import Billing from './components/Billing'
+import Calculator from './components/Calculator'
+import AdminSettings from './components/AdminSettings'
+import MultiItemCalculator from './components/MultiItemCalculator'
+import SharedQuoteViewer from './components/SharedQuoteViewer'
+import OnboardingWizard from './components/OnboardingWizard'
+import { ResponsiveHeader } from './components/ResponsiveHeader.tsx'
+import { useState, useEffect } from 'react'
 
-// Header component with auth integration
-function Header() {
-  const { user, userProfile, logout } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  const handleLogout = async () => {
-    await logout()
-    navigate('/')
-  }
-
-  return (
-    <header className="sticky-top bg-body border-bottom" style={{zIndex: 1030}}>
-      <div className="container py-3 d-flex align-items-center justify-content-between">
-        <div className="d-flex align-items-center gap-2">
-          <Link to="/" className="text-decoration-none">
-            <h1 className="h5 mb-0 text-body">Venkatesh Aluminium and Glass</h1>
-            <small className="text-body-secondary">Windows & Doors • Weight & Cost Estimator</small>
-          </Link>
-        </div>
-        
-        <div className="d-flex align-items-center gap-2">
-          {user ? (
-            <>
-              <BillingBadge className="me-2" />
-              <Link to="/billing" className="btn btn-outline-secondary btn-sm">
-                Billing
-              </Link>
-              <div className="dropdown">
-                <button 
-                  className="btn btn-outline-secondary btn-sm dropdown-toggle" 
-                  type="button" 
-                  data-bs-toggle="dropdown"
-                >
-                  {userProfile?.displayName || user.email}
-                </button>
-                <ul className="dropdown-menu dropdown-menu-end">
-                  <li><Link className="dropdown-item" to="/billing">Billing</Link></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><button className="dropdown-item" onClick={handleLogout}>Sign Out</button></li>
-                </ul>
-              </div>
-            </>
-          ) : (
-            <div className="d-flex gap-2">
-              <Link 
-                to="/login" 
-                className={`btn btn-sm ${location.pathname === '/login' ? 'btn-primary' : 'btn-outline-primary'}`}
-              >
-                Sign In
-              </Link>
-              <Link 
-                to="/signup" 
-                className={`btn btn-sm ${location.pathname === '/signup' ? 'btn-primary' : 'btn-outline-secondary'}`}
-              >
-                Sign Up
-              </Link>
-            </div>
-          )}
+// Protected Route Component
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth()
+  
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '50vh' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
       </div>
-    </header>
-  )
+    )
+  }
+  
+  return user ? <>{children}</> : <Navigate to="/login" />
 }
 
-// Main app wrapper
-function AppWrapper() {
+// Layout wrapper component to conditionally show header/footer
+function AppLayout({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
+  const location = window.location
+  const isAuthPage = location.hash.includes('/login') || location.hash.includes('/signup')
+  
+  // Show auth pages without header/footer
+  if (isAuthPage || !user) {
+    return <>{children}</>
+  }
+
+  // Show full layout for authenticated pages
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-vh-100 bg-body">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Calculator />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route 
-              path="/billing" 
-              element={
-                <ProtectedRoute>
-                  <Billing />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
+    <>
+      <ResponsiveHeader />
+      
+      {/* Status Bar */}
+      <div className="bg-success text-white py-2">
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex align-items-center gap-3">
+              <span className="badge bg-light text-success">
+                <i className="bi bi-check-circle me-1"></i>
+                SAAS Platform Active
+              </span>
+              <small>
+                <i className="bi bi-clock me-1"></i>
+                Firebase Auth | Multi-item quotations | PDF Export | Quote Sharing
+              </small>
+            </div>
+            <small>
+              <i className="bi bi-shield-check me-1"></i>
+              Professional Edition
+            </small>
+          </div>
         </div>
-      </Router>
-    </AuthProvider>
+      </div>
+
+      {children}
+
+      {/* Footer */}
+      <footer className="bg-dark text-white py-3 mt-auto">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-md-6">
+              <p className="mb-0">
+                <strong>Estimatix</strong> - Professional Estimation & Quotation Platform
+              </p>
+              <small className="text-muted">
+                Powered by Firebase & Advanced SaaS Technology | Version 1.0
+              </small>
+            </div>
+            <div className="col-md-6 text-md-end">
+              <div className="d-flex justify-content-md-end gap-3">
+                <small>
+                  <i className="bi bi-calculator me-1"></i>
+                  Smart Estimations
+                </small>
+                <small>
+                  <i className="bi bi-file-earmark-pdf me-1"></i>
+                  PDF Export
+                </small>
+                <small>
+                  <i className="bi bi-palette me-1"></i>
+                  Theme Toggle
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </>
   )
 }
 
-export default AppWrapper
+// Onboarding Check Component
+function OnboardingCheck({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
+  const [showOnboarding, setShowOnboarding] = useState(false)
 
+  useEffect(() => {
+    if (user) {
+      const hasOnboarded = localStorage.getItem('estimatix-onboarded')
+      setShowOnboarding(!hasOnboarded)
+    }
+  }, [user])
 
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+  }
 
+  if (user && showOnboarding) {
+    return <OnboardingWizard onComplete={handleOnboardingComplete} />
+  }
 
+  return <>{children}</>
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="min-vh-100 d-flex flex-column">
+            <OnboardingCheck>
+              <AppLayout>
+                <main className="flex-grow-1">
+                  <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/shared/:shareToken" element={<SharedQuoteViewer />} />
+                    <Route path="/dashboard" element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/billing" element={
+                      <ProtectedRoute>
+                        <Billing />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/calculator" element={
+                      <ProtectedRoute>
+                        <Calculator />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/multi-calculator" element={
+                      <ProtectedRoute>
+                        <MultiItemCalculator />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/admin" element={
+                      <ProtectedRoute>
+                        <AdminSettings />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/" element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="*" element={<Navigate to="/" />} />
+                  </Routes>
+                </main>
+              </AppLayout>
+            </OnboardingCheck>
+          </div>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
+  )
+}
+
+export default App

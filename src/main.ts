@@ -1,7 +1,8 @@
 import './style.css'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
+import App from './App.tsx' // Explicitly import the .tsx file
+
 // Initialize theme once at startup
 (() => {
   try {
