@@ -956,6 +956,25 @@ export default function MultiItemCalculator() {
   return (
     <>
       <style>{`
+        /* Improved label readability */
+        .form-label {
+          font-weight: 600 !important;
+          color: #1a202c !important;
+          font-size: 0.875rem !important;
+          margin-bottom: 0.5rem !important;
+          text-transform: uppercase;
+          letter-spacing: 0.025em;
+        }
+        
+        [data-bs-theme="dark"] .form-label {
+          color: #e2e8f0 !important;
+        }
+        
+        /* Special styling for icon labels */
+        .form-label i {
+          color: #2196f3 !important;
+        }
+        
         @keyframes pulse {
           0%, 100% { box-shadow: 0 -5px 20px rgba(0,123,255,0.3); }
           50% { box-shadow: 0 -5px 30px rgba(0,123,255,0.6); }
@@ -978,8 +997,41 @@ export default function MultiItemCalculator() {
         }
         
         .auto-calc-field {
-          background-color: #f0f8ff !important;
-          border-left: 3px solid #007bff;
+          background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%) !important;
+          border-left: 4px solid #2196f3 !important;
+          font-weight: 600 !important;
+          color: #0d47a1 !important;
+          text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+          font-size: 0.95rem;
+        }
+        
+        /* Dark mode support for auto-calc field */
+        [data-bs-theme="dark"] .auto-calc-field {
+          background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%) !important;
+          color: #90caf9 !important;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+          border-left: 4px solid #64b5f6 !important;
+        }
+        
+        /* Improved card header readability */
+        .card-header h6 {
+          font-weight: 700 !important;
+          font-size: 1.1rem !important;
+          color: #1a202c !important;
+        }
+        
+        [data-bs-theme="dark"] .card-header h6 {
+          color: #2d3748 !important;
+        }
+        
+        .card-header .badge {
+          font-size: 0.875rem !important;
+          padding: 0.375rem 0.625rem !important;
+          font-weight: 700 !important;
+        }
+        
+        .card-header small {
+          font-weight: 500 !important;
         }
         
         .ai-modal-backdrop {
