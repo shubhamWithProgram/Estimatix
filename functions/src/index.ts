@@ -18,6 +18,17 @@ const STRIPE_SECRET_KEY = defineSecret("STRIPE_SECRET_KEY");
 export const createCheckoutSession = onRequest(
   { cors: true, secrets: [STRIPE_SECRET_KEY] },
   async (req: Request, res: Response): Promise<void> => {
+    // Set CORS headers explicitly
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    // Handle preflight request
+    if (req.method === 'OPTIONS') {
+      res.status(204).send('');
+      return;
+    }
+
     try {
       const { priceId, successUrl, cancelUrl } = (req.body ?? {}) as {
         priceId?: string;
@@ -94,6 +105,17 @@ export const createCheckoutSession = onRequest(
 export const createPortalSession = onRequest(
   { cors: true, secrets: [STRIPE_SECRET_KEY] },
   async (req: Request, res: Response): Promise<void> => {
+    // Set CORS headers explicitly
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    // Handle preflight request
+    if (req.method === 'OPTIONS') {
+      res.status(204).send('');
+      return;
+    }
+
     try {
       const { returnUrl } = (req.body ?? {}) as { returnUrl?: string };
       const userId =

@@ -1,18 +1,19 @@
 {
-  "name": "Venkatesh Aluminium & Glass SaaS",
-  "short_name": "VAG SaaS",
-  "description": "Professional Windows & Doors Weight & Cost Estimator with Subscription Plans",
-  "theme_color": "#0d6efd",
+  "name": "Estimatix - Professional Estimation Platform",
+  "short_name": "Estimatix",
+  "description": "Professional estimation and quotation platform for construction materials, windows, doors, and custom projects with subscription plans",
+  "theme_color": "#4f46e5",
   "background_color": "#ffffff",
   "display": "standalone",
-  "scope": "/venkatesh_aluminium/",
-  "start_url": "/venkatesh_aluminium/",
-  "categories": ["business", "productivity", "utilities"],
+  "scope": "/",
+  "start_url": "/",
+  "categories": ["business", "productivity", "utilities", "finance"],
   "lang": "en",
   "orientation": "portrait-primary",
   "icons": [
     { "src": "/logo192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/logo512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/logo512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ],
   "screenshots": [
     {
@@ -30,17 +31,24 @@
   ],
   "shortcuts": [
     {
-      "name": "New Calculation",
-      "short_name": "New Calc",
-      "description": "Start a new aluminium calculation",
-      "url": "/venkatesh_aluminium/",
+      "name": "New Estimate",
+      "short_name": "Estimate",
+      "description": "Create a new estimation project",
+      "url": "/calculator",
+      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Multi-Item Quote",
+      "short_name": "Quote",
+      "description": "Create detailed quotations",
+      "url": "/multi-calculator",
       "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
     },
     {
       "name": "Billing",
       "short_name": "Billing", 
       "description": "Manage your subscription",
-      "url": "/venkatesh_aluminium/billing",
+      "url": "/billing",
       "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
     }
   ]

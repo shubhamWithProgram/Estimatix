@@ -1,0 +1,60 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern Estimatix Logo with Calculator and Analytics Theme -->
+  <defs>
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#primaryGradient)" opacity="0.1"/>
+  
+  <!-- Main Calculator Shape -->
+  <rect x="140" y="100" width="232" height="312" rx="24" fill="url(#primaryGradient)"/>
+  
+  <!-- Calculator Screen -->
+  <rect x="164" y="124" width="184" height="80" rx="12" fill="#ffffff" opacity="0.95"/>
+  
+  <!-- Display Numbers -->
+  <text x="332" y="180" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="url(#primaryGradient)" text-anchor="end">123.5</text>
+  
+  <!-- Calculator Buttons Grid -->
+  <!-- Row 1 -->
+  <rect x="164" y="228" width="36" height="36" rx="8" fill="#ffffff" opacity="0.2"/>
+  <rect x="212" y="228" width="36" height="36" rx="8" fill="#ffffff" opacity="0.2"/>
+  <rect x="260" y="228" width="36" height="36" rx="8" fill="#ffffff" opacity="0.2"/>
+  <rect x="308" y="228" width="36" height="36" rx="8" fill="url(#accentGradient)"/>
+  
+  <!-- Row 2 -->
+  <rect x="164" y="276" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="212" y="276" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="260" y="276" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="308" y="276" width="36" height="36" rx="8" fill="url(#accentGradient)"/>
+  
+  <!-- Row 3 -->
+  <rect x="164" y="324" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="212" y="324" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="260" y="324" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="308" y="324" width="36" height="36" rx="8" fill="url(#accentGradient)"/>
+  
+  <!-- Row 4 -->
+  <rect x="164" y="372" width="84" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="260" y="372" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="308" y="372" width="36" height="36" rx="8" fill="#10b981"/>
+  
+  <!-- Analytics Chart Icon -->
+  <path d="M 380 320 L 420 280 L 460 300 L 500 240" stroke="url(#accentGradient)" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <circle cx="380" cy="320" r="6" fill="url(#accentGradient)"/>
+  <circle cx="420" cy="280" r="6" fill="url(#accentGradient)"/>
+  <circle cx="460" cy="300" r="6" fill="url(#accentGradient)"/>
+  <circle cx="500" cy="240" r="6" fill="url(#accentGradient)"/>
+  
+  <!-- Estimate Symbol -->
+  <text x="50" y="180" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="url(#primaryGradient)">E</text>
+  <path d="M 40 200 L 100 200 L 70 240 L 95 240" stroke="url(#accentGradient)" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>

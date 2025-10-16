@@ -1,32 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Elements } from '@stripe/react-stripe-js'
-import { stripePromise, SUBSCRIPTION_PLANS, PLAN_IDS, PRICE_IDS } from '../lib/stripe'
+import { stripePromise, SUBSCRIPTION_PLANS, PRICE_IDS } from '../lib/stripe'
 import type { SubscriptionPlan, PlanId } from '../lib/stripe'
 
-import { useAuth } from './Auth'
-import { httpsCallable } from 'firebase/functions'
-import { functions } from '../lib/firebase'
+import { useAuth } from '../lib/auth'
 
-// ---------- Firebase callable types ----------
-type PortalReq = { returnUrl: string }
-type PortalRes = { url: string }
-
-type CheckoutReq = {
-  priceId: string
-  successUrl: string
-  cancelUrl: string
-}
-type CheckoutRes = { url: string }
-
-const createPortalSession = httpsCallable<PortalReq, PortalRes>(
-  functions,
-  'createPortalSession'
-)
-
-const createCheckoutSession = httpsCallable<CheckoutReq, CheckoutRes>(
-  functions,
-  'createCheckoutSession'
-)
+// Development mode - simulate Stripe without Cloud Functions
+const DEV_MODE = import.meta.env.DEV
 
 // ---------- UI: Subscription plan card ----------
 function PlanCard({
@@ -89,10 +69,18 @@ function CustomerPortal() {
     if (!user) return
     setLoading(true)
     try {
-      const { data } = await createPortalSession({
-        returnUrl: window.location.origin,
-      })
-      window.location.assign(data.url)
+      // Development mode - simulate portal
+      if (DEV_MODE) {
+        alert('🔧 Development Mode: Customer portal would open here.\n\nIn production, this would redirect to Stripe Customer Portal.')
+        setLoading(false)
+        return
+      }
+      
+      // Production code (when Cloud Functions are available)
+      // const { data } = await createPortalSession({
+      //   returnUrl: window.location.origin,
+      // })
+      // window.location.assign(data.url)
     } catch (error) {
       console.error('Error creating portal session:', error)
       alert('Failed to open billing portal. Please try again.')
@@ -135,13 +123,34 @@ export default function Billing() {
       const priceId = PRICE_IDS[planId]
       if (!priceId) return
 
-      const { data } = await createCheckoutSession({
-        priceId,
-        successUrl: `${window.location.origin}/billing?success=true`,
-        cancelUrl: `${window.location.origin}/billing?canceled=true`,
-      })
+      // Development mode - simulate checkout
+      if (DEV_MODE) {
+        const planName = SUBSCRIPTION_PLANS[planId].name
+        const planPrice = SUBSCRIPTION_PLANS[planId].price
+        
+        const proceed = confirm(
+          `🔧 Development Mode: Stripe Checkout Simulation\n\n` +
+          `Plan: ${planName}\n` +
+          `Price: ${planPrice}\n\n` +
+          `In production, this would redirect to Stripe Checkout.\n\n` +
+          `Click OK to simulate successful payment, Cancel to abort.`
+        )
+        
+        if (proceed) {
+          alert('✅ Payment simulation successful!\n\nIn production, user subscription would be updated via Stripe webhooks.')
+        }
+        setLoading(false)
+        return
+      }
 
-      window.location.assign(data.url)
+      // Production code (when Cloud Functions are available)
+      // const { data } = await createCheckoutSession({
+      //   priceId,
+      //   successUrl: `${window.location.origin}/billing?success=true`,
+      //   cancelUrl: `${window.location.origin}/billing?canceled=true`,
+      // })
+      // window.location.assign(data.url)
+      
     } catch (error) {
       console.error('Error creating checkout session:', error)
       alert('Failed to start checkout. Please try again.')
@@ -154,10 +163,18 @@ export default function Billing() {
 
   return (
     <Elements stripe={stripePromise}>
-      <div className="container py-4">
+      <div className="container py-4">        
         <div className="row">
           <div className="col-12">
             <h1 className="h2 mb-4">Billing & Subscription</h1>
+
+            {loading && (
+              <div className="d-flex justify-content-center mb-4">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Processing...</span>
+                </div>
+              </div>
+            )}
 
             {/* Current plan status */}
             <div className="card mb-4">
