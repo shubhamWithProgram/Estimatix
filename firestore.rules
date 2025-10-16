@@ -15,12 +15,30 @@ service cloud.firestore {
         request.auth.uid == request.resource.data.userId;
     }
     
+    // Users can read and write their own quotations
+    match /quotations/{quotationId} {
+      allow read: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+      allow write, update, delete: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Users can read and write their own shared quotations
+    match /sharedQuotations/{shareId} {
+      allow read: if true; // Public read for shared links
+      allow create, update, delete: if request.auth != null && 
+        request.auth.uid == request.resource.data.userId;
+    }
+    
     // Deny all other access
     match /{document=**} {
       allow read, write: if false;
     }
   }
 }
+
 
 
 
