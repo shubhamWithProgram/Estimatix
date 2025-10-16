@@ -1,10 +1,10 @@
 /**
- * Estimatix - Slack-Style Contextual Bubble Tour
- * Speech bubble design with pointers anchored to UI elements
+ * Estimatix - Dark Glass Contextual Bubble Tour
+ * Premium dark-neumorphic design with purple glow
  */
 
 /* ========================================
-   1. FLOATING TOUR BUTTON
+   1. FLOATING TOUR BUTTON WITH GLOW
    ======================================== */
 
 .tour-floating-button {
@@ -13,7 +13,7 @@
   right: 24px;
   z-index: 9998;
   
-  background: linear-gradient(135deg, #6C63FF 0%, #4F46E5 100%);
+  background: linear-gradient(135deg, #6C63FF 0%, #8B80FF 100%);
   color: white;
   
   width: 56px;
@@ -24,7 +24,10 @@
   align-items: center;
   justify-content: center;
   
-  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.4);
+  box-shadow: 
+    0 6px 20px rgba(108, 99, 255, 0.5),
+    0 0 30px rgba(108, 99, 255, 0.3);
+  
   border: none;
   cursor: pointer;
   
@@ -32,24 +35,31 @@
   
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  animation: pulse 2s infinite;
+  animation: pulseGlow 2s infinite;
 }
 
 .tour-floating-button:hover {
-  transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 6px 24px rgba(108, 99, 255, 0.5);
+  transform: scale(1.15) translateY(-2px);
+  box-shadow: 
+    0 8px 24px rgba(108, 99, 255, 0.6),
+    0 0 40px rgba(108, 99, 255, 0.4);
 }
 
 .tour-floating-button:active {
-  transform: scale(0.95);
+  transform: scale(1.05);
 }
 
-@keyframes pulse {
+@keyframes pulseGlow {
   0%, 100% {
-    box-shadow: 0 4px 20px rgba(108, 99, 255, 0.4);
+    box-shadow: 
+      0 6px 20px rgba(108, 99, 255, 0.5),
+      0 0 30px rgba(108, 99, 255, 0.3);
   }
   50% {
-    box-shadow: 0 4px 20px rgba(108, 99, 255, 0.6), 0 0 0 12px rgba(108, 99, 255, 0.1);
+    box-shadow: 
+      0 6px 20px rgba(108, 99, 255, 0.6),
+      0 0 40px rgba(108, 99, 255, 0.4),
+      0 0 0 16px rgba(108, 99, 255, 0.1);
   }
 }
 
@@ -66,14 +76,20 @@
 }
 
 /* ========================================
-   3. SPEECH BUBBLE CARD
+   3. DARK GLASS BUBBLE CARD
    ======================================== */
 
 .shepherd-element {
-  background: #ffffff !important;
+  background: rgba(30, 41, 59, 0.95) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  
   border-radius: 14px !important;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(229, 231, 235, 0.8);
+  box-shadow: 
+    0 10px 35px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(108, 99, 255, 0.2);
+  
+  border: 1px solid rgba(139, 128, 255, 0.2);
   padding: 0 !important;
   overflow: hidden;
   
@@ -85,11 +101,14 @@
 }
 
 .shepherd-element:hover {
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.14);
-  transform: translateY(-1px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(108, 99, 255, 0.3);
+  
+  transform: translateY(-2px);
 }
 
-/* Brand accent strip on left edge */
+/* Purple gradient accent strip */
 .shepherd-element::after {
   content: '';
   position: absolute;
@@ -97,13 +116,14 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, #6C63FF 0%, #4F46E5 100%);
+  background: linear-gradient(180deg, #6C63FF 0%, #8B80FF 100%);
   border-radius: 14px 0 0 14px;
   pointer-events: none;
+  box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
 }
 
 /* ========================================
-   4. SPEECH BUBBLE ARROW (POINTER)
+   4. DARK GLASS ARROW (POINTER)
    ======================================== */
 
 .shepherd-arrow {
@@ -111,13 +131,13 @@
 }
 
 .shepherd-arrow::before {
-  background: #ffffff;
-  border: 1px solid rgba(229, 231, 235, 0.8);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid rgba(139, 128, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ========================================
-   5. CONTENT AREA
+   5. DARK CONTENT AREA
    ======================================== */
 
 .shepherd-content {
@@ -125,24 +145,25 @@
   position: relative;
   z-index: 1;
   font-family: "Inter", "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: #1f2937;
+  color: #F1F5F9;
 }
 
 .shepherd-title {
   font-size: 1rem !important;
   font-weight: 600;
-  color: #111827;
+  color: #F1F5F9;
   margin-bottom: 0.35rem;
   line-height: 1.4;
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  text-shadow: 0 0 8px rgba(139, 128, 255, 0.3);
 }
 
 .shepherd-text {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #374151;
+  color: #94A3B8;
   margin: 0;
 }
 
@@ -155,7 +176,7 @@
 }
 
 /* ========================================
-   6. FOOTER (MINIMAL BUTTONS)
+   6. DARK GLASS FOOTER
    ======================================== */
 
 .shepherd-footer {
@@ -167,8 +188,9 @@
   position: relative;
   z-index: 1;
   
-  background: #fafafa;
-  border-top: 1px solid rgba(243, 244, 246, 0.9);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Button Base Styles */
@@ -188,34 +210,34 @@
   gap: 0.4rem;
 }
 
-/* Primary Button (Brand Solid) */
+/* Primary Gradient Button */
 .shepherd-button-primary {
-  background: #6C63FF !important;
+  background: linear-gradient(90deg, #6C63FF 0%, #8B80FF 100%) !important;
   color: white !important;
-  box-shadow: 0 3px 8px rgba(108, 99, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.4);
 }
 
 .shepherd-button-primary:hover {
-  background: #574ef3 !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108, 99, 255, 0.5);
 }
 
 .shepherd-button-primary:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(108, 99, 255, 0.25);
+  box-shadow: 0 3px 10px rgba(108, 99, 255, 0.4);
 }
 
-/* Secondary Button (Minimal) */
+/* Secondary Glass Button */
 .shepherd-button-secondary {
-  background: transparent !important;
-  color: #6B7280 !important;
-  border: none;
+  background: rgba(30, 41, 59, 0.5) !important;
+  color: #94A3B8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .shepherd-button-secondary:hover {
-  color: #374151 !important;
-  background: rgba(0, 0, 0, 0.03) !important;
+  color: #F1F5F9 !important;
+  background: rgba(30, 41, 59, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* ========================================
@@ -230,10 +252,11 @@
   width: 24px;
   height: 24px;
   
-  background: rgba(249, 250, 251, 0.8);
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(10px);
   
   border-radius: 50%;
-  border: 1px solid rgba(229, 231, 235, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   
   cursor: pointer;
   
@@ -247,19 +270,19 @@
 }
 
 .shepherd-cancel-icon:hover {
-  background: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
   transform: scale(1.05);
 }
 
 .shepherd-cancel-icon svg {
   width: 12px;
   height: 12px;
-  color: #6b7280;
+  color: #94A3B8;
 }
 
 .shepherd-cancel-icon:hover svg {
-  color: #ef4444;
+  color: #EF4444;
 }
 
 /* ========================================

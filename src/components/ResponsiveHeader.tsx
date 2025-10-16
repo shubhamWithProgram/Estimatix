@@ -21,46 +21,48 @@ export default function MobileHeader() {
 
   return (
     <>
-      {/* Professional Frosted Glass Header */}
+      {/* Dark Glass Header with Purple Glow */}
       <header 
         className="sticky-top" 
         style={{
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          background: 'rgba(255, 255, 255, 0.8)',
-          borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          background: 'rgba(17, 24, 39, 0.85)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           zIndex: 1000,
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(108, 99, 255, 0.1)'
         }}
       >
         <div className="container-fluid" style={{ maxWidth: '1400px', padding: '0 1.5rem' }}>
           <div 
             className="d-flex justify-content-between align-items-center" 
             style={{ 
-              minHeight: '64px',
-              padding: '0.75rem 0'
+              minHeight: '68px',
+              padding: '0.875rem 0'
             }}
           >
-            {/* Modern Brand Logo */}
+            {/* Premium Brand Logo with Glow */}
             <Link to="/" className="text-decoration-none" onClick={closeMenu}>
               <div className="d-flex align-items-center gap-2">
                 <i className="bi bi-calculator-fill" style={{ 
-                  fontSize: '1.25rem',
-                  color: '#4F46E5'
+                  fontSize: '1.5rem',
+                  color: '#8B80FF',
+                  filter: 'drop-shadow(0 0 8px rgba(139, 128, 255, 0.5))'
                 }}></i>
                 <div>
                   <span className="fw-semibold" style={{ 
-                    fontSize: '1.1rem',
-                    letterSpacing: '0.3px',
-                    color: '#1E293B'
+                    fontSize: '1.125rem',
+                    letterSpacing: '-0.01em',
+                    color: '#F1F5F9',
+                    textShadow: '0 0 10px rgba(139, 128, 255, 0.3)'
                   }}>
                     Estimatix
                   </span>
                   <span className="ms-2 d-none d-lg-inline" style={{ 
-                    fontSize: '0.85rem',
-                    color: '#64748B'
+                    fontSize: '0.875rem',
+                    color: '#94A3B8'
                   }}>
-                    Professional Estimation Suite
+                    Professional Estimation Platform
                   </span>
                 </div>
               </div>
@@ -72,38 +74,43 @@ export default function MobileHeader() {
               
               {user ? (
                 <>
-                  {/* Professional User Avatar */}
+                  {/* Glass User Avatar */}
                   <div className="d-flex align-items-center d-sm-none">
-                    <div className="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center text-white" 
+                    <div className="rounded-circle d-flex align-items-center justify-content-center" 
                          style={{ 
-                           width: '38px', 
-                           height: '38px',
+                           width: '40px', 
+                           height: '40px',
+                           background: 'rgba(108, 99, 255, 0.2)',
                            backdropFilter: 'blur(10px)',
-                           border: '1px solid rgba(255,255,255,0.3)'
+                           border: '1px solid rgba(139, 128, 255, 0.3)',
+                           color: '#8B80FF'
                          }}>
                       <i className="bi bi-person-fill"></i>
                     </div>
                   </div>
 
-                  {/* Elegant Hamburger Menu */}
+                  {/* Glass Hamburger Button */}
                   <button
-                    className="btn text-white"
+                    className="btn"
                     style={{ 
-                      width: '42px', 
-                      height: '42px',
-                      background: 'rgba(255,255,255,0.15)',
+                      width: '44px', 
+                      height: '44px',
+                      background: 'rgba(30, 41, 59, 0.6)',
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '12px',
-                      transition: 'all 0.3s ease'
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '0.75rem',
+                      color: '#F1F5F9',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.25)'
+                      e.currentTarget.style.background = 'rgba(108, 99, 255, 0.3)'
                       e.currentTarget.style.transform = 'scale(1.05)'
+                      e.currentTarget.style.borderColor = 'rgba(139, 128, 255, 0.4)'
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.15)'
+                      e.currentTarget.style.background = 'rgba(30, 41, 59, 0.6)'
                       e.currentTarget.style.transform = 'scale(1)'
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)'
                     }}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     aria-label="Toggle menu"
@@ -113,24 +120,25 @@ export default function MobileHeader() {
                 </>
               ) : (
                 <>
-                  {/* Elegant Guest Actions */}
+                  {/* Gradient Login & Signup Buttons */}
                   <Link 
                     to="/login" 
-                    className="btn text-white text-decoration-none"
+                    className="btn text-decoration-none"
                     style={{
-                      background: 'rgba(255,255,255,0.15)',
+                      background: 'rgba(30, 41, 59, 0.6)',
                       backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255,255,255,0.3)',
-                      borderRadius: '10px',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '0.625rem',
+                      color: '#F1F5F9',
                       fontWeight: '500',
                       transition: 'all 0.3s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.25)'
+                      e.currentTarget.style.background = 'rgba(30, 41, 59, 0.8)'
                       e.currentTarget.style.transform = 'translateY(-1px)'
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.15)'
+                      e.currentTarget.style.background = 'rgba(30, 41, 59, 0.6)'
                       e.currentTarget.style.transform = 'translateY(0)'
                     }}
                     onClick={closeMenu}
@@ -142,21 +150,21 @@ export default function MobileHeader() {
                     to="/signup" 
                     className="btn text-decoration-none"
                     style={{
-                      background: 'linear-gradient(45deg, #ffffff 0%, #f8f9fa 100%)',
-                      color: '#667eea',
+                      background: 'linear-gradient(90deg, #6C63FF 0%, #8B80FF 100%)',
+                      color: 'white',
                       border: 'none',
-                      borderRadius: '10px',
+                      borderRadius: '0.625rem',
                       fontWeight: '600',
-                      boxShadow: '0 4px 15px rgba(255,255,255,0.2)',
+                      boxShadow: '0 4px 12px rgba(108, 99, 255, 0.4)',
                       transition: 'all 0.3s ease'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'translateY(-2px)'
-                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(255,255,255,0.3)'
+                      e.currentTarget.style.boxShadow = '0 6px 16px rgba(108, 99, 255, 0.5)'
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'translateY(0)'
-                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(255,255,255,0.2)'
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(108, 99, 255, 0.4)'
                     }}
                     onClick={closeMenu}
                   >
@@ -169,35 +177,38 @@ export default function MobileHeader() {
           </div>
         </div>
 
-        {/* Professional Mobile Menu Dropdown */}
+        {/* Dark Glass Mobile Menu Dropdown */}
         {isMenuOpen && user && (
           <div className="shadow-lg" style={{
-            background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)',
-            borderTop: '1px solid rgba(102, 126, 234, 0.1)'
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%)',
+            backdropFilter: 'blur(20px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)'
           }}>
             <div className="container-fluid px-4 py-4">
-              {/* Elegant User Info */}
+              {/* Glass User Info Card */}
               <div className="d-flex align-items-center mb-4 pb-4" style={{
-                borderBottom: '2px solid rgba(102, 126, 234, 0.1)'
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
               }}>
-                <div className="rounded-circle d-flex align-items-center justify-content-center text-white me-3" 
+                <div className="rounded-circle d-flex align-items-center justify-content-center me-3" 
                      style={{ 
                        width: '50px', 
                        height: '50px',
-                       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                       boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+                       background: 'linear-gradient(135deg, #6C63FF 0%, #8B80FF 100%)',
+                       boxShadow: '0 6px 20px rgba(108, 99, 255, 0.4)',
+                       color: 'white'
                      }}>
                   <i className="bi bi-person-fill fs-5"></i>
                 </div>
                 <div>
-                  <div className="fw-bold text-dark" style={{ 
+                  <div className="fw-bold" style={{ 
                     fontSize: '1.1rem',
-                    fontFamily: "'Segoe UI', system-ui, sans-serif"
+                    fontFamily: "'Inter', system-ui, sans-serif",
+                    color: '#F1F5F9'
                   }}>
                     {user?.email?.split('@')[0]}
                   </div>
                   <small style={{ 
-                    color: '#667eea',
+                    color: '#94A3B8',
                     fontWeight: '500'
                   }}>
                     {user?.email}
@@ -205,28 +216,28 @@ export default function MobileHeader() {
                 </div>
               </div>
 
-              {/* Premium Navigation Items */}
+              {/* Dark Glass Navigation Buttons */}
               <div className="row g-3">
                 <div className="col-6">
                   <Link 
                     to="/dashboard" 
                     className="btn w-100 text-start text-decoration-none"
                     style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: 'linear-gradient(135deg, #6C63FF 0%, #8B80FF 100%)',
                       color: 'white',
                       border: 'none',
-                      borderRadius: '12px',
+                      borderRadius: '0.75rem',
                       fontWeight: '500',
                       transition: 'all 0.3s ease',
-                      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.2)'
+                      boxShadow: '0 4px 12px rgba(108, 99, 255, 0.3)'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'translateY(-2px)'
-                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.3)'
+                      e.currentTarget.style.boxShadow = '0 6px 16px rgba(108, 99, 255, 0.4)'
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'translateY(0)'
-                      e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.2)'
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(108, 99, 255, 0.3)'
                     }}
                     onClick={closeMenu}
                   >
