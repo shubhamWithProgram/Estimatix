@@ -283,19 +283,25 @@ function Calculator() {
           50% { opacity: 0.8; }
         }
         
-        /* Glassmorphic Premium Cards */
+        /* Fade-in animation for cards */
+        @keyframes fadeInUp {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Glassmorphic Premium Cards - REFINED */
         .premium-card {
-          background: rgba(255, 255, 255, 0.07);
+          background: rgba(15, 23, 42, 0.85);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          border-radius: 14px;
+          border: none;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           overflow: hidden;
+          animation: fadeInUp 0.6s ease-out;
+          margin-bottom: 1.5rem;
         }
         
         .premium-card::before {
@@ -305,97 +311,129 @@ function Calculator() {
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
           transition: left 0.5s;
         }
         
         .premium-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 
-            0 12px 40px rgba(0, 0, 0, 0.3),
-            0 0 20px rgba(139, 92, 246, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-          border-color: rgba(139, 92, 246, 0.4);
+          transform: translateY(-3px) scale(1.01);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
         }
         
         .premium-card:hover::before {
           left: 100%;
         }
         
-        /* Premium Header with Glow */
+        /* Width variations for visual hierarchy */
+        .premium-card:nth-child(2),
+        .premium-card:nth-child(3) {
+          max-width: 85%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        
+        .premium-card:last-child {
+          max-width: 90%;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        
+        /* Add spacing between section groups */
+        .section-group-spacing {
+          margin-top: 24px;
+        }
+        
+        /* Premium Header with Refined Glow */
         .premium-header {
           background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
           color: white;
-          padding: 2.5rem 2rem;
-          border-radius: 20px 20px 0 0;
+          padding: 2rem 2rem;
+          border-radius: 14px 14px 0 0;
           margin: -1px -1px 0 -1px;
           position: relative;
-          box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
         }
         
         .premium-header::after {
           content: '';
           position: absolute;
           bottom: 0;
-          left: 10%;
-          right: 10%;
-          height: 3px;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+          left: 15%;
+          right: 15%;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
           border-radius: 2px;
         }
         
         .premium-header h1 {
           font-weight: 800;
-          font-size: 2.5rem;
+          font-size: 2.25rem;
           margin: 0;
-          text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+          line-height: 1.4;
           background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
         
+        .premium-header p {
+          line-height: 1.4;
+        }
+        
+        /* Refined Badges */
         .premium-badge {
           background: rgba(255, 255, 255, 0.15);
-          padding: 0.5rem 1rem;
-          border-radius: 50px;
-          font-size: 0.875rem;
-          font-weight: 600;
+          padding: 5px 12px;
+          border-radius: 9999px;
+          font-size: 0.8rem;
+          font-weight: 500;
           backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
           transition: all 0.3s ease;
+          animation: pulse-badge 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-badge {
+          0%, 100% { box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2); }
+          50% { box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.4); }
         }
         
         .premium-badge:hover {
           background: rgba(255, 255, 255, 0.25);
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
-        /* Section Headers with Icons */
+        /* Section Headers with Icons - REFINED */
         .section-header {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 1.5rem 2rem;
-          background: rgba(99, 102, 241, 0.1);
-          border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+          justify-content: space-between;
+          gap: 0.5rem;
+          padding: 1.25rem 2rem;
+          background: rgba(99, 102, 241, 0.08);
+          border-bottom: 1px solid rgba(139, 92, 246, 0.15);
           margin: -1px -1px 0 -1px;
-          border-radius: 20px 20px 0 0;
+          border-radius: 14px 14px 0 0;
         }
         
         .section-header h5 {
           margin: 0;
           font-weight: 700;
-          font-size: 1.25rem;
-          color: #e0e7ff;
+          font-size: 1.1rem;
+          color: #e2e8f0;
           text-transform: uppercase;
           letter-spacing: 0.5px;
+          line-height: 1.4;
+          background: linear-gradient(to right, #a78bfa, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
         
         .section-header i {
-          font-size: 1.5rem;
+          font-size: 1.3rem;
           color: #a78bfa;
+          margin-right: 8px;
         }
         
         .section-body {
@@ -521,7 +559,7 @@ function Calculator() {
           box-shadow: 0 8px 25px rgba(239, 68, 68, 0.6);
         }
         
-        /* Animated Summary Cards */
+        /* Animated Summary Cards - WITH ACCENT SHADOWS */
         .premium-summary-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -530,15 +568,16 @@ function Calculator() {
         }
         
         .premium-summary-card {
-          background: rgba(15, 23, 42, 0.6);
+          background: rgba(15, 23, 42, 0.7);
           backdrop-filter: blur(10px);
-          border-radius: 16px;
+          border-radius: 14px;
           padding: 1.5rem;
           text-align: center;
-          border: 2px solid transparent;
+          border: 1px solid transparent;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           overflow: hidden;
+          animation: fadeInUp 0.6s ease-out;
         }
         
         .premium-summary-card::before {
@@ -553,14 +592,32 @@ function Calculator() {
           transition: opacity 0.3s;
         }
         
+        .premium-summary-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 14px;
+          padding: 1px;
+          background: linear-gradient(135deg, currentColor, transparent);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+        
         .premium-summary-card:hover {
-          transform: translateY(-8px) scale(1.03);
+          transform: translateY(-8px) scale(1.02);
           border-color: currentColor;
         }
         
         .premium-summary-card:hover::before {
           opacity: 1;
           animation: shimmer 1.5s infinite;
+        }
+        
+        .premium-summary-card:hover::after {
+          opacity: 0.3;
         }
         
         @keyframes shimmer {
@@ -570,22 +627,42 @@ function Calculator() {
         
         .premium-summary-card.cyan {
           color: #06b6d4;
-          border-color: rgba(6, 182, 212, 0.2);
+          border-color: rgba(6, 182, 212, 0.15);
+          box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+        
+        .premium-summary-card.cyan:hover {
+          box-shadow: 0 0 25px rgba(6, 182, 212, 0.5), inset 0 0 20px rgba(6, 182, 212, 0.1);
         }
         
         .premium-summary-card.amber {
           color: #f59e0b;
-          border-color: rgba(245, 158, 11, 0.2);
+          border-color: rgba(245, 158, 11, 0.15);
+          box-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
+        }
+        
+        .premium-summary-card.amber:hover {
+          box-shadow: 0 0 25px rgba(250, 204, 21, 0.5), inset 0 0 20px rgba(250, 204, 21, 0.1);
         }
         
         .premium-summary-card.violet {
           color: #8b5cf6;
-          border-color: rgba(139, 92, 246, 0.2);
+          border-color: rgba(139, 92, 246, 0.15);
+          box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
+        }
+        
+        .premium-summary-card.violet:hover {
+          box-shadow: 0 0 25px rgba(167, 139, 250, 0.5), inset 0 0 20px rgba(167, 139, 250, 0.1);
         }
         
         .premium-summary-card.emerald {
           color: #10b981;
-          border-color: rgba(16, 185, 129, 0.2);
+          border-color: rgba(16, 185, 129, 0.15);
+          box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .premium-summary-card.emerald:hover {
+          box-shadow: 0 0 25px rgba(16, 185, 129, 0.5), inset 0 0 20px rgba(16, 185, 129, 0.1);
         }
         
         .summary-icon {
@@ -639,11 +716,11 @@ function Calculator() {
           animation: pulse-glow 1s ease-in-out;
         }
         
-        /* Floating AI Assist Button */
+        /* Floating AI Assist Button - REFINED */
         .ai-assist-btn {
           position: fixed;
-          bottom: 2rem;
-          right: 2rem;
+          bottom: 24px;
+          right: 24px;
           width: 60px;
           height: 60px;
           border-radius: 50%;
@@ -658,11 +735,13 @@ function Calculator() {
           align-items: center;
           justify-content: center;
           font-size: 1.75rem;
+          opacity: 0.85;
         }
         
         .ai-assist-btn:hover {
-          transform: scale(1.1) rotate(10deg);
+          transform: scale(1.15);
           box-shadow: 0 12px 40px rgba(99, 102, 241, 0.7);
+          opacity: 1;
         }
         
         .ai-assist-btn::after {
@@ -677,6 +756,28 @@ function Calculator() {
           animation: ripple 2s infinite;
         }
         
+        .ai-assist-btn::before {
+          content: 'AI Assist';
+          position: absolute;
+          right: 70px;
+          background: rgba(15, 23, 42, 0.95);
+          color: #e2e8f0;
+          padding: 8px 16px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          white-space: nowrap;
+          opacity: 0;
+          transform: translateX(10px);
+          transition: all 0.3s ease;
+          pointer-events: none;
+        }
+        
+        .ai-assist-btn:hover::before {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        
         @keyframes ripple {
           0% {
             transform: scale(1);
@@ -688,19 +789,20 @@ function Calculator() {
           }
         }
         
-        /* Auto-save Indicator */
+        /* Auto-save Indicator - REFINED */
         .auto-save-indicator {
           position: fixed;
-          top: 2rem;
-          right: 2rem;
-          background: rgba(16, 185, 129, 0.9);
+          top: 24px;
+          right: 24px;
+          background: rgba(16, 185, 129, 0.2);
           backdrop-filter: blur(10px);
-          color: white;
-          padding: 0.75rem 1.5rem;
+          color: #6ee7b7;
+          padding: 8px 16px;
           border-radius: 50px;
-          font-size: 0.875rem;
+          font-size: 0.8rem;
           font-weight: 600;
-          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+          border: 1px solid rgba(16, 185, 129, 0.4);
+          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
           z-index: 999;
           animation: slideInRight 0.5s ease-out;
         }
@@ -813,26 +915,26 @@ function Calculator() {
       </button>
 
       <div className="premium-calc-container">
-        <div className="container-fluid" style={{ maxWidth: '1400px' }}>
-          {/* Premium Header */}
-          <div className="premium-card mb-4">
+        <div className="container-fluid" style={{ maxWidth: '1400px', padding: '0 1rem' }}>
+          {/* Premium Header - Narrower for hierarchy */}
+          <div className="premium-card mb-4" style={{ maxWidth: '90%', margin: '12px auto 1.5rem auto' }}>
             <div className="premium-header">
               <div className="d-flex justify-content-between align-items-center flex-wrap">
                 <div>
                   <h1>
-                    <i className="bi bi-calculator-fill me-3"></i>
+                    <i className="bi bi-calculator-fill me-2"></i>
                     Premium Calculator
                   </h1>
                   <p className="mb-0 mt-2 opacity-90">Professional Aluminium & Glass Estimation System</p>
                 </div>
-                <div className="d-flex gap-2 mt-3 mt-md-0">
+                <div className="d-flex gap-2 mt-3 mt-md-0 align-items-center">
                   <span className="premium-badge">
                     <i className="bi bi-shield-check me-1"></i>
                     Enterprise Grade
                   </span>
                   <span className="premium-badge">
                     <i className="bi bi-graph-up me-1"></i>
-                    Real-time Calculation
+                    Real-time
                   </span>
                   <span className="premium-badge">
                     <i className="bi bi-stars me-1"></i>
@@ -844,10 +946,12 @@ function Calculator() {
           </div>
       
       {/* Company Information */}
-      <div className="premium-card mb-4">
+      <div className="premium-card section-group-spacing">
         <div className="section-header">
-          <i className="bi bi-building-fill"></i>
-          <h5>Company Information</h5>
+          <div className="d-flex align-items-center">
+            <i className="bi bi-building-fill"></i>
+            <h5>Company Information</h5>
+          </div>
         </div>
         <div className="section-body">
           <div className="row g-3">
@@ -892,10 +996,12 @@ function Calculator() {
       </div>
 
       {/* Customer Information */}
-      <div className="premium-card mb-4">
+      <div className="premium-card section-group-spacing">
         <div className="section-header">
-          <i className="bi bi-person-circle"></i>
-          <h5>Customer Information</h5>
+          <div className="d-flex align-items-center">
+            <i className="bi bi-person-circle"></i>
+            <h5>Customer Information</h5>
+          </div>
         </div>
         <div className="section-body">
           <div className="row g-3">
@@ -956,7 +1062,7 @@ function Calculator() {
       </div>
 
       {/* Global Settings */}
-      <div className="premium-card mb-4">
+      <div className="premium-card section-group-spacing">
         <div className="section-header collapsible-header" onClick={() => setCollapsed({...collapsed, settings: !collapsed.settings})}>
           <div className="d-flex align-items-center gap-2">
             <i className="bi bi-sliders"></i>
@@ -1040,7 +1146,7 @@ function Calculator() {
 
       {/* Items */}
       {!showOnlyTotals && (
-        <div className="premium-card mb-4">
+        <div className="premium-card section-group-spacing">
           <div className="section-header collapsible-header" onClick={() => setCollapsed({...collapsed, items: !collapsed.items})}>
             <div className="d-flex align-items-center gap-2">
               <i className="bi bi-box-seam-fill"></i>
@@ -1170,7 +1276,7 @@ function Calculator() {
       )}
 
       {/* Summary - Premium Dashboard Style */}
-      <div className="premium-card mb-4">
+      <div className="premium-card section-group-spacing" style={{ maxWidth: '90%', margin: '24px auto' }}>
         <div className="section-header collapsible-header" onClick={() => setCollapsed({...collapsed, summary: !collapsed.summary})}>
           <div className="d-flex align-items-center gap-2">
             <i className="bi bi-pie-chart-fill"></i>
