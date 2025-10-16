@@ -46,49 +46,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <ResponsiveHeader />
       
-      {/* Refined Status Bar with subtle transparency */}
-      <div 
-        className="text-white py-2" 
-        style={{
-          background: 'rgba(16, 185, 129, 0.2)',
-          borderTop: '1px solid rgba(16, 185, 129, 0.3)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          backdropFilter: 'blur(10px)'
-        }}
-      >
-        <div className="container">
-          <div className="d-flex justify-content-between align-items-center" style={{ 
-            minHeight: '36px',
-            padding: '4px 0'
-          }}>
-            <div className="d-flex align-items-center gap-3">
-              <span 
-                className="badge" 
-                style={{
-                  background: 'rgba(34, 197, 94, 0.25)',
-                  color: '#6ee7b7',
-                  border: '1px solid rgba(34, 197, 94, 0.4)',
-                  padding: '4px 12px',
-                  borderRadius: '20px',
-                  fontSize: '0.8rem',
-                  fontWeight: '600'
-                }}
-              >
-                <i className="bi bi-check-circle me-1"></i>
-                SAAS Platform Active
-              </span>
-              <small style={{ color: '#cbd5e1', fontSize: '0.85rem' }}>
-                <i className="bi bi-clock me-1"></i>
-                Firebase Auth | Multi-item quotations | PDF Export | Quote Sharing
-              </small>
-            </div>
-            <small style={{ color: '#cbd5e1', fontSize: '0.85rem' }}>
-              <i className="bi bi-shield-check me-1"></i>
-              Professional Edition
-            </small>
-          </div>
-        </div>
-      </div>
+      {/* Removed status bar for cleaner design - features are self-evident */}
 
       {children}
 

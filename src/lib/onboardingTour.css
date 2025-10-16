@@ -1,0 +1,424 @@
+/**
+ * Estimatix Onboarding Tour - Custom Styles
+ * Professional Tailwind-inspired styling for Shepherd.js
+ */
+
+/* =========================
+   Tour Floating Button
+   ========================= */
+
+.tour-floating-button {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.tour-floating-button:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5);
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+}
+
+.tour-floating-button:active {
+  transform: scale(1.05);
+}
+
+.tour-floating-button i {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.tour-floating-button .tour-button-text {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: -2px;
+}
+
+/* Pulse animation for first-time visibility */
+@keyframes tour-pulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4), 0 0 0 12px rgba(139, 92, 246, 0.2);
+  }
+}
+
+.tour-floating-button.pulse {
+  animation: tour-pulse 2s ease-in-out infinite;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .tour-floating-button {
+    bottom: 80px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+  }
+  
+  .tour-floating-button i {
+    font-size: 1.25rem;
+  }
+  
+  .tour-floating-button .tour-button-text {
+    font-size: 0.5rem;
+  }
+}
+
+/* =========================
+   Shepherd Theme Override
+   ========================= */
+
+/* Main tour container */
+.shepherd-modal-overlay-container {
+  z-index: 9998 !important;
+}
+
+.shepherd-element {
+  z-index: 9999 !important;
+  max-width: 420px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Shepherd header */
+.shepherd-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.shepherd-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Shepherd content */
+.shepherd-text {
+  padding: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #475569;
+  background: white;
+}
+
+.shepherd-text-content {
+  margin: 0;
+}
+
+.shepherd-text-content p {
+  margin: 0 0 0.5rem 0;
+  color: #334155;
+}
+
+.shepherd-text-content p:last-child {
+  margin-bottom: 0;
+}
+
+.shepherd-text-content .text-sm {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.shepherd-text-content .text-xs {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Shepherd footer */
+.shepherd-footer {
+  padding: 1rem 1.25rem;
+  background: #fafafa;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-radius: 0 0 1rem 1rem;
+}
+
+/* Shepherd buttons */
+.shepherd-button {
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+  font-family: inherit;
+}
+
+.shepherd-button-primary {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+}
+
+.shepherd-button-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+.shepherd-button-primary:active {
+  transform: translateY(0);
+}
+
+.shepherd-button-secondary {
+  background: white;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.shepherd-button-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+/* Shepherd cancel icon */
+.shepherd-cancel-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 0.5rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.shepherd-cancel-icon:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+/* Shepherd arrow */
+.shepherd-arrow {
+  display: none;
+}
+
+/* Modal overlay styling */
+.shepherd-modal-overlay-container.shepherd-modal-is-visible {
+  opacity: 1;
+}
+
+.shepherd-modal-overlay-container {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Highlight effect for target elements */
+.shepherd-target-highlight {
+  animation: shepherd-highlight-pulse 2s ease-in-out infinite;
+}
+
+@keyframes shepherd-highlight-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(139, 92, 246, 0);
+  }
+}
+
+/* Pro tip box styling */
+.shepherd-text-content .bg-violet-50 {
+  background-color: #f5f3ff;
+}
+
+.shepherd-text-content .border-violet-200 {
+  border: 1px solid #ddd6fe;
+}
+
+.shepherd-text-content .text-violet-800 {
+  color: #5b21b6;
+}
+
+.shepherd-text-content .text-violet-700 {
+  color: #6d28d9;
+}
+
+.shepherd-text-content .rounded-lg {
+  border-radius: 0.5rem;
+}
+
+/* Smooth transitions */
+.shepherd-element,
+.shepherd-modal-overlay-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+  .shepherd-element {
+    max-width: calc(100vw - 32px);
+    margin: 0 1rem;
+  }
+  
+  .shepherd-header {
+    padding: 0.875rem 1rem;
+  }
+  
+  .shepherd-title {
+    font-size: 1rem;
+  }
+  
+  .shepherd-text {
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .shepherd-footer {
+    padding: 0.875rem 1rem;
+    flex-direction: column;
+  }
+  
+  .shepherd-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .shepherd-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom-color: #334155;
+  }
+  
+  .shepherd-title {
+    color: #f1f5f9;
+  }
+  
+  .shepherd-text {
+    background: #1e293b;
+    color: #cbd5e1;
+  }
+  
+  .shepherd-text-content p {
+    color: #e2e8f0;
+  }
+  
+  .shepherd-footer {
+    background: #0f172a;
+    border-top-color: #334155;
+  }
+  
+  .shepherd-button-secondary {
+    background: #334155;
+    color: #cbd5e1;
+    border-color: #475569;
+  }
+  
+  .shepherd-button-secondary:hover {
+    background: #475569;
+    border-color: #64748b;
+  }
+  
+  .shepherd-cancel-icon {
+    background: #334155;
+    border-color: #475569;
+    color: #cbd5e1;
+  }
+}
+
+/* Accessibility improvements */
+.shepherd-element:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 4px;
+}
+
+.shepherd-button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Ensure smooth animations */
+.shepherd-element[data-popper-placement^='top'] {
+  animation: slideInDown 0.3s ease-out;
+}
+
+.shepherd-element[data-popper-placement^='bottom'] {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.shepherd-element[data-popper-placement^='left'] {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.shepherd-element[data-popper-placement^='right'] {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

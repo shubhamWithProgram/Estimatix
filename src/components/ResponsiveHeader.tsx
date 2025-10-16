@@ -21,37 +21,43 @@ export default function MobileHeader() {
 
   return (
     <>
-      {/* Professional Header with Consistent Gradient */}
-      <header className="sticky-top shadow-sm" style={{
-        background: 'linear-gradient(90deg, #3B82F6, #8B5CF6)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
-      }}>
-        <div className="container-fluid px-4">
-          <div className="d-flex justify-content-between align-items-center" style={{ minHeight: '72px' }}>
-            {/* Premium Logo/Brand */}
-            <Link to="/" className="text-white text-decoration-none" onClick={closeMenu}>
-              <div className="d-flex align-items-center">
-                <div className="bg-white bg-opacity-20 rounded-3 p-2 me-3" style={{
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255,255,255,0.2)'
-                }}>
-                  <i className="bi bi-building fs-5 text-white"></i>
-                </div>
+      {/* Professional SaaS Header - Deep Blue Theme */}
+      <header 
+        className="sticky-top" 
+        style={{
+          background: 'linear-gradient(90deg, #312e81, #4338ca)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          zIndex: 1000
+        }}
+      >
+        <div className="container-fluid" style={{ maxWidth: '1400px', padding: '0 1.5rem' }}>
+          <div 
+            className="d-flex justify-content-between align-items-center" 
+            style={{ 
+              minHeight: '64px',
+              padding: '0.75rem 0'
+            }}
+          >
+            {/* Clean Brand Logo */}
+            <Link to="/" className="text-decoration-none" onClick={closeMenu}>
+              <div className="d-flex align-items-center gap-2">
+                <i className="bi bi-calculator-fill text-violet" style={{ 
+                  fontSize: '1.25rem',
+                  color: '#a855f7'
+                }}></i>
                 <div>
-                  <div className="fw-bold" style={{ 
-                    fontSize: '1.2rem', 
-                    fontFamily: "'Segoe UI', system-ui, sans-serif",
-                    letterSpacing: '0.5px'
+                  <span className="text-white fw-semibold" style={{ 
+                    fontSize: '1.1rem',
+                    letterSpacing: '0.3px'
                   }}>
                     Estimatix
-                  </div>
-                  <div className="opacity-90 d-none d-sm-block" style={{ 
+                  </span>
+                  <span className="text-muted ms-2 d-none d-lg-inline" style={{ 
                     fontSize: '0.85rem',
-                    fontWeight: '300',
-                    letterSpacing: '0.8px'
+                    color: '#94a3b8'
                   }}>
-                    Professional Estimation Platform
-                  </div>
+                    Professional Estimation Suite
+                  </span>
                 </div>
               </div>
             </Link>
