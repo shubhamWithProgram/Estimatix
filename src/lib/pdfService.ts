@@ -149,7 +149,7 @@ class EnhancedPDFService {
 
     // Default watermark configuration (Estimatix branding)
     let watermarkText = 'ESTIMATIX'
-    let opacity = 0.10 // More subtle - 10-12%
+    let opacity = 0.25 // Increased visibility - 25% opacity
     let color = '#6C63FF' // Brand purple
     let showLogo = true
 
@@ -160,12 +160,12 @@ class EnhancedPDFService {
       color = options.watermark.color || color
     } else if (options.confidential) {
       watermarkText = 'CONFIDENTIAL'
-      opacity = 0.15
+      opacity = 0.20
       color = '#FF6B6B'
       showLogo = false
     } else if (options.draft) {
       watermarkText = 'DRAFT'
-      opacity = 0.15
+      opacity = 0.20
       color = '#4ECDC4'
       showLogo = false
     }
@@ -174,9 +174,20 @@ class EnhancedPDFService {
     this.doc.saveGraphicsState()
     
     // Create transparency (opacity) - CRITICAL for background effect
-    if ((this.doc as any).setGState) {
-      const gState = new (this.doc as any).GState({ opacity })
-      this.doc.setGState(gState)
+    try {
+      if ((this.doc as any).setGState) {
+        const gState = new (this.doc as any).GState({ 
+          opacity: opacity,
+          'stroke-opacity': opacity 
+        })
+        this.doc.setGState(gState)
+      }
+    } catch (error) {
+      console.warn('GState not supported, watermark will be fully opaque:', error)
+      // Fallback: use setOpacity if available
+      if (typeof (this.doc as any).setOpacity === 'function') {
+        (this.doc as any).setOpacity(opacity)
+      }
     }
 
     // Center of page
@@ -203,17 +214,23 @@ class EnhancedPDFService {
           img.onload = () => {
             try {
               // Set canvas size for high quality
-              canvas.width = 400
-              canvas.height = 400
-              ctx?.drawImage(img, 0, 0, 400, 400)
+              canvas.width = 500
+              canvas.height = 500
               
-              // Convert canvas to PNG data URL
-              const pngDataUrl = canvas.toDataURL('image/png')
+              // Clear canvas and ensure transparent background
+              if (ctx) {
+                ctx.clearRect(0, 0, 500, 500)
+                // Draw image with proper scaling
+                ctx.drawImage(img, 0, 0, 500, 500)
+              }
               
-              // Add logo to PDF (scaled to 80%, bottom-right positioned)
-              const logoSize = 88 // Reduced from 110 to 88 (80%)
-              const logoX = pageWidth - logoSize - 40 // Bottom-right area
-              const logoY = pageHeight - logoSize - 40
+              // Convert canvas to PNG data URL with transparency
+              const pngDataUrl = canvas.toDataURL('image/png', 0.95)
+              
+              // Add logo to PDF (centered watermark, larger and more visible)
+              const logoSize = 120 // Increased size for better visibility
+              const logoX = centerX - logoSize / 2 // Centered horizontally
+              const logoY = centerY - logoSize / 2 // Centered vertically
               
               this.doc!.addImage(
                 pngDataUrl,
@@ -221,7 +238,9 @@ class EnhancedPDFService {
                 logoX,
                 logoY,
                 logoSize,
-                logoSize
+                logoSize,
+                undefined,
+                'NONE' // No compression for better quality
               )
               
               DOMURL.revokeObjectURL(url)
