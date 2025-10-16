@@ -273,82 +273,95 @@ function Calculator() {
   return (
     <>
       <style>{`
-        /* ===== PROFESSIONAL SAAS-GRADE DESIGN SYSTEM ===== */
-        /* Inspired by Notion + Linear + Stripe */
+        /* ===== ESTIMATIX PREMIUM COLOR SYSTEM ===== */
+        /* Modern SaaS Design - Notion + Linear + Stripe Inspired */
         
-        /* Global Fade-in Animation */
+        :root {
+          --color-primary: #4F46E5;
+          --color-primary-light: #6366F1;
+          --color-accent: #6C63FF;
+          --color-surface: #FFFFFF;
+          --color-background: #F8FAFC;
+          --color-text-main: #1E293B;
+          --color-text-muted: #64748B;
+          --color-border: #E2E8F0;
+          --color-success: #10B981;
+          --color-danger: #EF4444;
+          --color-warning: #F59E0B;
+        }
+        
+        /* GPU Acceleration for smooth performance */
+        * {
+          transform: translateZ(0);
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Global smooth load animation */
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Main Background - Ultra Light & Airy */
+        /* Ultra-Light Professional Background */
         .premium-calc-container {
-          background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+          background: var(--color-background);
           min-height: 100vh;
           padding: 5rem 0 3rem 0;
           position: relative;
           animation: fadeIn 0.6s ease-out;
         }
         
-        /* Subtle texture overlay */
-        .premium-calc-container::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.15) 1px, transparent 0);
-          background-size: 40px 40px;
-          pointer-events: none;
-          opacity: 0.5;
-        }
-        
-        /* Fade-in animation for cards */
+        /* Staggered fade-in for sections */
         @keyframes fadeInUp {
           0% { opacity: 0; transform: translateY(20px); }
           100% { opacity: 1; transform: translateY(0); }
         }
         
-        /* Professional White Cards with Depth Hierarchy */
+        /* Modern White Cards - Clean & Minimal */
         .premium-card {
-          background: white;
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
+          background: var(--color-surface);
           border-radius: 1rem;
-          border: 1px solid #e2e8f0;
+          border: 1px solid var(--color-border);
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
           transition: all 0.2s ease;
           position: relative;
           animation: fadeInUp 0.5s ease-out;
-          margin-bottom: 2rem;
+          animation-fill-mode: both;
+          margin-bottom: 1.5rem;
         }
+        
+        .premium-card:nth-child(1) { animation-delay: 0.1s; }
+        .premium-card:nth-child(2) { animation-delay: 0.2s; }
+        .premium-card:nth-child(3) { animation-delay: 0.3s; }
+        .premium-card:nth-child(4) { animation-delay: 0.4s; }
+        .premium-card:nth-child(5) { animation-delay: 0.5s; }
         
         .premium-card:hover {
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          border-color: rgba(79, 70, 229, 0.2);
         }
         
-        /* Spacing rhythm for visual hierarchy */
+        /* Spacing rhythm */
         .section-group-spacing {
-          margin-top: 2rem;
+          margin-top: 1.5rem;
         }
         
         /* Professional Typography Scale */
         body {
           line-height: 1.6;
-          color: #1e293b;
+          color: var(--color-text-main);
         }
         
-        /* Premium Title Card with Deep Blue Gradient Header */
+        /* Premium Gradient Header - Single Consistent Brand Color */
         .premium-header {
-          background: linear-gradient(90deg, #312e81, #4338ca);
+          background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
           color: white;
           padding: 1.5rem 2rem;
           border-radius: 1rem 1rem 0 0;
           margin: -1px -1px 0 -1px;
           position: relative;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border: none;
         }
         
         .premium-header h1 {
@@ -364,69 +377,66 @@ function Calculator() {
         }
         
         .premium-header h1 i {
-          color: #c4b5fd;
+          color: rgba(255, 255, 255, 0.9);
           font-size: 1.5rem;
         }
         
         .premium-header p {
           line-height: 1.6;
           font-size: 0.9rem;
-          color: rgba(255, 255, 255, 0.8);
+          color: rgba(255, 255, 255, 0.85);
           margin: 0;
         }
         
-        /* Clean Pill Badges */
+        /* Modern Accent Badges */
         .premium-badge {
-          background: #f3e8ff;
-          color: #7c3aed;
+          background: rgba(108, 99, 255, 0.1);
+          color: var(--color-accent);
           padding: 4px 12px;
           border-radius: 9999px;
           font-size: 0.75rem;
           font-weight: 600;
-          border: 1px solid #e9d5ff;
+          border: 1px solid rgba(108, 99, 255, 0.2);
           transition: all 0.2s ease;
         }
         
         .premium-badge:hover {
-          background: #e9d5ff;
+          background: rgba(108, 99, 255, 0.15);
           transform: translateY(-1px);
         }
         
-        /* Professional Section Headers with Label Chips */
+        /* Modern Section Headers with Chips */
         .section-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 0.5rem;
-          padding: 1.5rem 2rem;
+          padding: 1.25rem 1.5rem;
           background: transparent;
-          border-bottom: 1px solid #f1f5f9;
+          border-bottom: 1px solid var(--color-border);
           margin: 0;
         }
         
         .section-header h5 {
           margin: 0;
           font-weight: 600;
-          font-size: 0.8rem;
-          color: #64748b;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          font-size: 0.875rem;
+          color: var(--color-text-main);
+          text-transform: none;
+          letter-spacing: 0;
           line-height: 1.4;
           display: inline-flex;
           align-items: center;
-          gap: 0.375rem;
-          background: #f1f5f9;
-          padding: 0.375rem 0.75rem;
-          border-radius: 0.5rem;
+          gap: 0.5rem;
         }
         
         .section-header i {
-          font-size: 1rem;
-          color: #8b5cf6;
+          font-size: 1.125rem;
+          color: var(--color-primary);
         }
         
         .section-body {
-          padding: 1.5rem 2rem;
+          padding: 1.5rem;
         }
         
         /* Field Group Dividers */
@@ -436,11 +446,11 @@ function Calculator() {
           margin-top: 1rem;
         }
         
-        /* Improved Typography & Readability */
+        /* Modern Form Labels */
         .premium-form-label {
           font-weight: 600;
-          color: #6b7280;
-          font-size: 0.8rem;
+          color: var(--color-text-muted);
+          font-size: 0.8125rem;
           text-transform: none;
           letter-spacing: 0;
           margin-bottom: 0.5rem;
@@ -467,32 +477,32 @@ function Calculator() {
           opacity: 1;
         }
         
-        /* Professional Input Fields */
+        /* Clean Professional Inputs */
         .premium-input {
-          border: 1px solid #e2e8f0;
+          border: 1px solid var(--color-border);
           border-radius: 0.5rem;
           padding: 0.625rem 0.875rem;
-          font-size: 0.9rem;
-          background: white;
-          color: #111827;
+          font-size: 0.9375rem;
+          background: var(--color-surface);
+          color: var(--color-text-main);
           transition: all 0.2s ease;
           line-height: 1.6;
         }
         
         .premium-input:focus {
-          border-color: #8b5cf6;
-          box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
           outline: none;
-          background: white;
+          background: var(--color-surface);
         }
         
         .premium-input::placeholder {
           color: #9ca3af;
         }
         
-        /* Clean Modern Buttons */
+        /* Modern Premium Buttons */
         .premium-btn {
-          border-radius: 10px;
+          border-radius: 0.5rem;
           padding: 0.625rem 1.5rem;
           font-weight: 600;
           font-size: 0.9375rem;
@@ -509,18 +519,18 @@ function Calculator() {
         }
         
         .premium-btn-primary {
-          background: linear-gradient(135deg, #7c3aed, #a855f7);
+          background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
           color: white;
-          box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+          box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
         }
         
         .premium-btn-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
         }
         
         .premium-btn-success {
-          background: linear-gradient(135deg, #059669, #10b981);
+          background: var(--color-success);
           color: white;
           box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
         }
@@ -528,12 +538,19 @@ function Calculator() {
         .premium-btn-success:hover {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+          background: #059669;
         }
         
         .premium-btn-danger {
-          background: linear-gradient(135deg, #dc2626, #ef4444);
+          background: var(--color-danger);
           color: white;
-          box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+        }
+        
+        .premium-btn-danger:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+          background: #dc2626;
         }
         
         .premium-btn-danger:hover {
@@ -541,7 +558,7 @@ function Calculator() {
           box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
         }
         
-        /* Professional Summary Cards with Gradient Backgrounds */
+        /* Premium Summary Cards with Subtle Gradients */
         .premium-summary-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -550,25 +567,24 @@ function Calculator() {
         }
         
         .premium-summary-card {
-          background: linear-gradient(145deg, #fafafa, #f3f4f6);
-          backdrop-filter: blur(10px);
+          background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
           border-radius: 1rem;
           padding: 1.25rem;
           text-align: center;
-          border: 1px solid #e2e8f0;
+          border: 1px solid var(--color-border);
           transition: all 0.2s ease;
           position: relative;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
         
         .premium-summary-card:hover {
-          background: linear-gradient(145deg, #eef2ff, #e0e7ff);
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         
         .premium-summary-card.cyan {
           border-left: 3px solid #06b6d4;
+          background: linear-gradient(135deg, #ffffff 0%, #ecfeff 100%);
         }
         
         .premium-summary-card.cyan:hover {
@@ -577,6 +593,7 @@ function Calculator() {
         
         .premium-summary-card.amber {
           border-left: 3px solid #f59e0b;
+          background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
         }
         
         .premium-summary-card.amber:hover {
@@ -584,15 +601,17 @@ function Calculator() {
         }
         
         .premium-summary-card.violet {
-          border-left: 3px solid #8b5cf6;
+          border-left: 3px solid var(--color-primary);
+          background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
         }
         
         .premium-summary-card.violet:hover {
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
         }
         
         .premium-summary-card.emerald {
-          border-left: 3px solid #10b981;
+          border-left: 3px solid var(--color-success);
+          background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
         }
         
         .premium-summary-card.emerald:hover {
@@ -653,7 +672,7 @@ function Calculator() {
           animation: pulse-glow 1s ease-in-out;
         }
         
-        /* Floating AI Assist Button - REFINED */
+        /* Modern AI Assist Button */
         .ai-assist-btn {
           position: fixed;
           bottom: 24px;
@@ -661,10 +680,10 @@ function Calculator() {
           width: 60px;
           height: 60px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
           color: white;
           border: none;
-          box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+          box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
           cursor: pointer;
           transition: all 0.3s ease;
           z-index: 1000;
@@ -672,13 +691,11 @@ function Calculator() {
           align-items: center;
           justify-content: center;
           font-size: 1.75rem;
-          opacity: 0.85;
         }
         
         .ai-assist-btn:hover {
           transform: scale(1.15);
-          box-shadow: 0 12px 40px rgba(99, 102, 241, 0.7);
-          opacity: 1;
+          box-shadow: 0 12px 32px rgba(79, 70, 229, 0.5);
         }
         
         .ai-assist-btn::after {
@@ -689,7 +706,7 @@ function Calculator() {
           right: 0;
           bottom: 0;
           border-radius: 50%;
-          border: 2px solid rgba(99, 102, 241, 0.5);
+          border: 2px solid rgba(79, 70, 229, 0.5);
           animation: ripple 2s infinite;
         }
         
@@ -767,26 +784,26 @@ function Calculator() {
           }
         }
         
-        /* Professional AI Insights Bar */
+        /* Modern AI Insights Bar */
         .ai-insights-bar {
-          background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-          border-left: 3px solid #8b5cf6;
+          background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+          border-left: 3px solid var(--color-primary);
           border-radius: 0.75rem;
           padding: 1rem 1.25rem;
           margin-top: 1.5rem;
-          color: #475569;
+          color: var(--color-text-muted);
           font-size: 0.875rem;
           line-height: 1.6;
           border: 1px solid #e9d5ff;
         }
         
         .ai-insights-bar i {
-          color: #8b5cf6;
+          color: var(--color-primary);
           margin-right: 0.5rem;
         }
         
         .ai-insights-bar strong {
-          color: #6d28d9;
+          color: var(--color-primary);
           font-weight: 600;
         }
         

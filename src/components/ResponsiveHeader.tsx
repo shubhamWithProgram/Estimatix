@@ -21,13 +21,16 @@ export default function MobileHeader() {
 
   return (
     <>
-      {/* Professional SaaS Header - Deep Blue Theme */}
+      {/* Professional Frosted Glass Header */}
       <header 
         className="sticky-top" 
         style={{
-          background: 'linear-gradient(90deg, #312e81, #4338ca)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          zIndex: 1000
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          background: 'rgba(255, 255, 255, 0.8)',
+          borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+          zIndex: 1000,
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
         }}
       >
         <div className="container-fluid" style={{ maxWidth: '1400px', padding: '0 1.5rem' }}>
@@ -38,23 +41,24 @@ export default function MobileHeader() {
               padding: '0.75rem 0'
             }}
           >
-            {/* Clean Brand Logo */}
+            {/* Modern Brand Logo */}
             <Link to="/" className="text-decoration-none" onClick={closeMenu}>
               <div className="d-flex align-items-center gap-2">
-                <i className="bi bi-calculator-fill text-violet" style={{ 
+                <i className="bi bi-calculator-fill" style={{ 
                   fontSize: '1.25rem',
-                  color: '#a855f7'
+                  color: '#4F46E5'
                 }}></i>
                 <div>
-                  <span className="text-white fw-semibold" style={{ 
+                  <span className="fw-semibold" style={{ 
                     fontSize: '1.1rem',
-                    letterSpacing: '0.3px'
+                    letterSpacing: '0.3px',
+                    color: '#1E293B'
                   }}>
                     Estimatix
                   </span>
-                  <span className="text-muted ms-2 d-none d-lg-inline" style={{ 
+                  <span className="ms-2 d-none d-lg-inline" style={{ 
                     fontSize: '0.85rem',
-                    color: '#94a3b8'
+                    color: '#64748B'
                   }}>
                     Professional Estimation Suite
                   </span>
