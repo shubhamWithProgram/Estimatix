@@ -197,17 +197,57 @@ class EnhancedPDFService {
     // === ADD LOGO.SVG AS WATERMARK (Large & Prominent) ===
     if (showLogo && !options.draft && !options.confidential) {
       try {
-        // Load logo.svg from public folder
-        const response = await fetch('/logo.svg')
-        const svgText = await response.text()
+        // Embed logo SVG directly to avoid fetch issues
+        const logoSVG = `<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="240" fill="url(#primaryGradient)" opacity="0.1"/>
+  <rect x="140" y="100" width="232" height="312" rx="24" fill="url(#primaryGradient)"/>
+  <rect x="164" y="124" width="184" height="80" rx="12" fill="#ffffff" opacity="0.95"/>
+  <text x="332" y="180" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="url(#primaryGradient)" text-anchor="end">123.5</text>
+  <rect x="164" y="228" width="36" height="36" rx="8" fill="#ffffff" opacity="0.2"/>
+  <rect x="212" y="228" width="36" height="36" rx="8" fill="#ffffff" opacity="0.2"/>
+  <rect x="260" y="228" width="36" height="36" rx="8" fill="#ffffff" opacity="0.2"/>
+  <rect x="308" y="228" width="36" height="36" rx="8" fill="url(#accentGradient)"/>
+  <rect x="164" y="276" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="212" y="276" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="260" y="276" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="308" y="276" width="36" height="36" rx="8" fill="url(#accentGradient)"/>
+  <rect x="164" y="324" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="212" y="324" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="260" y="324" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="308" y="324" width="36" height="36" rx="8" fill="url(#accentGradient)"/>
+  <rect x="164" y="372" width="84" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="260" y="372" width="36" height="36" rx="8" fill="#ffffff" opacity="0.3"/>
+  <rect x="308" y="372" width="36" height="36" rx="8" fill="#10b981"/>
+  <path d="M 380 320 L 420 280 L 460 300 L 500 240" stroke="url(#accentGradient)" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <circle cx="380" cy="320" r="6" fill="url(#accentGradient)"/>
+  <circle cx="420" cy="280" r="6" fill="url(#accentGradient)"/>
+  <circle cx="460" cy="300" r="6" fill="url(#accentGradient)"/>
+  <circle cx="500" cy="240" r="6" fill="url(#accentGradient)"/>
+  <text x="50" y="180" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="url(#primaryGradient)">E</text>
+  <path d="M 40 200 L 100 200 L 70 240 L 95 240" stroke="url(#accentGradient)" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>`
         
         // Convert SVG to canvas, then to data URL
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
+        if (!ctx) {
+          throw new Error('Canvas context not available')
+        }
+        
         const DOMURL = window.URL || window.webkitURL || window
         
         const img = new Image()
-        const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' })
+        const svgBlob = new Blob([logoSVG], { type: 'image/svg+xml;charset=utf-8' })
         const url = DOMURL.createObjectURL(svgBlob)
         
         await new Promise<void>((resolve, reject) => {
@@ -243,23 +283,25 @@ class EnhancedPDFService {
                 'NONE' // No compression for better quality
               )
               
+              console.log('✅ Logo watermark added successfully to PDF')
               DOMURL.revokeObjectURL(url)
               resolve()
             } catch (error) {
-              console.warn('Failed to convert logo:', error)
+              console.error('❌ Failed to convert logo to canvas:', error)
               DOMURL.revokeObjectURL(url)
               reject(error)
             }
           }
-          img.onerror = () => {
+          img.onerror = (err) => {
+            console.error('❌ Failed to load logo image:', err)
             DOMURL.revokeObjectURL(url)
             reject(new Error('Failed to load logo.svg'))
           }
           img.src = url
         })
       } catch (error) {
-        console.warn('Logo watermark failed, using fallback:', error)
-        // Fallback: Simple circle with E
+        console.error('❌ Logo watermark failed, using fallback circle:', error)
+        // Fallback: Simple circle with E (only shows if logo completely fails)
         this.doc.setDrawColor(color)
         this.doc.setFillColor(color)
         this.doc.setLineWidth(4)
