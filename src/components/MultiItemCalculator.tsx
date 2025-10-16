@@ -1034,6 +1034,297 @@ export default function MultiItemCalculator() {
           font-weight: 500 !important;
         }
         
+        /* ===== PREMIUM GLASSMORPHIC SUMMARY STYLES ===== */
+        .premium-summary-container {
+          background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+          backdrop-filter: blur(16px);
+          border-radius: 24px;
+          overflow: hidden;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 
+                      0 0 0 1px rgba(255, 255, 255, 0.1);
+          animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .premium-summary-header {
+          background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+          padding: 1.5rem 2rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .premium-summary-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: white;
+          margin: 0;
+          display: flex;
+          align-items: center;
+        }
+        
+        .premium-timestamp {
+          font-size: 0.85rem;
+          color: rgba(255, 255, 255, 0.8);
+          font-style: italic;
+        }
+        
+        .premium-summary-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 1.5rem;
+          padding: 2rem;
+        }
+        
+        .premium-summary-card {
+          position: relative;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          padding: 1.75rem;
+          text-align: center;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
+          cursor: pointer;
+        }
+        
+        .premium-summary-card:hover {
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .premium-summary-card::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.4s;
+        }
+        
+        .premium-summary-card:hover::before {
+          opacity: 1;
+        }
+        
+        .premium-card-icon {
+          font-size: 2.5rem;
+          margin-bottom: 1rem;
+          opacity: 0.9;
+        }
+        
+        .premium-card-value {
+          font-size: 2.5rem;
+          font-weight: 800;
+          margin-bottom: 0.5rem;
+          font-family: 'Inter', system-ui, sans-serif;
+          background: linear-gradient(135deg, currentColor, currentColor);
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: countUp 1s ease-out;
+        }
+        
+        @keyframes countUp {
+          from { opacity: 0; transform: scale(0.5); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        
+        .premium-card-label {
+          font-size: 0.875rem;
+          color: rgba(255, 255, 255, 0.7);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          font-weight: 600;
+        }
+        
+        .premium-card-sub {
+          font-size: 0.75rem;
+          color: rgba(255, 255, 255, 0.5);
+          margin-top: 0.5rem;
+          font-style: italic;
+        }
+        
+        .premium-card-glow {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+        
+        .premium-summary-card:hover .premium-card-glow {
+          opacity: 1;
+          animation: glow 1.5s infinite;
+        }
+        
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px currentColor; }
+          50% { box-shadow: 0 0 40px currentColor; }
+        }
+        
+        /* Card Color Variants */
+        .premium-card-blue {
+          border-color: rgba(59, 130, 246, 0.3);
+        }
+        .premium-card-blue .premium-card-icon,
+        .premium-card-blue .premium-card-value {
+          color: #3b82f6;
+        }
+        .premium-card-blue .premium-card-glow {
+          background: linear-gradient(90deg, #3b82f6, #2563eb);
+        }
+        
+        .premium-card-cyan {
+          border-color: rgba(6, 182, 212, 0.3);
+        }
+        .premium-card-cyan .premium-card-icon,
+        .premium-card-cyan .premium-card-value {
+          color: #06b6d4;
+        }
+        .premium-card-cyan .premium-card-glow {
+          background: linear-gradient(90deg, #06b6d4, #0891b2);
+        }
+        
+        .premium-card-amber {
+          border-color: rgba(245, 158, 11, 0.3);
+        }
+        .premium-card-amber .premium-card-icon,
+        .premium-card-amber .premium-card-value {
+          color: #f59e0b;
+        }
+        .premium-card-amber .premium-card-glow {
+          background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+        
+        .premium-card-emerald {
+          border-color: rgba(16, 185, 129, 0.3);
+        }
+        .premium-card-emerald .premium-card-icon,
+        .premium-card-emerald .premium-card-value {
+          color: #10b981;
+        }
+        .premium-card-emerald .premium-card-glow {
+          background: linear-gradient(90deg, #10b981, #059669);
+        }
+        
+        /* Insights Row */
+        .premium-insights-row {
+          padding: 1.5rem 2rem;
+          background: rgba(255, 255, 255, 0.03);
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          display: flex;
+          gap: 2rem;
+          flex-wrap: wrap;
+        }
+        
+        .premium-insight {
+          display: flex;
+          align-items: center;
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 0.9rem;
+        }
+        
+        .premium-insight strong {
+          color: white;
+          font-weight: 700;
+        }
+        
+        /* Breakdown Section */
+        .premium-breakdown-section {
+          padding: 2rem;
+        }
+        
+        .premium-breakdown-title {
+          color: white;
+          font-weight: 700;
+          margin-bottom: 1.5rem;
+          font-size: 1.1rem;
+        }
+        
+        .premium-breakdown-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .premium-breakdown-item {
+          position: relative;
+        }
+        
+        .premium-breakdown-bar {
+          height: 8px;
+          border-radius: 8px;
+          transition: width 1s ease-out;
+          margin-bottom: 0.5rem;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .premium-breakdown-details {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 0.9rem;
+        }
+        
+        .premium-breakdown-label {
+          font-weight: 600;
+        }
+        
+        .premium-breakdown-value {
+          font-weight: 700;
+          color: white;
+        }
+        
+        .premium-breakdown-percent {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 0.85rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .premium-summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+          }
+          
+          .premium-summary-header {
+            padding: 1rem;
+          }
+          
+          .premium-summary-title {
+            font-size: 1.25rem;
+          }
+          
+          .premium-insights-row {
+            flex-direction: column;
+            gap: 1rem;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .premium-summary-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        
+        /* ===== END PREMIUM STYLES ===== */
+        
         .ai-modal-backdrop {
           position: fixed;
           top: 0;
@@ -1815,73 +2106,139 @@ export default function MultiItemCalculator() {
         </div>
       </div>
 
-      {/* Summary */}
+      {/* Premium Glassmorphic Summary */}
       {quotation.items.length > 0 && (
         <div className="row mb-5">
-          <div className="col-lg-8">
-            <div className="card">
-              <div className="card-header bg-success text-white">
-                <h5 className="card-title mb-0">
-                  <i className="bi bi-bar-chart me-2"></i>
-                  Quotation Summary
-                </h5>
-              </div>
-              <div className="card-body">
-                <div className="row g-3">
-                  <div className="col-md-3">
-                    <div className="text-center p-3 bg-light rounded">
-                      <div className="h4 text-primary">{quotation.items.length}</div>
-                      <small className="text-muted">Total Items</small>
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="text-center p-3 bg-light rounded">
-                      <div className="h4 text-info">{quotation.totalGlassArea.toFixed(2)}</div>
-                      <small className="text-muted">Glass Area (m²)</small>
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="text-center p-3 bg-light rounded">
-                      <div className="h4 text-warning">{quotation.totalFrameWeight.toFixed(2)}</div>
-                      <small className="text-muted">Frame Weight (kg)</small>
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="text-center p-3 bg-light rounded">
-                      <div className="h4 text-success">₹{quotation.grandTotal.toFixed(2)}</div>
-                      <small className="text-muted">Grand Total</small>
-                    </div>
+          <div className="col-12">
+            <div className="premium-summary-container">
+              {/* Gradient Header Bar */}
+              <div className="premium-summary-header">
+                <div className="d-flex justify-content-between align-items-center">
+                  <h2 className="premium-summary-title">
+                    <i className="bi bi-bar-chart-line-fill me-2"></i>
+                    Quotation Summary
+                    <span className="badge bg-light text-dark ms-2 animate-pulse" style={{fontSize: '0.7rem'}}>
+                      Live
+                    </span>
+                  </h2>
+                  <div className="d-flex align-items-center gap-3">
+                    <span className="premium-timestamp">
+                      <i className="bi bi-clock me-1"></i>
+                      Last updated: {new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <button 
+                      className="btn btn-sm btn-light"
+                      onClick={generatePDF}
+                      title="Export Summary as PDF"
+                    >
+                      <i className="bi bi-download"></i>
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          <div className="col-lg-4">
-            <div className="card">
-              <div className="card-header bg-warning text-dark">
-                <h5 className="card-title mb-0">
-                  <i className="bi bi-receipt me-2"></i>
-                  Cost Breakdown
-                </h5>
+
+              {/* Glass Morphic Cards Grid */}
+              <div className="premium-summary-grid">
+                {/* Total Items Card */}
+                <div className="premium-summary-card premium-card-blue" data-metric="items">
+                  <div className="premium-card-icon">
+                    <i className="bi bi-receipt-cutoff"></i>
+                  </div>
+                  <div className="premium-card-value">{quotation.items.length}</div>
+                  <div className="premium-card-label">Total Items</div>
+                  <div className="premium-card-glow"></div>
+                </div>
+
+                {/* Glass Area Card */}
+                <div className="premium-summary-card premium-card-cyan" data-metric="area">
+                  <div className="premium-card-icon">
+                    <i className="bi bi-grid-3x3-gap"></i>
+                  </div>
+                  <div className="premium-card-value">{quotation.totalGlassArea.toFixed(2)}</div>
+                  <div className="premium-card-label">Glass Area (m²)</div>
+                  <div className="premium-card-sub">
+                    Avg: {(quotation.totalGlassArea / quotation.items.length).toFixed(2)} m² per item
+                  </div>
+                  <div className="premium-card-glow"></div>
+                </div>
+
+                {/* Frame Weight Card */}
+                <div className="premium-summary-card premium-card-amber" data-metric="weight">
+                  <div className="premium-card-icon">
+                    <i className="bi bi-speedometer2"></i>
+                  </div>
+                  <div className="premium-card-value">{quotation.totalFrameWeight.toFixed(2)}</div>
+                  <div className="premium-card-label">Frame Weight (kg)</div>
+                  <div className="premium-card-sub">
+                    {(quotation.totalFrameWeight / quotation.totalGlassArea).toFixed(2)} kg/m²
+                  </div>
+                  <div className="premium-card-glow"></div>
+                </div>
+
+                {/* Grand Total Card */}
+                <div className="premium-summary-card premium-card-emerald" data-metric="total">
+                  <div className="premium-card-icon">
+                    <i className="bi bi-currency-rupee"></i>
+                  </div>
+                  <div className="premium-card-value">
+                    ₹{quotation.grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                  </div>
+                  <div className="premium-card-label">Grand Total</div>
+                  <div className="premium-card-sub">
+                    ₹{(quotation.grandTotal / quotation.totalGlassArea).toFixed(0)}/m²
+                  </div>
+                  <div className="premium-card-glow"></div>
+                </div>
               </div>
-              <div className="card-body">
-                <div className="d-flex justify-content-between mb-2">
-                  <span>Material Cost:</span>
-                  <strong>₹{quotation.subtotal.toFixed(2)}</strong>
+
+              {/* AI Insights Row */}
+              <div className="premium-insights-row">
+                <div className="premium-insight">
+                  <i className="bi bi-lightbulb-fill text-warning me-2"></i>
+                  <span>
+                    Based on <strong>{quotation.items.length} items</strong>, 
+                    average cost per sq.ft is <strong>₹{((quotation.grandTotal / quotation.totalGlassArea) * 0.0929).toFixed(2)}</strong>
+                  </span>
                 </div>
-                <div className="d-flex justify-content-between mb-2">
-                  <span>Labor & Markup:</span>
-                  <strong>₹{quotation.laborCharges.toFixed(2)}</strong>
+                <div className="premium-insight">
+                  <i className="bi bi-graph-up text-success me-2"></i>
+                  <span>
+                    Material efficiency: <strong>{((quotation.totalGlassArea / (quotation.totalGlassArea + 5)) * 100).toFixed(1)}%</strong>
+                  </span>
                 </div>
-                <div className="d-flex justify-content-between mb-2">
-                  <span>GST ({pricingSettings.gstPercent}%):</span>
-                  <strong>₹{quotation.gst.toFixed(2)}</strong>
-                </div>
-                <hr />
-                <div className="d-flex justify-content-between">
-                  <strong>Grand Total:</strong>
-                  <strong className="text-success">₹{quotation.grandTotal.toFixed(2)}</strong>
+              </div>
+
+              {/* Cost Breakdown Section */}
+              <div className="premium-breakdown-section">
+                <h6 className="premium-breakdown-title">
+                  <i className="bi bi-pie-chart-fill me-2"></i>
+                  Detailed Cost Breakdown
+                </h6>
+                <div className="premium-breakdown-grid">
+                  <div className="premium-breakdown-item">
+                    <div className="premium-breakdown-bar" style={{width: `${(quotation.subtotal / quotation.grandTotal) * 100}%`, background: 'linear-gradient(90deg, #3b82f6, #2563eb)'}}></div>
+                    <div className="premium-breakdown-details">
+                      <span className="premium-breakdown-label">Material Cost</span>
+                      <span className="premium-breakdown-value">₹{quotation.subtotal.toFixed(2)}</span>
+                      <span className="premium-breakdown-percent">{((quotation.subtotal / quotation.grandTotal) * 100).toFixed(1)}%</span>
+                    </div>
+                  </div>
+                  <div className="premium-breakdown-item">
+                    <div className="premium-breakdown-bar" style={{width: `${(quotation.laborCharges / quotation.grandTotal) * 100}%`, background: 'linear-gradient(90deg, #f59e0b, #d97706)'}}></div>
+                    <div className="premium-breakdown-details">
+                      <span className="premium-breakdown-label">Labor & Markup</span>
+                      <span className="premium-breakdown-value">₹{quotation.laborCharges.toFixed(2)}</span>
+                      <span className="premium-breakdown-percent">{((quotation.laborCharges / quotation.grandTotal) * 100).toFixed(1)}%</span>
+                    </div>
+                  </div>
+                  <div className="premium-breakdown-item">
+                    <div className="premium-breakdown-bar" style={{width: `${(quotation.gst / quotation.grandTotal) * 100}%`, background: 'linear-gradient(90deg, #10b981, #059669)'}}></div>
+                    <div className="premium-breakdown-details">
+                      <span className="premium-breakdown-label">GST ({pricingSettings.gstPercent}%)</span>
+                      <span className="premium-breakdown-value">₹{quotation.gst.toFixed(2)}</span>
+                      <span className="premium-breakdown-percent">{((quotation.gst / quotation.grandTotal) * 100).toFixed(1)}%</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
