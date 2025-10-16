@@ -343,14 +343,16 @@ function Calculator() {
           margin-top: 24px;
         }
         
-        /* Premium Header with Refined Glow */
+        /* Premium Header with Refined Styling */
         .premium-header {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: rgba(88, 28, 135, 0.8);
           color: white;
-          padding: 2rem 2rem;
+          padding: 20px 30px;
           border-radius: 14px 14px 0 0;
           margin: -1px -1px 0 -1px;
           position: relative;
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+          border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .premium-header::after {
@@ -365,10 +367,11 @@ function Calculator() {
         }
         
         .premium-header h1 {
-          font-weight: 800;
-          font-size: 2.25rem;
+          font-weight: 700;
+          font-size: 1.75rem;
           margin: 0;
           line-height: 1.4;
+          letter-spacing: -0.5px;
           background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -377,6 +380,8 @@ function Calculator() {
         
         .premium-header p {
           line-height: 1.4;
+          font-size: 0.9rem;
+          opacity: 0.8;
         }
         
         /* Refined Badges */
@@ -527,7 +532,7 @@ function Calculator() {
         }
         
         .premium-btn-primary {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: linear-gradient(90deg, #6366f1, #8b5cf6);
           color: white;
           box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
@@ -789,22 +794,32 @@ function Calculator() {
           }
         }
         
-        /* Auto-save Indicator - REFINED */
+        /* Auto-save Indicator - REFINED & SUBTLE */
         .auto-save-indicator {
           position: fixed;
           top: 24px;
           right: 24px;
-          background: rgba(16, 185, 129, 0.2);
+          background: rgba(34, 197, 94, 0.15);
           backdrop-filter: blur(10px);
-          color: #6ee7b7;
-          padding: 8px 16px;
-          border-radius: 50px;
+          color: #bbf7d0;
+          padding: 3px 10px;
+          border-radius: 20px;
           font-size: 0.8rem;
           font-weight: 600;
-          border: 1px solid rgba(16, 185, 129, 0.4);
-          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+          border: 1px solid rgba(34, 197, 94, 0.3);
+          box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
           z-index: 999;
-          animation: slideInRight 0.5s ease-out;
+          animation: slideInRight 0.5s ease-out, pulse-save 2s ease-in-out infinite;
+        }
+        
+        .auto-save-indicator i {
+          color: #4ade80;
+          font-size: 0.9rem;
+        }
+        
+        @keyframes pulse-save {
+          0%, 100% { box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2); }
+          50% { box-shadow: 0 0 12px rgba(34, 197, 94, 0.4); }
         }
         
         @keyframes slideInRight {
@@ -916,8 +931,11 @@ function Calculator() {
 
       <div className="premium-calc-container">
         <div className="container-fluid" style={{ maxWidth: '1400px', padding: '0 1rem' }}>
-          {/* Premium Header - Narrower for hierarchy */}
-          <div className="premium-card mb-4" style={{ maxWidth: '90%', margin: '12px auto 1.5rem auto' }}>
+          {/* Premium Header - Narrower with proper spacing */}
+          <div className="premium-card" style={{ 
+            maxWidth: '90%', 
+            margin: '24px auto 1.5rem auto'
+          }}>
             <div className="premium-header">
               <div className="d-flex justify-content-between align-items-center flex-wrap">
                 <div>

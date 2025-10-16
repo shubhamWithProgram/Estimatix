@@ -21,13 +21,13 @@ export default function MobileHeader() {
 
   return (
     <>
-      {/* Professional Header */}
+      {/* Professional Header with Consistent Gradient */}
       <header className="sticky-top shadow-sm" style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        borderBottom: '3px solid rgba(255,255,255,0.1)'
+        background: 'linear-gradient(90deg, #3B82F6, #8B5CF6)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
       }}>
         <div className="container-fluid px-4">
-          <div className="d-flex justify-content-between align-items-center py-3">
+          <div className="d-flex justify-content-between align-items-center" style={{ minHeight: '72px' }}>
             {/* Premium Logo/Brand */}
             <Link to="/" className="text-white text-decoration-none" onClick={closeMenu}>
               <div className="d-flex align-items-center">
@@ -524,7 +524,25 @@ export function DesktopHeader() {
                     <i className="bi bi-credit-card me-1"></i>
                     Billing
                   </Link>
-                  <Link to="/admin" className="btn btn-warning btn-sm">
+                  <Link to="/admin" 
+                    className="btn btn-sm" 
+                    style={{
+                      background: 'linear-gradient(90deg, #facc15, #eab308)',
+                      color: '#1e1e1e',
+                      fontWeight: '600',
+                      border: 'none',
+                      boxShadow: '0 0 8px rgba(250, 204, 21, 0.4)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 0 12px rgba(250, 204, 21, 0.6)'
+                      e.currentTarget.style.transform = 'translateY(-2px)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 0 8px rgba(250, 204, 21, 0.4)'
+                      e.currentTarget.style.transform = 'translateY(0)'
+                    }}
+                  >
                     <i className="bi bi-shield-check me-1"></i>
                     Admin
                   </Link>
