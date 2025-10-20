@@ -11,45 +11,30 @@
   "lang": "en",
   "orientation": "portrait-primary",
   "icons": [
-    { "src": "/logo192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/logo512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ],
-  "screenshots": [
-    {
-      "src": "/screenshot-mobile.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshot-desktop.png", 
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    }
-  ],
+  "screenshots": [],
   "shortcuts": [
     {
       "name": "New Estimate",
       "short_name": "Estimate",
       "description": "Create a new estimation project",
       "url": "/calculator",
-      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/logo.svg", "sizes": "any" }]
     },
     {
       "name": "Multi-Item Quote",
       "short_name": "Quote",
       "description": "Create detailed quotations",
       "url": "/multi-calculator",
-      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/logo.svg", "sizes": "any" }]
     },
     {
       "name": "Billing",
       "short_name": "Billing", 
       "description": "Manage your subscription",
       "url": "/billing",
-      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/logo.svg", "sizes": "any" }]
     }
   ]
 }
