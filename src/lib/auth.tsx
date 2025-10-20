@@ -144,8 +144,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GoogleAuthProvider()
       await signInWithPopup(auth, provider)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Google sign in error:', error)
+      
+      // Check if it's an unauthorized domain error
+      if (error?.code === 'auth/unauthorized-domain') {
+        const currentDomain = window.location.hostname
+        throw new Error(
+          `🔒 Domain not authorized\n\n` +
+          `The domain "${currentDomain}" needs to be added to Firebase.\n\n` +
+          `Please add it in:\n` +
+          `Firebase Console → Authentication → Settings → Authorized domains`
+        )
+      }
+      
       throw error
     }
   }
