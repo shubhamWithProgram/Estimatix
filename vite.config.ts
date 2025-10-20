@@ -46,7 +46,10 @@ export default defineConfig(({ mode }) => {
           if (id.includes('node_modules')) {
             if (id.includes('xlsx')) return 'vendor-xlsx'
             if (id.includes('jspdf')) return 'vendor-jspdf'
-            if (id.match(/react|react-dom/)) return 'vendor-react'
+            // Keep React, React-DOM, and Scheduler together to avoid duplicate instances
+            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+              return 'vendor-react'
+            }
             return 'vendor'
           }
         }
