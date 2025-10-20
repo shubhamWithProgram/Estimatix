@@ -9,6 +9,7 @@ import AdminSettings from './components/AdminSettings'
 import MultiItemCalculator from './components/MultiItemCalculator'
 import SharedQuoteViewer from './components/SharedQuoteViewer'
 import OnboardingWizard from './components/OnboardingWizard'
+import PricingConfiguration from './components/PricingConfiguration'
 import { ResponsiveHeader } from './components/ResponsiveHeader.tsx'
 import { useState, useEffect } from 'react'
 
@@ -51,34 +52,32 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
       {children}
 
-      {/* Footer */}
-      <footer className="bg-dark text-white py-3 mt-auto">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-md-6">
-              <p className="mb-0">
-                <strong>Estimatix</strong> - Professional Estimation & Quotation Platform
+      {/* Modern PWA Footer */}
+      <footer className="estimatix-footer mt-auto border-top border-secondary">
+        <div className="container py-4">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            
+            {/* Brand Section */}
+            <div className="text-center text-md-start">
+              <div className="mb-2">
+                <span className="text-info fw-bold fs-5">Estimatix</span>
+                <span className="text-muted ms-2">v1.0</span>
+              </div>
+              <p className="mb-0 small text-secondary">
+                Professional Estimation & Quotation Platform
               </p>
-              <small className="text-muted">
-                Powered by Firebase & Advanced SaaS Technology | Version 1.0
+              <small className="text-muted" style={{ fontSize: '0.75rem' }}>
+                Powered by Firebase & Advanced SaaS Technology
               </small>
             </div>
-            <div className="col-md-6 text-md-end">
-              <div className="d-flex justify-content-md-end gap-3">
-                <small>
-                  <i className="bi bi-calculator me-1"></i>
-                  Smart Estimations
-                </small>
-                <small>
-                  <i className="bi bi-file-earmark-pdf me-1"></i>
-                  PDF Export
-                </small>
-                <small>
-                  <i className="bi bi-palette me-1"></i>
-                  Theme Toggle
-                </small>
-              </div>
+
+            {/* Copyright */}
+            <div className="text-center text-md-end">
+              <small className="text-muted">
+                © 2025 Estimatix. All rights reserved.
+              </small>
             </div>
+
           </div>
         </div>
       </footer>
@@ -139,6 +138,11 @@ function AppLayoutWrapper() {
           <Route path="/multi-calculator" element={
             <ProtectedRoute>
               <MultiItemCalculator />
+            </ProtectedRoute>
+          } />
+          <Route path="/pricing-config" element={
+            <ProtectedRoute>
+              <PricingConfiguration />
             </ProtectedRoute>
           } />
           <Route path="/admin" element={
