@@ -8,7 +8,8 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-  updateProfile
+  updateProfile,
+  sendPasswordResetEmail
 } from 'firebase/auth'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { auth, db } from './firebase'
@@ -37,6 +38,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, displayName?: string) => Promise<void>
   signInWithGoogle: () => Promise<void>
   logout: () => Promise<void>
+  resetPassword: (email: string) => Promise<void>
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>
 }
 
@@ -158,6 +160,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  // Reset password
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email)
+      console.log('✅ Password reset email sent')
+    } catch (error) {
+      console.error('Password reset error:', error)
+      throw error
+    }
+  }
+
   // Update user profile
   const updateUserProfile = async (updates: Partial<UserProfile>) => {
     if (!user || !userProfile) throw new Error('No user logged in')
@@ -180,6 +193,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signInWithGoogle,
     logout,
+    resetPassword,
     updateUserProfile
   }
 

@@ -1,190 +1,377 @@
-# Estimatix - Professional Estimation & Quotation Platform
+# 📱 Estimatix - Aluminium Quotation Calculator# Estimatix - Professional Estimation & Quotation Platform
 
-<div align="center">
-  <img src="public/logo.svg" alt="Estimatix Logo" width="200"/>
-  
-  **Modern SaaS Platform for Professional Estimations**
-  
-  [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/shubhamWithProgram/estimatix)
-  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-</div>
 
----
 
-## 🚀 Features
+<div align="center"><div align="center">
 
-### 🆕 Enhanced Multi-Item Calculator (October 2025) ⭐ AI-POWERED
-The Multi-Item Quotation Calculator has been transformed into a **world-class professional system** with **28 production-ready features** across 6 categories:
+  <img src="public/logo.svg" alt="Estimatix Logo" width="120"/>  <img src="public/logo.svg" alt="Estimatix Logo" width="200"/>
 
-| Category | Features | Impact |
-|----------|----------|--------|
-| 🧠 **Smart Logic** | 5 features | Accuracy & Efficiency |
-| 🚀 **Productivity** | 5 features | Faster Workflow |
-| 🎨 **Visual** | 6 features | Cleaner UX |
-| ⚙️ **Automation** | 4 features | Reliability |
-| 💼 **Business** | 4 features | Professional Edge |
-| 📢 **Marketing** | 4 features | Modern Touch |
+    
 
-#### � AI-Assisted Estimation ⭐ NEW!
-- **One-click intelligent auto-fill** - AI analyzes and suggests optimal configurations
-- **4 AI Modes**: Residential, Commercial, Thermal, Premium
-- **8 preset configurations** - Small to Extra-Large for both windows and doors
-- **AI confidence scoring** - Shows estimation reliability
-- **Cost impact preview** - See financial implications before applying
-- **Smart reasoning** - Explains why each choice was made
-- **Premium modal interface** - Professional presentation
+  **Professional Aluminium Estimation & Quotation Platform**  **Modern SaaS Platform for Professional Estimations**
 
-#### �🧮 Smart Auto-Calculation
-- **Real-time calculations** as you type (Excel-like experience)
-- Auto-calculated: Glass Area, Frame Weight, All Costs
-- Frame weight varies by type (Standard, Heavy Duty, UPVC, etc.)
-- Visual indicators for auto-calculated fields
+    
 
-#### 💡 Intelligent Recommendations
-- **Context-aware suggestions** based on dimensions and materials
-- Sliding mechanism alerts for large windows (>2m)
-- Glass type recommendations for safety
-- Security suggestions for doors
-- Weather strip alerts for large openings
+  ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)  [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/shubhamWithProgram/estimatix)
 
-#### 📊 Live Summary Footer
-- **Always-visible sticky footer** with totals
-- Shows: Items, Area, Weight, Grand Total
-- Quick action buttons: WhatsApp, Email, PDF
-- Pulsing animation for visibility
+  ![Status](https://img.shields.io/badge/status-production-success.svg)  [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-#### 🔖 Template System
-- Save common configurations as reusable templates
-- One-click insertion from template library
-- Perfect for frequently-used setups
+  ![Bundle](https://img.shields.io/badge/bundle-687KB-green.svg)  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-#### 📋 Productivity Features
-- **Clone/Duplicate items** with one click
-- **Drag-and-drop reordering** with visual feedback
-- **Auto-numbering** that updates dynamically
-- **Auto-save** every 2 seconds (Google Docs style)
-- **Draft recovery** on page reload
+</div></div>
 
-#### 🧾 Cost Transparency
-- Expandable **cost breakdown per item**
-- Shows: Glass, Frame, Accessories, Labor costs
-- Professional presentation for customers
 
-#### 📱 Direct Communication
-- **WhatsApp integration** - Pre-filled messages
-- **Email integration** - Professional templates
-- One-click sharing from sticky footer
 
-#### 📅 Smart Tracking
-- **30-day auto expiry** on quotations
-- **Status badges**: Draft, Finalized, Sent
-- Visual warnings for expired quotes
+------
 
-**📖 Documentation**: See `MULTI_ITEM_CALCULATOR_ENHANCEMENTS.md` for detailed features
 
----
 
-### Core Functionality
-- **Multi-Item Quotations**: Create detailed quotations with multiple items
-- **Smart Calculator**: Quick single-item estimations
-- **PDF Generation**: Professional PDF quotations with custom branding
-- **Share Quotes**: Generate shareable links for quotes
-- **Subscription Management**: Integrated Stripe billing
-- **Multi-Tenant Support**: Customizable per client/tenant
+## 🚀 Quick Start## 🚀 Features
 
-### Technical Features
-- ⚡ **Fast**: Built with Vite + React
-- 🔐 **Secure**: Firebase Authentication
-- 📱 **Responsive**: Mobile-first design
-- 🎨 **Modern UI**: Bootstrap 5 + Custom CSS
-- 📄 **PWA Ready**: Installable as app
-- 🔄 **Real-time**: Live data sync
-- 📊 **Analytics**: Track usage and metrics
 
----
 
-## 🎨 Branding
+```bash### 🆕 Enhanced Multi-Item Calculator (October 2025) ⭐ AI-POWERED
 
-**Estimatix** represents professional estimation services with a modern, trustworthy identity.
+# Install dependenciesThe Multi-Item Quotation Calculator has been transformed into a **world-class professional system** with **28 production-ready features** across 6 categories:
 
-- **Colors**: Indigo (#4f46e5) to Purple (#9333ea) gradient
-- **Style**: Clean, minimal, glassmorphism
-- **Theme**: Calculator + Analytics fusion
-
----
-
-## 📦 Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/shubhamWithProgram/estimatix.git
-
-# Navigate to project directory
-cd estimatix
-
-# Install dependencies
 npm install
 
-# Create .env.local file (see env.example)
-cp env.example .env.local
+| Category | Features | Impact |
 
-# Start development server
-npm run dev
+# Configure Firebase (copy and edit .env.local)|----------|----------|--------|
+
+cp env.example .env.local| 🧠 **Smart Logic** | 5 features | Accuracy & Efficiency |
+
+| 🚀 **Productivity** | 5 features | Faster Workflow |
+
+# Run development server| 🎨 **Visual** | 6 features | Cleaner UX |
+
+npm run dev| ⚙️ **Automation** | 4 features | Reliability |
+
+| 💼 **Business** | 4 features | Professional Edge |
+
+# Build for production| 📢 **Marketing** | 4 features | Modern Touch |
+
+npm run build
+
+```#### � AI-Assisted Estimation ⭐ NEW!
+
+- **One-click intelligent auto-fill** - AI analyzes and suggests optimal configurations
+
+Visit: **http://localhost:5173**- **4 AI Modes**: Residential, Commercial, Thermal, Premium
+
+- **8 preset configurations** - Small to Extra-Large for both windows and doors
+
+---- **AI confidence scoring** - Shows estimation reliability
+
+- **Cost impact preview** - See financial implications before applying
+
+## ✨ Key Features- **Smart reasoning** - Explains why each choice was made
+
+- **Premium modal interface** - Professional presentation
+
+- ✅ **Professional Authentication** - Premium glassmorphic login/signup
+
+- ✅ **Single & Multi-Item Calculators** - Flexible quotation system#### �🧮 Smart Auto-Calculation
+
+- ✅ **PDF Generation** - Professional quotations with branding- **Real-time calculations** as you type (Excel-like experience)
+
+- ✅ **Excel Export** - Download calculations as spreadsheets- Auto-calculated: Glass Area, Frame Weight, All Costs
+
+- ✅ **Firebase Integration** - Cloud storage & authentication- Frame weight varies by type (Standard, Heavy Duty, UPVC, etc.)
+
+- ✅ **Share Quotes** - WhatsApp, Email, QR codes- Visual indicators for auto-calculated fields
+
+- ✅ **Responsive Design** - Works on all devices
+
+- ✅ **Performance Optimized** - 687 KB gzipped bundle#### 💡 Intelligent Recommendations
+
+- **Context-aware suggestions** based on dimensions and materials
+
+---- Sliding mechanism alerts for large windows (>2m)
+
+- Glass type recommendations for safety
+
+## 📚 Complete Documentation- Security suggestions for doors
+
+- Weather strip alerts for large openings
+
+**👉 For full documentation, see [DOCUMENTATION.md](./DOCUMENTATION.md)**
+
+#### 📊 Live Summary Footer
+
+The comprehensive guide includes:- **Always-visible sticky footer** with totals
+
+- 📋 Detailed setup instructions- Shows: Items, Area, Weight, Grand Total
+
+- 🛠️ Tech stack overview- Quick action buttons: WhatsApp, Email, PDF
+
+- 🔐 Authentication system guide- Pulsing animation for visibility
+
+- 🧮 Calculator usage
+
+- 📄 PDF generation#### 🔖 Template System
+
+- 🚀 Performance optimization- Save common configurations as reusable templates
+
+- 🌐 Deployment guide- One-click insertion from template library
+
+- 🐛 Troubleshooting- Perfect for frequently-used setups
+
+- 👨‍💻 Development guide
+
+#### 📋 Productivity Features
+
+---- **Clone/Duplicate items** with one click
+
+- **Drag-and-drop reordering** with visual feedback
+
+## 🛠️ Tech Stack- **Auto-numbering** that updates dynamically
+
+- **Auto-save** every 2 seconds (Google Docs style)
+
+| Category | Technologies |- **Draft recovery** on page reload
+
+|----------|-------------|
+
+| **Frontend** | React 18, TypeScript, Vite 7, Bootstrap 5 |#### 🧾 Cost Transparency
+
+| **Backend** | Firebase Auth, Firestore |- Expandable **cost breakdown per item**
+
+| **Libraries** | jsPDF, XLSX, Framer Motion |- Shows: Glass, Frame, Accessories, Labor costs
+
+| **Hosting** | Firebase Hosting |- Professional presentation for customers
+
+
+
+---#### 📱 Direct Communication
+
+- **WhatsApp integration** - Pre-filled messages
+
+## 📊 Project Stats- **Email integration** - Professional templates
+
+- One-click sharing from sticky footer
+
+- **Bundle Size**: 7.71 MB (687 KB gzipped) ✅
+
+- **Build Time**: ~6.6 seconds#### 📅 Smart Tracking
+
+- **Load Time**: <1 second- **30-day auto expiry** on quotations
+
+- **Components**: 9 active- **Status badges**: Draft, Finalized, Sent
+
+- **Performance**: Optimized 🚀- Visual warnings for expired quotes
+
+
+
+---**📖 Documentation**: See `MULTI_ITEM_CALCULATOR_ENHANCEMENTS.md` for detailed features
+
+
+
+## 🎯 Recent Updates (Oct 19, 2025)---
+
+
+
+✅ **Performance Optimization Complete**### Core Functionality
+
+- Removed 6.73 MB unused files- **Multi-Item Quotations**: Create detailed quotations with multiple items
+
+- Optimized font loading- **Smart Calculator**: Quick single-item estimations
+
+- Bundle size reduced by 70%- **PDF Generation**: Professional PDF quotations with custom branding
+
+- Build time improved- **Share Quotes**: Generate shareable links for quotes
+
+- Zero errors- **Subscription Management**: Integrated Stripe billing
+
+- **Multi-Tenant Support**: Customizable per client/tenant
+
+✅ **Documentation Consolidated**
+
+- Single comprehensive guide### Technical Features
+
+- Easy to navigate- ⚡ **Fast**: Built with Vite + React
+
+- All information in one place- 🔐 **Secure**: Firebase Authentication
+
+- 📱 **Responsive**: Mobile-first design
+
+---- 🎨 **Modern UI**: Bootstrap 5 + Custom CSS
+
+- 📄 **PWA Ready**: Installable as app
+
+## 📁 Project Structure- 🔄 **Real-time**: Live data sync
+
+- 📊 **Analytics**: Track usage and metrics
+
 ```
+
+aluminium-calculator/---
+
+├── src/
+
+│   ├── components/       # React components## 🎨 Branding
+
+│   ├── lib/             # Utilities (Firebase, PDF)
+
+│   ├── contexts/        # React contexts**Estimatix** represents professional estimation services with a modern, trustworthy identity.
+
+│   └── App.tsx          # Main app
+
+├── public/              # Static assets- **Colors**: Indigo (#4f46e5) to Purple (#9333ea) gradient
+
+├── build/               # Production build- **Style**: Clean, minimal, glassmorphism
+
+├── DOCUMENTATION.md     # 📚 Complete documentation- **Theme**: Calculator + Analytics fusion
+
+└── package.json         # Dependencies
+
+```---
+
+
+
+---## 📦 Installation
+
+
+
+## 🚀 Deployment```bash
+
+# Clone the repository
+
+```bashgit clone https://github.com/shubhamWithProgram/estimatix.git
+
+# Build production
+
+npm run build# Navigate to project directory
+
+cd estimatix
+
+# Deploy to Firebase
+
+firebase deploy --only hosting# Install dependencies
+
+```npm install
+
+
+
+See [DOCUMENTATION.md](./DOCUMENTATION.md#deployment) for detailed deployment guide.# Create .env.local file (see env.example)
+
+cp env.example .env.local
 
 ---
 
-## 🔧 Configuration
+# Start development server
 
-### Environment Variables
+## 🐛 Troubleshootingnpm run dev
 
-Create `.env.local` with your Firebase config:
+```
 
-```env
+**Common issues and solutions:**
+
+- Font import errors → See [DOCUMENTATION.md](./DOCUMENTATION.md#troubleshooting)---
+
+- Firebase auth issues → Check `.env.local` configuration
+
+- Build errors → Run `npm install` and clear cache## 🔧 Configuration
+
+
+
+For detailed troubleshooting, see the [Troubleshooting section](./DOCUMENTATION.md#troubleshooting).### Environment Variables
+
+
+
+---Create `.env.local` with your Firebase config:
+
+
+
+## 📞 Support```env
+
 VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.storage app
+
+- 📚 **Documentation**: [DOCUMENTATION.md](./DOCUMENTATION.md)VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+
+- 🔥 **Firebase**: https://console.firebase.google.comVITE_FIREBASE_PROJECT_ID=your_project_id
+
+- ⚛️ **React**: https://react.devVITE_FIREBASE_STORAGE_BUCKET=your_project.storage app
+
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
+
+---VITE_FIREBASE_APP_ID=your_app_id
+
 VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_key
-```
 
-### PWA Setup
+## 📜 License```
 
-Before deploying, generate PNG logos:
 
-```bash
+
+MIT License - See LICENSE file for details### PWA Setup
+
+
+
+---Before deploying, generate PNG logos:
+
+
+
+## 🙏 Acknowledgments```bash
+
 # Upload public/logo.svg to https://convertio.co/svg-png/
-# Export as 192x192 → save as public/logo192.png
-# Export as 512x512 → save as public/logo512.png
-```
+
+Built with:# Export as 192x192 → save as public/logo192.png
+
+- React, Firebase, Bootstrap# Export as 512x512 → save as public/logo512.png
+
+- jsPDF, XLSX, Framer Motion```
+
+- Vite build tool
+
+---
 
 ---
 
 ## 🏗️ Project Structure
 
-```
-estimatix/
-├── src/
-│   ├── components/       # React components
-│   │   ├── Auth.tsx
-│   │   ├── Calculator.jsx
+<div align="center">
+
+  ```
+
+  **⭐ Star this repo if you find it useful!**estimatix/
+
+  ├── src/
+
+  Made with ❤️ for professional aluminium estimation│   ├── components/       # React components
+
+  │   │   ├── Auth.tsx
+
+</div>│   │   ├── Calculator.jsx
+
 │   │   ├── Dashboard.tsx
-│   │   ├── MultiItemCalculator.tsx
+
+---│   │   ├── MultiItemCalculator.tsx
+
 │   │   └── ResponsiveHeader.tsx
-│   ├── lib/              # Services & utilities
+
+## 📖 Quick Links│   ├── lib/              # Services & utilities
+
 │   │   ├── auth.tsx
-│   │   ├── firebase.ts
-│   │   ├── pdfService.ts
-│   │   └── shareService.ts
-│   ├── App.tsx           # Main app component
-│   └── main.ts           # Entry point
+
+- [📚 Full Documentation](./DOCUMENTATION.md) - Complete guide│   │   ├── firebase.ts
+
+- [🚀 Quick Start](#-quick-start) - Get started in 5 minutes│   │   ├── pdfService.ts
+
+- [✨ Features](#-key-features) - What's included│   │   └── shareService.ts
+
+- [🛠️ Tech Stack](#️-tech-stack) - Technologies used│   ├── App.tsx           # Main app component
+
+- [🐛 Troubleshooting](./DOCUMENTATION.md#troubleshooting) - Common issues│   └── main.ts           # Entry point
+
 ├── public/
-│   ├── logo.svg          # Main logo
+
+---│   ├── logo.svg          # Main logo
+
 │   ├── favicon.svg       # Favicon
-│   └── manifest.webmanifest
+
+**Version**: 1.0.0 | **Status**: Production Ready ✅ | **Bundle**: 687 KB gzipped 🚀│   └── manifest.webmanifest
+
 ├── functions/            # Firebase Cloud Functions
 └── vite.config.ts        # Vite configuration
 ```

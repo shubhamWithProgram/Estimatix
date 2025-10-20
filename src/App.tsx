@@ -1,8 +1,7 @@
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from './lib/auth'
 import { ThemeProvider } from './contexts/ThemeContext'
-import { Login, Signup } from './components/Auth'
-import { ForgotPassword } from './components/ForgotPassword'
+import { Login, Signup, ForgotPassword } from './components/Auth_bootstrap'
 import Dashboard from './components/Dashboard'
 import Billing from './components/Billing'
 import Calculator from './components/Calculator'
@@ -33,8 +32,10 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 // Layout wrapper component to conditionally show header/footer
 function AppLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
-  const location = window.location
-  const isAuthPage = location.hash.includes('/login') || location.hash.includes('/signup')
+  const location = useLocation()
+  const isAuthPage = location.pathname.includes('/login') || 
+                     location.pathname.includes('/signup') || 
+                     location.pathname.includes('/forgot-password')
   
   // Show auth pages without header/footer
   if (isAuthPage || !user) {
@@ -108,6 +109,55 @@ function OnboardingCheck({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+// Wrapper to ensure AppLayout re-renders on auth changes
+function AppLayoutWrapper() {
+  const { user } = useAuth()
+  
+  return (
+    <AppLayout key={user?.uid || 'logged-out'}>
+      <main className="flex-grow-1">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/shared/:shareToken" element={<SharedQuoteViewer />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/billing" element={
+            <ProtectedRoute>
+              <Billing />
+            </ProtectedRoute>
+          } />
+          <Route path="/calculator" element={
+            <ProtectedRoute>
+              <Calculator />
+            </ProtectedRoute>
+          } />
+          <Route path="/multi-calculator" element={
+            <ProtectedRoute>
+              <MultiItemCalculator />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminSettings />
+            </ProtectedRoute>
+          } />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </main>
+    </AppLayout>
+  )
+}
+
 function App() {
   return (
     <ThemeProvider>
@@ -115,47 +165,7 @@ function App() {
         <Router>
           <div className="min-vh-100 d-flex flex-column">
             <OnboardingCheck>
-              <AppLayout>
-                <main className="flex-grow-1">
-                  <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/shared/:shareToken" element={<SharedQuoteViewer />} />
-                    <Route path="/dashboard" element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/billing" element={
-                      <ProtectedRoute>
-                        <Billing />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/calculator" element={
-                      <ProtectedRoute>
-                        <Calculator />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/multi-calculator" element={
-                      <ProtectedRoute>
-                        <MultiItemCalculator />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin" element={
-                      <ProtectedRoute>
-                        <AdminSettings />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/" element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="*" element={<Navigate to="/" />} />
-                  </Routes>
-                </main>
-              </AppLayout>
+              <AppLayoutWrapper />
             </OnboardingCheck>
           </div>
         </Router>

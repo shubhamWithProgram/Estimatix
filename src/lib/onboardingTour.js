@@ -11,16 +11,17 @@ import 'shepherd.js/dist/css/shepherd.css'
 const TOUR_COMPLETED_KEY = 'estimatix_tour_completed'
 
 /**
- * Slack-style contextual bubble theme
+ * Custom Shepherd theme with Tailwind-inspired styling
  */
 const shepherdTheme = {
   defaultStepOptions: {
-    classes: 'shepherd-theme-bubble',
-    scrollTo: false,
+    classes: 'shepherd-theme-custom',
+    scrollTo: { behavior: 'smooth', block: 'center' },
     cancelIcon: {
       enabled: true
     },
-    arrow: true
+    modalOverlayOpeningPadding: 8,
+    modalOverlayOpeningRadius: 8
   }
 }
 
@@ -30,7 +31,7 @@ const shepherdTheme = {
 export function createOnboardingTour() {
   const tour = new Shepherd.Tour({
     ...shepherdTheme,
-    useModalOverlay: false,
+    useModalOverlay: true,
     exitOnEsc: true,
     keyboardNavigation: true
   })
@@ -38,17 +39,21 @@ export function createOnboardingTour() {
   // Step 1: Welcome
   tour.addStep({
     id: 'welcome',
-    title: '👋 Welcome to Estimatix',
-    text: `Let's take a quick guided tour to help you create professional quotations with confidence.`,
-    attachTo: { element: '#company-section', on: 'bottom' },
+    title: '👋 Welcome to Estimatix!',
+    text: `
+      <div class="shepherd-text-content">
+        <p>Let's take a quick tour to help you create professional quotations with confidence.</p>
+        <p class="text-sm text-slate-600 mt-2">This will only take 60 seconds.</p>
+      </div>
+    `,
     buttons: [
       {
-        text: 'Skip',
+        text: 'Skip Tour',
         classes: 'shepherd-button-secondary',
         action: tour.complete
       },
       {
-        text: 'Next',
+        text: 'Start Tour',
         classes: 'shepherd-button-primary',
         action: tour.next
       }
@@ -58,11 +63,16 @@ export function createOnboardingTour() {
   // Step 2: Company Information
   tour.addStep({
     id: 'company-info',
-    title: '🏢 Company Details',
-    text: `Add your company information here — it appears automatically on quotations.`,
+    title: '🏢 Company Information',
+    text: `
+      <div class="shepherd-text-content">
+        <p>Start by filling in your company name, phone, and email.</p>
+        <p class="text-sm text-slate-600 mt-2">These details will appear on all your quotations and make them look professional.</p>
+      </div>
+    `,
     attachTo: {
       element: '#company-section',
-      on: 'right'
+      on: 'bottom'
     },
     buttons: [
       {
@@ -71,7 +81,7 @@ export function createOnboardingTour() {
         action: tour.back
       },
       {
-        text: 'Got it',
+        text: 'Next',
         classes: 'shepherd-button-primary',
         action: tour.next
       }
@@ -81,11 +91,16 @@ export function createOnboardingTour() {
   // Step 3: Customer Information
   tour.addStep({
     id: 'customer-info',
-    title: '👤 Customer Info',
-    text: `Enter customer contact details here for accurate quotation records.`,
+    title: '👤 Customer Details',
+    text: `
+      <div class="shepherd-text-content">
+        <p>Enter your customer's details here.</p>
+        <p class="text-sm text-slate-600 mt-2">They'll be used for your quotation header and when sharing via email or WhatsApp.</p>
+      </div>
+    `,
     attachTo: {
       element: '#customer-section',
-      on: 'left'
+      on: 'bottom'
     },
     buttons: [
       {
@@ -104,11 +119,16 @@ export function createOnboardingTour() {
   // Step 4: Default Settings & Rates
   tour.addStep({
     id: 'settings',
-    title: '⚙️ Settings',
-    text: `Configure rates, wastage, and parameters applied to all quotations.`,
+    title: '⚙️ Default Settings & Rates',
+    text: `
+      <div class="shepherd-text-content">
+        <p>Adjust default settings like glass type, profile type, and rate per kg.</p>
+        <p class="text-sm text-slate-600 mt-2">These will be applied to all new items automatically, saving you time.</p>
+      </div>
+    `,
     attachTo: {
       element: '#settings-section',
-      on: 'top'
+      on: 'bottom'
     },
     buttons: [
       {
@@ -127,8 +147,13 @@ export function createOnboardingTour() {
   // Step 5: Items & Calculations
   tour.addStep({
     id: 'items',
-    title: '📋 Add Items',
-    text: `Build your quotation by adding items with specs and quantities.`,
+    title: '📋 Items & Calculations',
+    text: `
+      <div class="shepherd-text-content">
+        <p>Add your quotation items here with dimensions and quantities.</p>
+        <p class="text-sm text-slate-600 mt-2">Each item's material weight is calculated automatically based on dimensions and selected materials.</p>
+      </div>
+    `,
     attachTo: {
       element: '#items-section',
       on: 'bottom'
@@ -150,8 +175,13 @@ export function createOnboardingTour() {
   // Step 6: Project Summary & Analysis
   tour.addStep({
     id: 'summary',
-    title: '📊 Summary',
-    text: `Real-time view of glass area, frame weight, and grand total calculations.`,
+    title: '📊 Project Summary & Analysis',
+    text: `
+      <div class="shepherd-text-content">
+        <p>Here's your real-time summary dashboard.</p>
+        <p class="text-sm text-slate-600 mt-2">View total glass area, frame weight, profile length, and grand total — all updated automatically as you work.</p>
+      </div>
+    `,
     attachTo: {
       element: '#summary-section',
       on: 'top'
@@ -173,11 +203,16 @@ export function createOnboardingTour() {
   // Step 7: Generate PDF & Actions
   tour.addStep({
     id: 'actions',
-    title: '🚀 Actions',
-    text: `Generate PDFs, export to Excel, or share via WhatsApp. Auto-saved.`,
+    title: '🎯 Export & Share',
+    text: `
+      <div class="shepherd-text-content">
+        <p>Finally, export your quotation as a branded PDF or share it with your client instantly.</p>
+        <p class="text-sm text-slate-600 mt-2">Choose from PDF download, Excel export, email, or WhatsApp sharing options.</p>
+      </div>
+    `,
     attachTo: {
       element: '#actions-section',
-      on: 'left'
+      on: 'top'
     },
     buttons: [
       {
@@ -196,12 +231,20 @@ export function createOnboardingTour() {
   // Step 8: Completion
   tour.addStep({
     id: 'complete',
-    title: '🎉 Ready to Go!',
-    text: `You're all set! Click the 🧭 button anytime to replay this tour.`,
-    attachTo: { element: '#summary-section', on: 'bottom' },
+    title: '🎉 You\'re All Set!',
+    text: `
+      <div class="shepherd-text-content">
+        <p>That's it! You're ready to start using Estimatix confidently.</p>
+        <p class="text-sm text-slate-600 mt-2">You can restart this tour anytime by clicking the <strong>🧭 Tour</strong> button at the bottom-right corner.</p>
+        <div class="mt-4 p-3 bg-violet-50 rounded-lg border border-violet-200">
+          <p class="text-sm text-violet-800 font-medium">💡 Pro Tip:</p>
+          <p class="text-xs text-violet-700 mt-1">Use AI suggestions for pricing recommendations and save your quotations to the cloud!</p>
+        </div>
+      </div>
+    `,
     buttons: [
       {
-        text: 'Get Started',
+        text: 'Start Using Estimatix',
         classes: 'shepherd-button-primary',
         action: tour.complete
       }

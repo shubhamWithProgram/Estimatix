@@ -1,9 +1,7 @@
 import { useMemo, useState, useEffect } from 'react'
 import { saveAs } from 'file-saver'
-import { dejavuFontBase64 } from '../DejaVuSans-base64.js'
+// Font removed - using built-in Helvetica for PDF generation (saves 6MB bundle size!)
 import { pdfService } from '../lib/pdfService'
-import { setupOnboarding } from '../lib/onboardingTour'
-import '../lib/onboardingTour.css'
 
 // Lazy-load heavy libs to reduce initial bundle size
 let _XLSX
@@ -50,7 +48,6 @@ function Calculator() {
   const [showOnlyTotals, setShowOnlyTotals] = useState(false)
   const [ratePerKg, setRatePerKg] = useState('')
   const [collapsed, setCollapsed] = useState({ settings: false, items: false, summary: false })
-  const [showAutoSave, setShowAutoSave] = useState(false)
   const [companyData, setCompanyData] = useState({
     name: 'Venkatesh Aluminium & Glass',
     address: '',
@@ -63,24 +60,10 @@ function Calculator() {
     phone: '',
     email: ''
   })
-
-  // Auto-save indicator function
-  const showAutoSaveIndicator = () => {
-    setShowAutoSave(true)
-    setTimeout(() => setShowAutoSave(false), 3000)
-  }
-
-  // Trigger auto-save when items change
-  useEffect(() => {
-    if (items.length > 0) {
-      showAutoSaveIndicator()
-    }
-  }, [items])
-
-  // Initialize onboarding tour for first-time users
-  useEffect(() => {
-    setupOnboarding()
-  }, [])
+  
+  // Draft Management State
+  const [showRestorePrompt, setShowRestorePrompt] = useState(false)
+  const [draftTimestamp, setDraftTimestamp] = useState(null)
 
   // Calculation results
   const totals = useMemo(() => {
@@ -156,6 +139,129 @@ function Calculator() {
   const deleteItem = (id) => {
     setItems(items.filter(item => item.id !== id))
   }
+
+  // AI Suggestions Handler
+  const showAISuggestions = () => {
+    const suggestions = []
+    
+    // Analyze current configuration
+    if (items.length === 0) {
+      suggestions.push('💡 Start by adding items to get AI-powered suggestions!')
+    } else {
+      // Glass type optimization
+      if (totals.totalWeight > 100 && globalGlassType === '5mm Clear') {
+        suggestions.push('⚡ Consider using 6mm or 8mm glass for better strength in large installations')
+      }
+      
+      // Profile type recommendations
+      if (totals.totalGlassArea > 10 && globalProfileType === 'Standard') {
+        suggestions.push('🔧 For large areas, Heavy Duty profiles provide better stability')
+      }
+      
+      // Cost optimization
+      if (ratePerKg && parseFloat(ratePerKg) > 300) {
+        suggestions.push('💰 Consider negotiating bulk pricing - your rate seems high for large orders')
+      }
+      
+      // Size warnings
+      items.forEach((item, index) => {
+        if (item.width > 3 || item.height > 3) {
+          suggestions.push(`⚠️ Item ${index + 1}: Large dimensions may require additional support frames`)
+        }
+      })
+      
+      // Efficiency tip
+      const avgItemArea = totals.totalGlassArea / items.length
+      if (avgItemArea < 1) {
+        suggestions.push('📊 Small items detected - consider batch production for cost efficiency')
+      }
+      
+      // Material efficiency
+      const frameDensity = totals.totalWeight / totals.totalGlassArea
+      if (frameDensity < 15) {
+        suggestions.push('✅ Excellent material efficiency! Your design is optimized')
+      } else if (frameDensity > 30) {
+        suggestions.push('🎯 Consider lighter profiles to reduce material costs')
+      }
+    }
+    
+    // Show suggestions
+    if (suggestions.length === 0) {
+      suggestions.push('✨ Your configuration looks great! No suggestions at the moment.')
+    }
+    
+    alert('🤖 AI Suggestions:\n\n' + suggestions.join('\n\n'))
+  }
+
+  // ===== DRAFT MANAGEMENT FUNCTIONS =====
+  
+  // Save draft to localStorage
+  const saveDraft = () => {
+    const draftData = {
+      items,
+      globalGlassType,
+      globalProfileType,
+      ratePerKg,
+      companyData,
+      customerData,
+      savedAt: Date.now()
+    }
+    localStorage.setItem('estimatix_calculator_draft', JSON.stringify(draftData))
+    setDraftTimestamp(Date.now())
+  }
+
+  // Restore draft from localStorage
+  const restoreDraft = () => {
+    try {
+      const saved = localStorage.getItem('estimatix_calculator_draft')
+      if (saved) {
+        const draftData = JSON.parse(saved)
+        setItems(draftData.items || [])
+        setGlobalGlassType(draftData.globalGlassType || '5mm')
+        setGlobalProfileType(draftData.globalProfileType || 'Series 60')
+        setRatePerKg(draftData.ratePerKg || '')
+        setCompanyData(draftData.companyData || companyData)
+        setCustomerData(draftData.customerData || { name: '', address: '', phone: '', email: '' })
+        setDraftTimestamp(draftData.savedAt || null)
+        setShowRestorePrompt(false)
+      }
+    } catch (error) {
+      console.error('Error restoring draft:', error)
+    }
+  }
+
+  // Clear draft from localStorage
+  const clearDraft = () => {
+    localStorage.removeItem('estimatix_calculator_draft')
+    setDraftTimestamp(null)
+    setShowRestorePrompt(false)
+  }
+
+  // Check for saved draft on component mount
+  useEffect(() => {
+    const saved = localStorage.getItem('estimatix_calculator_draft')
+    if (saved) {
+      try {
+        const draftData = JSON.parse(saved)
+        setDraftTimestamp(draftData.savedAt || null)
+        setShowRestorePrompt(true)
+      } catch (error) {
+        console.error('Error parsing draft:', error)
+        localStorage.removeItem('estimatix_calculator_draft')
+      }
+    }
+  }, [])
+
+  // Auto-save draft when data changes (debounced)
+  useEffect(() => {
+    if (items.length > 0 || ratePerKg || customerData.name || companyData.name !== 'Venkatesh Aluminium & Glass') {
+      const debounce = setTimeout(() => {
+        saveDraft()
+      }, 2000) // Auto-save 2 seconds after changes
+      
+      return () => clearTimeout(debounce)
+    }
+  }, [items, globalGlassType, globalProfileType, ratePerKg, companyData, customerData])
 
   // Export to Premium PDF using pdfService
   const exportPDF = async () => {
@@ -273,367 +379,300 @@ function Calculator() {
   return (
     <>
       <style>{`
-        /* ===== ESTIMATIX DARK-NEUMORPHIC THEME ===== */
-        /* Sleek Glass Design - Linear + Superhuman Inspired */
+        /* ===== ENTERPRISE-GRADE PREMIUM STYLING ===== */
         
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
-        :root {
-          /* Dark Glass Color System */
-          --bg-deep: #0F172A;
-          --bg-gradient-end: #1E293B;
-          --card-bg: rgba(30, 41, 59, 0.6);
-          --card-border: rgba(255, 255, 255, 0.1);
-          
-          /* Brand Accent Colors */
-          --accent-primary: #6C63FF;
-          --accent-glow: #8B80FF;
-          --accent-shadow: rgba(108, 99, 255, 0.3);
-          
-          /* Text Hierarchy */
-          --text-primary: #F1F5F9;
-          --text-secondary: #94A3B8;
-          --text-muted: #64748B;
-          
-          /* Semantic Colors */
-          --success: #22C55E;
-          --warning: #EAB308;
-          --danger: #EF4444;
-          
-          /* Subtle Dividers */
-          --divider: rgba(255, 255, 255, 0.05);
-        }
-        
-        /* GPU Acceleration & Font Rendering */
-        * {
-          transform: translateZ(0);
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
-        
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-        }
-        
-        /* Deep Gradient Background */
+        /* Enhanced Gradient Background with Depth */
         .premium-calc-container {
-          background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-gradient-end) 100%);
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #1e293b 100%);
           min-height: 100vh;
-          padding: 5rem 0 3rem 0;
+          padding: 2rem 0;
           position: relative;
-          color: var(--text-primary);
-          animation: fadeIn 0.6s ease-out;
-        }
-        
-        /* Animated gradient background (optional subtle effect) */
-        @keyframes gradientShift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        /* Global smooth animations */
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fadeInUp {
-          0% { opacity: 0; transform: translateY(20px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Glass-Neumorphic Cards with Backdrop Blur */
-        .premium-card {
-          background: var(--card-bg);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          
-          border-radius: 1.25rem;
-          border: 1px solid var(--card-border);
-          
-          box-shadow: 
-            0 10px 35px rgba(0, 0, 0, 0.3),
-            0 1px 3px rgba(0, 0, 0, 0.2),
-            inset 0 1px 1px rgba(255, 255, 255, 0.03);
-          
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          animation: fadeInUp 0.5s ease-out;
-          animation-fill-mode: both;
-          margin-bottom: 1.5rem;
           overflow: hidden;
         }
         
-        /* Staggered animation delays */
-        .premium-card:nth-child(1) { animation-delay: 0.1s; }
-        .premium-card:nth-child(2) { animation-delay: 0.2s; }
-        .premium-card:nth-child(3) { animation-delay: 0.3s; }
-        .premium-card:nth-child(4) { animation-delay: 0.4s; }
-        .premium-card:nth-child(5) { animation-delay: 0.5s; }
-        
-        /* Elegant hover with purple glow */
-        .premium-card:hover {
-          box-shadow: 
-            0 12px 40px rgba(0, 0, 0, 0.4),
-            0 0 20px var(--accent-shadow),
-            inset 0 1px 1px rgba(255, 255, 255, 0.05);
-          
-          border-color: rgba(108, 99, 255, 0.3);
-          transform: translateY(-2px);
-        }
-        
-        /* Glass reflection effect */
-        .premium-card::before {
+        /* Animated gradient texture overlay */
+        .premium-calc-container::before {
           content: '';
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, 
-            transparent, 
-            rgba(255, 255, 255, 0.1), 
-            transparent);
+          bottom: 0;
+          background: 
+            radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
           pointer-events: none;
+          animation: breathe 8s ease-in-out infinite;
         }
         
-        /* Premium Typography with Glow Effects */
-        body {
-          line-height: 1.6;
-          color: var(--text-primary);
+        @keyframes breathe {
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 0.8; }
         }
         
-        h1, h2, h3, h4, h5, h6 {
-          color: var(--text-primary);
-          font-weight: 600;
-          letter-spacing: -0.02em;
+        /* Glassmorphic Premium Cards */
+        .premium-card {
+          background: rgba(255, 255, 255, 0.07);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
         }
         
-        /* Text glow effect for headings */
-        .text-glow {
-          text-shadow: 0 0 12px var(--accent-shadow);
+        .premium-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          transition: left 0.5s;
         }
         
-        /* Section Headers with Purple Glow */
-        .section-header {
-          font-size: 1.125rem;
-          font-weight: 600;
-          color: var(--text-primary);
+        .premium-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.3),
+            0 0 20px rgba(139, 92, 246, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          border-color: rgba(139, 92, 246, 0.4);
+        }
+        
+        .premium-card:hover::before {
+          left: 100%;
+        }
+        
+        /* ===== COMPACT PREMIUM HEADER ===== */
+        .premium-header {
+          background: linear-gradient(135deg, #5B5BEA 0%, #7C5CFA 50%, #9965F4 100%);
+          backdrop-filter: blur(16px);
+          color: white;
+          padding: 1rem 1.5rem;
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .premium-header:hover {
+          box-shadow: 0 8px 30px rgba(92, 122, 255, 0.3);
+          transform: translateY(-2px);
+        }
+        
+        /* Header Layout - Responsive */
+        .header-layout {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        
+        @media (min-width: 640px) {
+          .header-layout {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+          }
+        }
+        
+        /* Left Section - Icon + Title */
+        .header-left {
           display: flex;
           align-items: center;
-          gap: 0.625rem;
-          margin-bottom: 1.25rem;
-          padding-bottom: 0.875rem;
-          border-bottom: 1px solid var(--divider);
-          text-shadow: 0 0 8px var(--accent-shadow);
+          gap: 0.75rem;
+        }
+        
+        .header-icon-box {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          padding: 0.625rem;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .header-icon-box i {
+          font-size: 1.25rem;
+          color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .header-text {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+        
+        .premium-header h1 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin: 0;
+          color: rgba(255, 255, 255, 0.9);
+          letter-spacing: -0.02em;
+          line-height: 1.2;
+        }
+        
+        .header-subtitle {
+          font-size: 0.875rem;
+          color: rgba(255, 255, 255, 0.7);
+          font-weight: 400;
+          margin: 0;
+        }
+        
+        /* Right Section - Feature Badges */
+        .header-badges {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        
+        .premium-badge {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.375rem 0.75rem;
+          border-radius: 50px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.05);
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 0.875rem;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          backdrop-filter: blur(10px);
+        }
+        
+        .premium-badge:hover {
+          background: rgba(255, 255, 255, 0.1);
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .premium-badge i {
+          font-size: 0.75rem;
+          color: #A5B4FC;
+        }
+        
+        /* Section Headers with Icons */
+        .section-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 1.5rem 2rem;
+          background: rgba(99, 102, 241, 0.1);
+          border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+          margin: -1px -1px 0 -1px;
+          border-radius: 20px 20px 0 0;
+        }
+        
+        .section-header h5 {
+          margin: 0;
+          font-weight: 700;
+          font-size: 1.25rem;
+          color: #e0e7ff;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
         
         .section-header i {
-          color: var(--accent-glow);
-          font-size: 1.125rem;
+          font-size: 1.5rem;
+          color: #a78bfa;
         }
         
-        /* Labels */
-        label {
-          display: block;
-          font-size: 0.8125rem;
-          font-weight: 500;
-          color: var(--text-secondary);
-          margin-bottom: 0.5rem;
-          text-transform: none;
-          letter-spacing: 0;
+        .section-body {
+          padding: 2rem;
         }
         
-        /* Dark Input Fields with Glass Effect */
-        input[type="text"],
-        input[type="number"],
-        input[type="email"],
-        textarea,
-        select {
-          width: 100%;
-          padding: 0.625rem 0.875rem;
-          font-size: 0.9375rem;
-          font-family: 'Inter', sans-serif;
-          
-          background: rgba(15, 23, 42, 0.4);
-          border: 1px solid var(--card-border);
-          border-radius: 0.5rem;
-          
-          color: var(--text-primary);
-          
-          transition: all 0.2s ease;
-          outline: none;
-        }
-        
-        input::placeholder,
-        textarea::placeholder {
-          color: var(--text-muted);
-        }
-        
-        input:focus,
-        textarea:focus,
-        select:focus {
-          background: rgba(15, 23, 42, 0.6);
-          border-color: var(--accent-primary);
-          box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-        }
-        
-        /* Disabled state */
-        input:disabled,
-        select:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-          background: rgba(15, 23, 42, 0.2);
-        }
-        
-        /* Premium Gradient Buttons */
-        .btn-primary {
-          background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-glow) 100%);
-          color: white;
-          border: none;
-          padding: 0.625rem 1.25rem;
-          border-radius: 0.5rem;
+        /* Premium Form Labels */
+        .premium-form-label {
+          font-weight: 600;
+          color: #cbd5e1;
           font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          
-          box-shadow: 
-            0 4px 12px var(--accent-shadow),
-            0 1px 3px rgba(0, 0, 0, 0.2);
-          
-          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 
-            0 6px 16px rgba(108, 99, 255, 0.4),
-            0 0 20px var(--accent-shadow);
-        }
-        
-        .btn-primary:active {
-          transform: translateY(0);
-        }
-        
-        /* Secondary Glass Buttons */
-        .btn-secondary {
-          background: rgba(30, 41, 59, 0.5);
-          color: var(--text-primary);
-          border: 1px solid var(--card-border);
-          padding: 0.625rem 1.25rem;
-          border-radius: 0.5rem;
-          font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        
-        .btn-secondary:hover {
-          background: rgba(30, 41, 59, 0.7);
-          border-color: rgba(255, 255, 255, 0.15);
-          transform: translateY(-1px);
-        }
-        
-        /* Success Button */
-        .btn-success {
-          background: var(--success);
-          color: white;
-          border: none;
-          padding: 0.625rem 1.25rem;
-          border-radius: 0.5rem;
-          font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-          transition: all 0.2s ease;
-        }
-        
-        .btn-success:hover {
-          background: #16A34A;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
-        }
-        
-        /* Danger Button */
-        .btn-danger {
-          background: var(--danger);
-          color: white;
-          border: none;
-          padding: 0.625rem 1.25rem;
-          border-radius: 0.5rem;
-          font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-          transition: all 0.2s ease;
-        }
-        
-        .btn-danger:hover {
-          background: #DC2626;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
-        }
-          font-size: 0.8125rem;
-          text-transform: none;
-          letter-spacing: 0;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
           margin-bottom: 0.5rem;
           display: flex;
           align-items: center;
-          gap: 0.375rem;
-        }
-        
-        .premium-form-label i {
-          display: none;
+          gap: 0.5rem;
         }
         
         .premium-form-label i.info-icon {
-          color: #94a3b8;
-          font-size: 0.875rem;
+          color: #60a5fa;
+          font-size: 1rem;
           cursor: help;
-          opacity: 0.6;
+          opacity: 0.7;
           transition: opacity 0.2s;
-          display: inline-block;
-          margin-left: auto;
         }
         
         .premium-form-label i.info-icon:hover {
           opacity: 1;
         }
         
-        /* Clean Professional Inputs */
+        /* Premium Inputs with Glow Focus */
         .premium-input {
-          border: 1px solid var(--color-border);
-          border-radius: 0.5rem;
-          padding: 0.625rem 0.875rem;
-          font-size: 0.9375rem;
-          background: var(--color-surface);
-          color: var(--color-text-main);
-          transition: all 0.2s ease;
-          line-height: 1.6;
+          border: 2px solid rgba(148, 163, 184, 0.3);
+          border-radius: 12px;
+          padding: 0.875rem 1rem;
+          font-size: 1rem;
+          background: rgba(15, 23, 42, 0.6);
+          color: #f1f5f9;
+          transition: all 0.3s ease;
         }
         
         .premium-input:focus {
-          border-color: var(--color-primary);
-          box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+          border-color: #6366f1;
+          box-shadow: 
+            0 0 0 3px rgba(99, 102, 241, 0.15),
+            0 0 15px rgba(99, 102, 241, 0.4);
           outline: none;
-          background: var(--color-surface);
+          background: rgba(15, 23, 42, 0.8);
+          transform: translateY(-1px);
         }
         
         .premium-input::placeholder {
-          color: #9ca3af;
+          color: #64748b;
         }
         
-        /* Modern Premium Buttons */
+        /* Premium Buttons with Gradient & Glow */
         .premium-btn {
-          border-radius: 0.5rem;
-          padding: 0.625rem 1.5rem;
+          border-radius: 12px;
+          padding: 0.875rem 2rem;
           font-weight: 600;
-          font-size: 0.9375rem;
-          text-transform: none;
-          letter-spacing: 0;
-          transition: all 0.2s ease;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          transition: all 0.3s ease;
           border: none;
           position: relative;
+          overflow: hidden;
+        }
+        
+        .premium-btn::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.3);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s, height 0.6s;
+        }
+        
+        .premium-btn:hover::before {
+          width: 300px;
+          height: 300px;
         }
         
         .premium-btn span {
@@ -642,69 +681,54 @@ function Calculator() {
         }
         
         .premium-btn-primary {
-          background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
           color: white;
-          box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
         
         .premium-btn-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
         }
         
         .premium-btn-success {
-          background: var(--color-success);
+          background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
           color: white;
-          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+          box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
         }
         
         .premium-btn-success:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
-          background: #059669;
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 8px 25px rgba(34, 197, 94, 0.6);
         }
         
         .premium-btn-danger {
-          background: var(--color-danger);
+          background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
           color: white;
-          box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+          box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
         }
         
         .premium-btn-danger:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
-          background: #dc2626;
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 8px 25px rgba(239, 68, 68, 0.6);
         }
         
-        .premium-btn-danger:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
-        }
-        
-        /* Glass Summary Stats Cards with Purple Glow */
+        /* Animated Summary Cards */
         .premium-summary-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 1rem;
-          margin-top: 1.5rem;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1.5rem;
+          margin-top: 2rem;
         }
         
         .premium-summary-card {
-          background: var(--card-bg);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          
-          border-radius: 1rem;
+          background: rgba(15, 23, 42, 0.6);
+          backdrop-filter: blur(10px);
+          border-radius: 16px;
           padding: 1.5rem;
           text-align: center;
-          
-          border: 1px solid var(--card-border);
-          
-          box-shadow: 
-            0 8px 24px rgba(0, 0, 0, 0.2),
-            inset 0 1px 1px rgba(255, 255, 255, 0.03);
-          
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border: 2px solid transparent;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           overflow: hidden;
         }
@@ -716,49 +740,86 @@ function Calculator() {
           left: 0;
           right: 0;
           height: 3px;
-          background: linear-gradient(90deg, var(--accent-primary), var(--accent-glow));
+          background: currentColor;
           opacity: 0;
-          transition: opacity 0.3s ease;
+          transition: opacity 0.3s;
         }
         
         .premium-summary-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 
-            0 12px 32px rgba(0, 0, 0, 0.3),
-            0 0 24px var(--accent-shadow);
-          border-color: rgba(108, 99, 255, 0.4);
+          transform: translateY(-8px) scale(1.03);
+          border-color: currentColor;
         }
         
         .premium-summary-card:hover::before {
           opacity: 1;
+          animation: shimmer 1.5s infinite;
         }
         
-        .premium-summary-card i {
-          font-size: 1.75rem;
-          color: var(--accent-glow);
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        
+        .premium-summary-card.cyan {
+          color: #06b6d4;
+          border-color: rgba(6, 182, 212, 0.2);
+        }
+        
+        .premium-summary-card.amber {
+          color: #f59e0b;
+          border-color: rgba(245, 158, 11, 0.2);
+        }
+        
+        .premium-summary-card.violet {
+          color: #8b5cf6;
+          border-color: rgba(139, 92, 246, 0.2);
+        }
+        
+        .premium-summary-card.emerald {
+          color: #10b981;
+          border-color: rgba(16, 185, 129, 0.2);
+        }
+        
+        .summary-icon {
+          font-size: 2.5rem;
           margin-bottom: 0.75rem;
-          display: block;
+          opacity: 0.9;
+          animation: float 3s ease-in-out infinite;
         }
         
-        .premium-summary-card h3 {
-          font-size: 0.8125rem;
-          font-weight: 500;
-          color: var(--text-secondary);
-          margin: 0 0 0.5rem 0;
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        .premium-summary-value {
+          font-size: 2.25rem;
+          font-weight: 800;
+          color: currentColor;
+          margin: 0.5rem 0;
+          font-family: 'Inter', system-ui, sans-serif;
+          animation: countUp 0.8s ease-out;
+        }
+        
+        @keyframes countUp {
+          from { opacity: 0; transform: scale(0.5); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        
+        .premium-summary-label {
+          font-size: 0.875rem;
+          color: #94a3b8;
+          font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.5px;
         }
         
-        .premium-summary-card p {
-          font-size: 1.875rem;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin: 0;
-          line-height: 1.2;
-          text-shadow: 0 0 10px rgba(108, 99, 255, 0.2);
+        .premium-summary-sub {
+          font-size: 0.75rem;
+          color: #64748b;
+          margin-top: 0.5rem;
+          font-style: italic;
         }
-        
-        /* Remove old light theme color-specific styles */
         
         /* Live Update Pulse Animation */
         @keyframes pulse-glow {
@@ -770,18 +831,18 @@ function Calculator() {
           animation: pulse-glow 1s ease-in-out;
         }
         
-        /* Modern AI Assist Button */
+        /* Floating AI Assist Button */
         .ai-assist-btn {
           position: fixed;
-          bottom: 24px;
-          right: 24px;
+          bottom: 2rem;
+          right: 2rem;
           width: 60px;
           height: 60px;
           border-radius: 50%;
-          background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
           color: white;
           border: none;
-          box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+          box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
           cursor: pointer;
           transition: all 0.3s ease;
           z-index: 1000;
@@ -792,8 +853,8 @@ function Calculator() {
         }
         
         .ai-assist-btn:hover {
-          transform: scale(1.15);
-          box-shadow: 0 12px 32px rgba(79, 70, 229, 0.5);
+          transform: scale(1.1) rotate(10deg);
+          box-shadow: 0 12px 40px rgba(99, 102, 241, 0.7);
         }
         
         .ai-assist-btn::after {
@@ -804,30 +865,8 @@ function Calculator() {
           right: 0;
           bottom: 0;
           border-radius: 50%;
-          border: 2px solid rgba(79, 70, 229, 0.5);
+          border: 2px solid rgba(99, 102, 241, 0.5);
           animation: ripple 2s infinite;
-        }
-        
-        .ai-assist-btn::before {
-          content: 'AI Assist';
-          position: absolute;
-          right: 70px;
-          background: rgba(15, 23, 42, 0.95);
-          color: #e2e8f0;
-          padding: 8px 16px;
-          border-radius: 8px;
-          font-size: 0.85rem;
-          font-weight: 600;
-          white-space: nowrap;
-          opacity: 0;
-          transform: translateX(10px);
-          transition: all 0.3s ease;
-          pointer-events: none;
-        }
-        
-        .ai-assist-btn:hover::before {
-          opacity: 1;
-          transform: translateX(0);
         }
         
         @keyframes ripple {
@@ -841,37 +880,69 @@ function Calculator() {
           }
         }
         
-        /* Smart Auto-Save Corner Chip */
+        /* Auto-save Indicator */
         .auto-save-indicator {
           position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background: rgba(16, 185, 129, 0.1);
-          backdrop-filter: blur(12px);
-          color: #059669;
-          padding: 6px 12px;
-          border-radius: 9999px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          border: 1px solid rgba(16, 185, 129, 0.3);
-          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
-          z-index: 999;
-          display: none;
-          align-items: center;
-          gap: 0.375rem;
-          animation: slideInUp 0.3s ease-out;
-        }
-        
-        .auto-save-indicator.show {
-          display: flex;
-        }
-        
-        .auto-save-indicator i {
-          color: #10b981;
+          top: 2rem;
+          right: 2rem;
+          background: rgba(16, 185, 129, 0.9);
+          backdrop-filter: blur(10px);
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border-radius: 50px;
           font-size: 0.875rem;
+          font-weight: 600;
+          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+          z-index: 999;
+          animation: slideInRight 0.5s ease-out;
         }
         
-        @keyframes slideInUp {
+        @keyframes slideInRight {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        /* ===== DRAFT MANAGEMENT UI ===== */
+        
+        /* Draft Restore Modal Overlay */
+        .draft-modal-overlay {
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(8px);
+          z-index: 9999;
+          animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        /* Draft Modal Card */
+        .draft-modal-card {
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          color: white;
+          border-radius: 16px;
+          padding: 2rem;
+          width: 90%;
+          max-width: 420px;
+          box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+          animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
           from {
             transform: translateY(20px);
             opacity: 0;
@@ -882,27 +953,145 @@ function Calculator() {
           }
         }
         
-        /* Modern AI Insights Bar */
-        .ai-insights-bar {
-          background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-          border-left: 3px solid var(--color-primary);
-          border-radius: 0.75rem;
-          padding: 1rem 1.25rem;
-          margin-top: 1.5rem;
-          color: var(--color-text-muted);
-          font-size: 0.875rem;
+        .draft-modal-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          color: rgba(255, 255, 255, 0.95);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        
+        .draft-modal-text {
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.7);
+          margin-bottom: 1.5rem;
           line-height: 1.6;
-          border: 1px solid #e9d5ff;
+        }
+        
+        .draft-modal-timestamp {
+          font-size: 0.8rem;
+          color: rgba(139, 92, 246, 0.9);
+          margin-bottom: 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        
+        .draft-modal-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.75rem;
+        }
+        
+        .draft-btn {
+          padding: 0.625rem 1.25rem;
+          border-radius: 10px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .draft-btn-discard {
+          background: rgba(239, 68, 68, 0.15);
+          color: #fca5a5;
+          border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .draft-btn-discard:hover {
+          background: rgba(239, 68, 68, 0.25);
+          transform: translateY(-1px);
+        }
+        
+        .draft-btn-restore {
+          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          color: white;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .draft-btn-restore:hover {
+          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+          transform: translateY(-1px);
+          box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Draft Control Buttons (in toolbar) */
+        .draft-control-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 1rem;
+          font-size: 0.85rem;
+          font-weight: 600;
+          border-radius: 8px;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .draft-save-btn {
+          background: rgba(34, 197, 94, 0.15);
+          color: #4ade80;
+          border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .draft-save-btn:hover {
+          background: rgba(34, 197, 94, 0.25);
+          transform: translateY(-1px);
+        }
+        
+        .draft-clear-btn {
+          background: rgba(239, 68, 68, 0.1);
+          color: #fca5a5;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .draft-clear-btn:hover {
+          background: rgba(239, 68, 68, 0.2);
+          transform: translateY(-1px);
+        }
+        
+        .draft-indicator {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.375rem 0.75rem;
+          font-size: 0.75rem;
+          color: rgba(139, 92, 246, 0.9);
+          background: rgba(139, 92, 246, 0.1);
+          border: 1px solid rgba(139, 92, 246, 0.2);
+          border-radius: 20px;
+          animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
+        }
+        
+        /* AI Insights Bar */
+        .ai-insights-bar {
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+          border-left: 4px solid #8b5cf6;
+          border-radius: 12px;
+          padding: 1.25rem 1.5rem;
+          margin-top: 1.5rem;
+          color: #cbd5e1;
+          font-size: 0.95rem;
+          line-height: 1.6;
         }
         
         .ai-insights-bar i {
-          color: var(--color-primary);
+          color: #a78bfa;
           margin-right: 0.5rem;
         }
         
         .ai-insights-bar strong {
-          color: var(--color-primary);
-          font-weight: 600;
+          color: #e0e7ff;
+          font-weight: 700;
         }
         
         /* Collapsible Section */
@@ -943,226 +1132,355 @@ function Calculator() {
           border-color: rgba(71, 85, 105, 0.4);
         }
         
-        /* Glass Table with Hover States */
-        .table-responsive {
-          border-radius: 0.75rem;
-          overflow: hidden;
-          border: 1px solid var(--card-border);
-          background: rgba(15, 23, 42, 0.3);
+        /* ===== PREMIUM DATAGRID STYLING ===== */
+        
+        /* DataGrid Header Bar */
+        .premium-datagrid-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.5rem 2rem;
+          background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+          border-radius: 16px;
+          margin-bottom: 1.5rem;
+          border: 1px solid rgba(139, 92, 246, 0.2);
         }
         
-        table {
+        .datagrid-title {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 1.25rem;
+          font-weight: 700;
+        }
+        
+        .datagrid-title i {
+          font-size: 1.5rem;
+          color: #8b5cf6;
+        }
+        
+        .gradient-text {
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .items-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 32px;
+          height: 32px;
+          padding: 0 12px;
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          color: white;
+          border-radius: 20px;
+          font-size: 0.875rem;
+          font-weight: 700;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+        
+        .premium-add-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.5rem;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          border: none;
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 0.95rem;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .premium-add-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+        
+        .premium-add-btn:active {
+          transform: translateY(0);
+        }
+        
+        /* Empty State */
+        .empty-state {
+          text-align: center;
+          padding: 4rem 2rem;
+          background: rgba(99, 102, 241, 0.05);
+          border-radius: 16px;
+          border: 2px dashed rgba(139, 92, 246, 0.3);
+        }
+        
+        .empty-icon {
+          font-size: 4rem;
+          color: rgba(139, 92, 246, 0.4);
+          margin-bottom: 1rem;
+        }
+        
+        .empty-state h5 {
+          color: rgba(255, 255, 255, 0.9);
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+        
+        .empty-state p {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 0.95rem;
+        }
+        
+        /* DataGrid Wrapper with Scroll */
+        .premium-datagrid-wrapper {
+          background: rgba(15, 23, 42, 0.4);
+          backdrop-filter: blur(10px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          overflow: hidden;
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        .premium-datagrid {
+          max-height: 600px;
+          overflow-y: auto;
+          overflow-x: auto;
+        }
+        
+        /* Custom Scrollbar */
+        .premium-datagrid::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        .premium-datagrid::-webkit-scrollbar-track {
+          background: rgba(15, 23, 42, 0.5);
+          border-radius: 10px;
+        }
+        
+        .premium-datagrid::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          border-radius: 10px;
+        }
+        
+        .premium-datagrid::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        }
+        
+        /* DataGrid Table */
+        .datagrid-table {
           width: 100%;
           border-collapse: separate;
           border-spacing: 0;
-          font-size: 0.875rem;
+          font-size: 0.9rem;
         }
         
-        thead {
-          background: rgba(30, 41, 59, 0.7);
-        }
-        
-        thead th {
-          padding: 0.875rem 1rem;
-          text-align: left;
-          font-weight: 600;
-          font-size: 0.8125rem;
-          color: var(--text-secondary);
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          border-bottom: 1px solid var(--divider);
-        }
-        
-        thead th:first-child {
-          border-top-left-radius: 0.75rem;
-        }
-        
-        thead th:last-child {
-          border-top-right-radius: 0.75rem;
-          text-align: right;
-        }
-        
-        tbody tr {
-          background: rgba(15, 23, 42, 0.4);
-          transition: all 0.2s ease;
-        }
-        
-        tbody tr:hover {
-          background: rgba(108, 99, 255, 0.1);
-          transform: scale(1.01);
-        }
-        
-        tbody td {
-          padding: 0.875rem 1rem;
-          color: var(--text-primary);
-          border-bottom: 1px solid var(--divider);
-        }
-        
-        tbody td:last-child {
-          text-align: right;
-          font-weight: 500;
-        }
-        
-        tbody tr:last-child td {
-          border-bottom: none;
-        }
-        
-        /* Grand Total Row with Glow */
-        tbody tr.total-row {
-          background: rgba(108, 99, 255, 0.15);
-          font-weight: 600;
-        }
-        
-        tbody tr.total-row td {
-          color: var(--accent-glow);
-          font-size: 1rem;
-        }
-        
-        tbody tr.total-row:hover {
-          background: rgba(108, 99, 255, 0.2);
-        }
-        
-        /* Premium Badges & Chips */
-        .premium-badge {
-          background: rgba(108, 99, 255, 0.15);
-          color: var(--accent-glow);
-          padding: 4px 12px;
-          border-radius: 9999px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          border: 1px solid rgba(108, 99, 255, 0.3);
-          transition: all 0.2s ease;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.375rem;
-        }
-        
-        .premium-badge:hover {
-          background: rgba(108, 99, 255, 0.25);
-          transform: translateY(-1px);
-        }
-        
-        /* Section Body Padding */
-        .section-body {
-          padding: 1.5rem;
-        }
-        
-        /* Floating Elements with Glow */
-        .ai-assist-button {
-          position: fixed;
-          bottom: 24px;
-          right: 100px;
-          z-index: 998;
-          
-          background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
-          color: white;
-          
-          width: 56px;
-          height: 56px;
-          border-radius: 50%;
-          border: none;
-          
-          box-shadow: 
-            0 6px 20px var(--accent-shadow),
-            0 0 30px rgba(108, 99, 255, 0.2);
-          
-          cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.5rem;
-        }
-        
-        .ai-assist-button:hover {
-          transform: scale(1.15) translateY(-2px);
-          box-shadow: 
-            0 8px 24px rgba(108, 99, 255, 0.5),
-            0 0 40px rgba(108, 99, 255, 0.3);
-        }
-        
-        .ai-assist-button:active {
-          transform: scale(1.05);
-        }
-        
-        /* Auto-save Indicator */
-        .auto-save-indicator {
-          position: fixed;
-          bottom: 90px;
-          right: 100px;
-          z-index: 998;
-          
-          background: rgba(30, 41, 59, 0.9);
+        /* Sticky Header */
+        .datagrid-header-sticky {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
           backdrop-filter: blur(12px);
-          border: 1px solid var(--card-border);
-          
-          color: var(--success);
-          padding: 8px 14px;
-          border-radius: 9999px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-          
-          display: none;
+        }
+        
+        .datagrid-header-sticky th {
+          padding: 1rem 0.75rem;
+          font-weight: 700;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-bottom: 2px solid rgba(139, 92, 246, 0.5);
+          background: transparent;
+        }
+        
+        .th-content {
+          display: flex;
           align-items: center;
           gap: 0.5rem;
-          
-          animation: slideInUp 0.3s ease-out;
+          color: rgba(255, 255, 255, 0.9);
         }
         
-        .auto-save-indicator.show {
-          display: flex;
+        .th-content i {
+          font-size: 0.9rem;
+          color: #8b5cf6;
         }
         
-        .auto-save-indicator i {
-          color: var(--success);
-          font-size: 0.875rem;
-        }
+        /* Column-specific styling */
+        .col-text { min-width: 200px; }
+        .col-numeric { min-width: 100px; text-align: center; }
+        .col-select { min-width: 160px; }
+        .col-calculated { min-width: 100px; text-align: center; }
+        .col-total { min-width: 120px; text-align: center; }
+        .col-action { width: 80px; text-align: center; }
+        
+        /* Table Body */
+        .datagrid-body {
+          background: transparent;
         }
         
-        .table tbody td {
-          color: #1e293b;
-          padding: 0.875rem 0.75rem;
-          border-bottom: 1px solid #f1f5f9;
+        .datagrid-row {
+          transition: all 0.2s ease;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .datagrid-row:hover {
+          background: rgba(139, 92, 246, 0.08);
+          transform: scale(1.005);
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+        }
+        
+        .datagrid-row td {
+          padding: 0.75rem;
           vertical-align: middle;
         }
         
-        .table tbody td input {
-          background: white;
-          border: 1px solid #e2e8f0;
-          padding: 0.375rem 0.75rem;
-          border-radius: 6px;
-          color: #1e293b;
-          font-size: 0.875rem;
+        /* Input Fields */
+        .datagrid-input {
+          width: 100%;
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(139, 92, 246, 0.2);
+          border-radius: 8px;
+          padding: 0.5rem 0.75rem;
+          color: rgba(255, 255, 255, 0.95);
+          font-size: 0.9rem;
+          transition: all 0.2s ease;
         }
         
-        .table tbody td input:focus {
+        .datagrid-input:focus {
           outline: none;
-          border-color: #a855f7;
-          box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+          background: rgba(30, 41, 59, 0.8);
+          border-color: #8b5cf6;
+          box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
         }
         
-        .table tbody td select {
-          background: white;
-          border: 1px solid #e2e8f0;
-          padding: 0.375rem 0.75rem;
-          border-radius: 6px;
-          color: #1e293b;
-          font-size: 0.875rem;
+        .input-text {
+          font-weight: 500;
         }
         
-        .table tbody td select:focus {
+        .input-numeric {
+          text-align: center;
+          font-family: 'Courier New', monospace;
+          font-weight: 600;
+        }
+        
+        /* Select Dropdown */
+        .datagrid-select {
+          width: 100%;
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(139, 92, 246, 0.2);
+          border-radius: 8px;
+          padding: 0.5rem 0.75rem;
+          color: rgba(255, 255, 255, 0.95);
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .datagrid-select:focus {
           outline: none;
-          border-color: #a855f7;
-          box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+          background: rgba(30, 41, 59, 0.8);
+          border-color: #8b5cf6;
+          box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+        
+        .datagrid-select option {
+          background: #1e293b;
+          color: white;
+        }
+        
+        /* Calculated Values */
+        .calculated-value {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.4rem 0.75rem;
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+          border: 1px solid rgba(59, 130, 246, 0.3);
+          border-radius: 8px;
+          color: #60a5fa;
+          font-weight: 700;
+          font-family: 'Courier New', monospace;
+          font-size: 0.9rem;
+          min-width: 70px;
+        }
+        
+        .total-value {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem 1rem;
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+          border: 1px solid rgba(16, 185, 129, 0.4);
+          border-radius: 10px;
+          color: #34d399;
+          font-weight: 800;
+          font-family: 'Courier New', monospace;
+          font-size: 1rem;
+          min-width: 80px;
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+        }
+        
+        /* Delete Button */
+        .delete-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          border-radius: 8px;
+          color: #ef4444;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .delete-btn:hover {
+          background: rgba(239, 68, 68, 0.2);
+          border-color: #ef4444;
+          transform: scale(1.1);
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        
+        .delete-btn:active {
+          transform: scale(0.95);
         }
         
         /* Responsive adjustments */
         @media (max-width: 768px) {
+          .premium-header {
+            padding: 1rem;
+          }
+          
           .premium-header h1 {
-            font-size: 1.75rem;
+            font-size: 1.125rem;
+          }
+          
+          .header-subtitle {
+            font-size: 0.8rem;
+          }
+          
+          .header-icon-box {
+            padding: 0.5rem;
+          }
+          
+          .header-icon-box i {
+            font-size: 1rem;
+          }
+          
+          .premium-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.625rem;
+          }
+          
+          .premium-badge i {
+            font-size: 0.7rem;
           }
           
           .premium-summary-grid {
@@ -1175,67 +1493,158 @@ function Calculator() {
             height: 50px;
             font-size: 1.5rem;
           }
+          
+          .premium-datagrid-header {
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+          }
+          
+          .datagrid-title {
+            font-size: 1rem;
+          }
+          
+          .premium-add-btn {
+            width: 100%;
+            justify-content: center;
+          }
+          
+          .datagrid-table {
+            font-size: 0.8rem;
+          }
+          
+          .datagrid-header-sticky th {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.7rem;
+          }
+          
+          .col-text { min-width: 150px; }
+          .col-numeric { min-width: 80px; }
+          .col-select { min-width: 120px; }
         }
         
         @media (max-width: 480px) {
           .premium-summary-grid {
             grid-template-columns: 1fr;
           }
+          
+          .premium-datagrid {
+            max-height: 400px;
+          }
         }
       `}</style>
-      
-      {/* Smart Auto-save Indicator - Only shows during save */}
-      <div className={`auto-save-indicator ${showAutoSave ? 'show' : ''}`}>
-        <i className="bi bi-check-circle"></i>
-        Auto-saved at {new Date().toLocaleTimeString()}
-      </div>
+
+      {/* Draft Restore Modal */}
+      {showRestorePrompt && (
+        <div className="draft-modal-overlay" onClick={() => setShowRestorePrompt(false)}>
+          <div className="draft-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="draft-modal-title">
+              <i className="bi bi-clock-history"></i>
+              Restore Saved Draft?
+            </div>
+            <p className="draft-modal-text">
+              We found a previously saved draft. Would you like to continue editing it?
+            </p>
+            {draftTimestamp && (
+              <div className="draft-modal-timestamp">
+                <i className="bi bi-calendar-check"></i>
+                Saved {new Date(draftTimestamp).toLocaleString()}
+              </div>
+            )}
+            <div className="draft-modal-actions">
+              <button 
+                className="draft-btn draft-btn-discard"
+                onClick={clearDraft}
+              >
+                <i className="bi bi-trash3 me-1"></i>
+                Discard
+              </button>
+              <button 
+                className="draft-btn draft-btn-restore"
+                onClick={restoreDraft}
+              >
+                <i className="bi bi-arrow-clockwise me-1"></i>
+                Restore Draft
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Floating AI Assist Button */}
-      <button className="ai-assist-btn" title="AI Suggestions">
+      <button className="ai-assist-btn" onClick={showAISuggestions} title="AI Suggestions">
         <i className="bi bi-stars"></i>
       </button>
 
       <div className="premium-calc-container">
-        <div className="container-fluid" style={{ maxWidth: '1400px', padding: '0 1rem' }}>
-          {/* Premium Header - Narrower with proper spacing */}
-          <div className="premium-card" style={{ 
-            maxWidth: '90%', 
-            margin: '24px auto 1.5rem auto'
-          }}>
+        <div className="container-fluid" style={{ maxWidth: '1400px' }}>
+          {/* Compact Premium Header */}
+          <div className="premium-card mb-4">
             <div className="premium-header">
-              <div className="d-flex justify-content-between align-items-center flex-wrap">
-                <div>
-                  <h1>
-                    <i className="bi bi-calculator-fill me-2"></i>
-                    Premium Calculator
-                  </h1>
-                  <p className="mb-0 mt-2 opacity-90">Professional Aluminium & Glass Estimation System</p>
+              <div className="header-layout">
+                {/* Left Section - Icon + Title */}
+                <div className="header-left">
+                  <div className="header-icon-box">
+                    <i className="bi bi-calculator-fill"></i>
+                  </div>
+                  <div className="header-text">
+                    <h1>Premium Calculator</h1>
+                    <p className="header-subtitle">Professional Aluminium & Glass Estimation</p>
+                  </div>
                 </div>
-                <div className="d-flex gap-2 mt-3 mt-md-0 align-items-center">
+                
+                {/* Right Section - Feature Badges */}
+                <div className="header-badges">
                   <span className="premium-badge">
-                    <i className="bi bi-shield-check me-1"></i>
-                    Enterprise Grade
+                    <i className="bi bi-shield-check"></i>
+                    <span>Enterprise Grade</span>
                   </span>
                   <span className="premium-badge">
-                    <i className="bi bi-graph-up me-1"></i>
-                    Real-time
+                    <i className="bi bi-graph-up"></i>
+                    <span>Real-time Calc</span>
                   </span>
                   <span className="premium-badge">
-                    <i className="bi bi-stars me-1"></i>
-                    AI-Powered
+                    <i className="bi bi-stars"></i>
+                    <span>AI-Powered</span>
                   </span>
                 </div>
               </div>
             </div>
+            
+            {/* Draft Management Controls */}
+            <div className="d-flex justify-content-end align-items-center gap-2 mt-3 px-3 pb-3">
+              {draftTimestamp && (
+                <span className="draft-indicator">
+                  <i className="bi bi-check-circle-fill"></i>
+                  Draft saved {new Date(draftTimestamp).toLocaleTimeString()}
+                </span>
+              )}
+              <button 
+                className="draft-control-btn draft-save-btn"
+                onClick={saveDraft}
+                title="Save current data as draft"
+              >
+                <i className="bi bi-floppy"></i>
+                Save Template
+              </button>
+              {draftTimestamp && (
+                <button 
+                  className="draft-control-btn draft-clear-btn"
+                  onClick={clearDraft}
+                  title="Clear saved draft"
+                >
+                  <i className="bi bi-trash3"></i>
+                  Clear Template
+                </button>
+              )}
+            </div>
           </div>
       
       {/* Company Information */}
-      <div id="company-section" className="premium-card section-group-spacing">
+      <div className="premium-card mb-4">
         <div className="section-header">
-          <div className="d-flex align-items-center">
-            <i className="bi bi-building-fill"></i>
-            <h5>Company Information</h5>
-          </div>
+          <i className="bi bi-building-fill"></i>
+          <h5>Company Information</h5>
         </div>
         <div className="section-body">
           <div className="row g-3">
@@ -1280,12 +1689,10 @@ function Calculator() {
       </div>
 
       {/* Customer Information */}
-      <div id="customer-section" className="premium-card section-group-spacing">
+      <div className="premium-card mb-4">
         <div className="section-header">
-          <div className="d-flex align-items-center">
-            <i className="bi bi-person-circle"></i>
-            <h5>Customer Information</h5>
-          </div>
+          <i className="bi bi-person-circle"></i>
+          <h5>Customer Information</h5>
         </div>
         <div className="section-body">
           <div className="row g-3">
@@ -1346,7 +1753,7 @@ function Calculator() {
       </div>
 
       {/* Global Settings */}
-      <div id="settings-section" className="premium-card section-group-spacing">
+      <div className="premium-card mb-4">
         <div className="section-header collapsible-header" onClick={() => setCollapsed({...collapsed, settings: !collapsed.settings})}>
           <div className="d-flex align-items-center gap-2">
             <i className="bi bi-sliders"></i>
@@ -1430,7 +1837,7 @@ function Calculator() {
 
       {/* Items */}
       {!showOnlyTotals && (
-        <div id="items-section" className="premium-card section-group-spacing">
+        <div className="premium-card mb-4">
           <div className="section-header collapsible-header" onClick={() => setCollapsed({...collapsed, items: !collapsed.items})}>
             <div className="d-flex align-items-center gap-2">
               <i className="bi bi-box-seam-fill"></i>
@@ -1440,119 +1847,186 @@ function Calculator() {
             <i className={`bi bi-chevron-down chevron ${collapsed.items ? 'collapsed' : ''}`}></i>
           </div>
           <div className={`collapsible-content section-body ${collapsed.items ? 'collapsed' : ''}`}>
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h5 className="card-title text-primary mb-0">
-                <i className="bi bi-list me-2"></i>Items
-              </h5>
-              <button className="btn btn-primary btn-sm" onClick={addItem}>
-                <i className="bi bi-plus-circle me-1"></i>Add Item
+            {/* Premium DataGrid Header */}
+            <div className="premium-datagrid-header">
+              <div className="datagrid-title">
+                <i className="bi bi-grid-3x3-gap me-2"></i>
+                <span className="gradient-text">Estimatix Premium DataGrid</span>
+                <span className="items-badge">{items.length}</span>
+              </div>
+              <button className="premium-add-btn" onClick={addItem}>
+                <i className="bi bi-plus-lg me-2"></i>
+                Add New Item
               </button>
             </div>
 
             {items.length === 0 ? (
-              <div className="text-center py-4 text-muted">
-                <i className="bi bi-inbox display-4 d-block mb-2"></i>
-                <p>No items added yet. Click "Add Item" to get started.</p>
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <i className="bi bi-inbox"></i>
+                </div>
+                <h5>No Items Yet</h5>
+                <p>Click "Add New Item" to start building your quotation</p>
               </div>
             ) : (
-              <div className="table-responsive">
-                <table className="table table-hover">
-                  <thead className="table-light">
-                    <tr>
-                      <th>Item Name</th>
-                      <th>Width (m)</th>
-                      <th>Height (m)</th>
-                      <th>Quantity</th>
-                      <th>Glass Type</th>
-                      <th>Profile Type</th>
-                      <th>Glass Weight (kg)</th>
-                      <th>Profile Weight (kg)</th>
-                      <th>Total Weight (kg)</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map(item => {
-                      const { glassWeight, profileWeight } = calculateItemWeights(item)
-                      return (
-                        <tr key={item.id}>
-                          <td>
-                            <input
-                              type="text"
-                              className="form-control form-control-sm"
-                              value={item.name}
-                              onChange={(e) => updateItem(item.id, 'name', e.target.value)}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              className="form-control form-control-sm"
-                              value={item.width}
-                              onChange={(e) => updateItem(item.id, 'width', parseFloat(e.target.value) || 0)}
-                              step="0.01"
-                              min="0"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              className="form-control form-control-sm"
-                              value={item.height}
-                              onChange={(e) => updateItem(item.id, 'height', parseFloat(e.target.value) || 0)}
-                              step="0.01"
-                              min="0"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              className="form-control form-control-sm"
-                              value={item.quantity}
-                              onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
-                              min="1"
-                            />
-                          </td>
-                          <td>
-                            <select
-                              className="form-select form-select-sm"
-                              value={item.glassType}
-                              onChange={(e) => updateItem(item.id, 'glassType', e.target.value)}
-                            >
-                              <option value="">Use Default</option>
-                              {Object.keys(GLASS_WEIGHT_PER_M2).map(type => (
-                                <option key={type} value={type}>{type}</option>
-                              ))}
-                            </select>
-                          </td>
-                          <td>
-                            <select
-                              className="form-select form-select-sm"
-                              value={item.profileType}
-                              onChange={(e) => updateItem(item.id, 'profileType', e.target.value)}
-                            >
-                              <option value="">Use Default</option>
-                              {Object.keys(PROFILE_WEIGHT_PER_M).map(type => (
-                                <option key={type} value={type}>{type}</option>
-                              ))}
-                            </select>
-                          </td>
-                          <td className="text-end">{glassWeight.toFixed(2)}</td>
-                          <td className="text-end">{profileWeight.toFixed(2)}</td>
-                          <td className="text-end fw-bold">{(glassWeight + profileWeight).toFixed(2)}</td>
-                          <td>
-                            <button
-                              className="btn btn-outline-danger btn-sm"
-                              onClick={() => deleteItem(item.id)}
-                            >
-                              <i className="bi bi-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
+              <div className="premium-datagrid-wrapper">
+                <div className="premium-datagrid">
+                  <table className="datagrid-table">
+                    <thead className="datagrid-header-sticky">
+                      <tr>
+                        <th className="col-text">
+                          <div className="th-content">
+                            <i className="bi bi-tag-fill"></i>
+                            <span>Item Name</span>
+                          </div>
+                        </th>
+                        <th className="col-numeric">
+                          <div className="th-content">
+                            <i className="bi bi-arrows-expand"></i>
+                            <span>Width (m)</span>
+                          </div>
+                        </th>
+                        <th className="col-numeric">
+                          <div className="th-content">
+                            <i className="bi bi-arrows-vertical"></i>
+                            <span>Height (m)</span>
+                          </div>
+                        </th>
+                        <th className="col-numeric">
+                          <div className="th-content">
+                            <i className="bi bi-hash"></i>
+                            <span>Qty</span>
+                          </div>
+                        </th>
+                        <th className="col-select">
+                          <div className="th-content">
+                            <i className="bi bi-gem"></i>
+                            <span>Glass Type</span>
+                          </div>
+                        </th>
+                        <th className="col-select">
+                          <div className="th-content">
+                            <i className="bi bi-box"></i>
+                            <span>Profile Type</span>
+                          </div>
+                        </th>
+                        <th className="col-calculated">
+                          <div className="th-content">
+                            <i className="bi bi-droplet"></i>
+                            <span>Glass Wt</span>
+                          </div>
+                        </th>
+                        <th className="col-calculated">
+                          <div className="th-content">
+                            <i className="bi bi-box-seam"></i>
+                            <span>Profile Wt</span>
+                          </div>
+                        </th>
+                        <th className="col-total">
+                          <div className="th-content">
+                            <i className="bi bi-calculator"></i>
+                            <span>Total (kg)</span>
+                          </div>
+                        </th>
+                        <th className="col-action">
+                          <div className="th-content">
+                            <i className="bi bi-gear"></i>
+                            <span>Action</span>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="datagrid-body">
+                      {items.map((item, index) => {
+                        const { glassWeight, profileWeight } = calculateItemWeights(item)
+                        return (
+                          <tr key={item.id} className="datagrid-row">
+                            <td className="col-text">
+                              <input
+                                type="text"
+                                className="datagrid-input input-text"
+                                value={item.name}
+                                onChange={(e) => updateItem(item.id, 'name', e.target.value)}
+                                placeholder="Enter item name..."
+                              />
+                            </td>
+                            <td className="col-numeric">
+                              <input
+                                type="number"
+                                className="datagrid-input input-numeric"
+                                value={item.width}
+                                onChange={(e) => updateItem(item.id, 'width', parseFloat(e.target.value) || 0)}
+                                step="0.01"
+                                min="0"
+                              />
+                            </td>
+                            <td className="col-numeric">
+                              <input
+                                type="number"
+                                className="datagrid-input input-numeric"
+                                value={item.height}
+                                onChange={(e) => updateItem(item.id, 'height', parseFloat(e.target.value) || 0)}
+                                step="0.01"
+                                min="0"
+                              />
+                            </td>
+                            <td className="col-numeric">
+                              <input
+                                type="number"
+                                className="datagrid-input input-numeric"
+                                value={item.quantity}
+                                onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
+                                min="1"
+                              />
+                            </td>
+                            <td className="col-select">
+                              <select
+                                className="datagrid-select"
+                                value={item.glassType}
+                                onChange={(e) => updateItem(item.id, 'glassType', e.target.value)}
+                              >
+                                <option value="">Default</option>
+                                {Object.keys(GLASS_WEIGHT_PER_M2).map(type => (
+                                  <option key={type} value={type}>{type}</option>
+                                ))}
+                              </select>
+                            </td>
+                            <td className="col-select">
+                              <select
+                                className="datagrid-select"
+                                value={item.profileType}
+                                onChange={(e) => updateItem(item.id, 'profileType', e.target.value)}
+                              >
+                                <option value="">Default</option>
+                                {Object.keys(PROFILE_WEIGHT_PER_M).map(type => (
+                                  <option key={type} value={type}>{type}</option>
+                                ))}
+                              </select>
+                            </td>
+                            <td className="col-calculated">
+                              <div className="calculated-value">{glassWeight.toFixed(2)}</div>
+                            </td>
+                            <td className="col-calculated">
+                              <div className="calculated-value">{profileWeight.toFixed(2)}</div>
+                            </td>
+                            <td className="col-total">
+                              <div className="total-value">{(glassWeight + profileWeight).toFixed(2)}</div>
+                            </td>
+                            <td className="col-action">
+                              <button
+                                className="delete-btn"
+                                onClick={() => deleteItem(item.id)}
+                                title="Delete item"
+                              >
+                                <i className="bi bi-trash3"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
@@ -1560,7 +2034,7 @@ function Calculator() {
       )}
 
       {/* Summary - Premium Dashboard Style */}
-      <div id="summary-section" className="premium-card section-group-spacing" style={{ maxWidth: '90%', margin: '24px auto' }}>
+      <div className="premium-card mb-4">
         <div className="section-header collapsible-header" onClick={() => setCollapsed({...collapsed, summary: !collapsed.summary})}>
           <div className="d-flex align-items-center gap-2">
             <i className="bi bi-pie-chart-fill"></i>
@@ -1573,7 +2047,7 @@ function Calculator() {
           <div className="premium-summary-grid">
             {/* Glass Area Card */}
             <div className="premium-summary-card cyan">
-              <div className="summary-icon">🪟</div>
+              <div className="summary-icon"><i className="bi bi-grid-3x3-gap-fill"></i></div>
               <div className="premium-summary-value">
                 {totals.totalGlassArea.toFixed(2)}
               </div>
@@ -1583,7 +2057,7 @@ function Calculator() {
 
             {/* Frame Weight Card */}
             <div className="premium-summary-card amber">
-              <div className="summary-icon">⚖️</div>
+              <div className="summary-icon"><i className="bi bi-box-seam-fill"></i></div>
               <div className="premium-summary-value">
                 {totals.totalWeight.toFixed(2)}
               </div>
@@ -1593,7 +2067,7 @@ function Calculator() {
 
             {/* Profile Length Card */}
             <div className="premium-summary-card violet">
-              <div className="summary-icon">📏</div>
+              <div className="summary-icon"><i className="bi bi-rulers"></i></div>
               <div className="premium-summary-value">
                 {totals.totalProfileLength.toFixed(2)}
               </div>
@@ -1603,7 +2077,7 @@ function Calculator() {
 
             {/* Grand Total Card */}
             <div className="premium-summary-card emerald updating">
-              <div className="summary-icon">💰</div>
+              <div className="summary-icon"><i className="bi bi-currency-rupee"></i></div>
               <div className="premium-summary-value">
                 ₹{(totals.grandTotal || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}
               </div>
@@ -1675,7 +2149,7 @@ function Calculator() {
           </div>
 
           {/* Export Buttons */}
-          <div id="actions-section" className="row g-3 mt-4">
+          <div className="row g-3 mt-4">
             <div className="col-md-6">
               <button 
                 className="premium-btn premium-btn-success w-100"

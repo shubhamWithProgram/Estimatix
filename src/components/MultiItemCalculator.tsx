@@ -115,6 +115,10 @@ export default function MultiItemCalculator() {
   const [showAIHistory, setShowAIHistory] = useState(false)
   const [currentEstimatingItemId, setCurrentEstimatingItemId] = useState<string | null>(null)
   
+  // Draft management states
+  const [showRestorePrompt, setShowRestorePrompt] = useState(false)
+  const [draftTimestamp, setDraftTimestamp] = useState<number | null>(null)
+  
   const [quotation, setQuotation] = useState<QuotationSummary>({
     quotationId: '',
     customerName: '',
@@ -584,6 +588,18 @@ export default function MultiItemCalculator() {
     alert(`✅ Template "${templateName}" saved successfully!`)
   }
 
+  const deleteTemplate = (templateId: string) => {
+    const template = savedTemplates.find(t => t.id === templateId)
+    if (!template) return
+    
+    const confirmed = confirm(`Are you sure you want to delete template "${template.name}"?`)
+    if (!confirmed) return
+
+    const updatedTemplates = savedTemplates.filter(t => t.id !== templateId)
+    setSavedTemplates(updatedTemplates)
+    localStorage.setItem('item_templates', JSON.stringify(updatedTemplates))
+  }
+
   // Drag and drop handlers
   const handleDragStart = (itemId: string) => {
     setDraggedItemId(itemId)
@@ -667,19 +683,56 @@ export default function MultiItemCalculator() {
     }
   }
 
-  // Load draft on mount
+  // Draft Management Functions
+  const saveDraft = () => {
+    const draftData = {
+      ...quotation,
+      savedAt: Date.now()
+    }
+    localStorage.setItem('estimatix_multi_calculator_draft', JSON.stringify(draftData))
+    setDraftTimestamp(Date.now())
+  }
+
+  const restoreDraft = () => {
+    const saved = localStorage.getItem('estimatix_multi_calculator_draft')
+    if (saved) {
+      const draftData = JSON.parse(saved)
+      setQuotation(draftData)
+      setShowRestorePrompt(false)
+    }
+  }
+
+  const clearDraft = () => {
+    localStorage.removeItem('estimatix_multi_calculator_draft')
+    setDraftTimestamp(null)
+    setShowRestorePrompt(false)
+  }
+
+  // Check for draft on mount
   useEffect(() => {
-    const draft = localStorage.getItem('draft_quotation')
-    if (draft && !quotation.quotationId) {
-      const draftData = JSON.parse(draft)
-      if (draftData.items && draftData.items.length > 0) {
-        const shouldRestore = confirm('Found a saved draft. Would you like to restore it?')
-        if (shouldRestore) {
-          setQuotation(draftData)
+    const saved = localStorage.getItem('estimatix_multi_calculator_draft')
+    if (saved) {
+      try {
+        const draftData = JSON.parse(saved)
+        if (draftData.items && draftData.items.length > 0) {
+          setDraftTimestamp(draftData.savedAt)
+          setShowRestorePrompt(true)
         }
+      } catch (e) {
+        console.error('Failed to load draft:', e)
       }
     }
   }, [])
+
+  // Auto-save draft when quotation changes
+  useEffect(() => {
+    if (quotation.items.length > 0 || quotation.customerName || quotation.customerPhone) {
+      const debounce = setTimeout(() => {
+        saveDraft()
+      }, 2000)
+      return () => clearTimeout(debounce)
+    }
+  }, [quotation])
 
   const removeItem = (itemId: string) => {
     setQuotation(prev => ({
@@ -955,6 +1008,36 @@ export default function MultiItemCalculator() {
 
   return (
     <>
+      {/* Draft Restore Modal */}
+      {showRestorePrompt && (
+        <div className="draft-modal-overlay" onClick={clearDraft}>
+          <div className="draft-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="draft-modal-title">
+              🕐 Restore Saved Draft?
+            </div>
+            <p>
+              We found a previously saved multi-item quotation draft. Would you like to continue where you left off?
+            </p>
+            {draftTimestamp && (
+              <small>
+                Saved: {new Date(draftTimestamp).toLocaleString('en-IN', {
+                  dateStyle: 'medium',
+                  timeStyle: 'short'
+                })}
+              </small>
+            )}
+            <div className="d-flex">
+              <button className="draft-btn-discard" onClick={clearDraft}>
+                Discard
+              </button>
+              <button className="draft-btn-restore" onClick={restoreDraft}>
+                Restore Draft
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style>{`
         /* Improved label readability */
         .form-label {
@@ -1324,6 +1407,152 @@ export default function MultiItemCalculator() {
         }
         
         /* ===== END PREMIUM STYLES ===== */
+        
+        /* ===== DRAFT MANAGEMENT STYLES ===== */
+        .draft-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.75);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          z-index: 10000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: fadeIn 0.2s ease-out;
+        }
+
+        .draft-modal-card {
+          background: linear-gradient(135deg, rgba(30, 30, 40, 0.95) 0%, rgba(20, 20, 30, 0.98) 100%);
+          border: 1px solid rgba(100, 100, 255, 0.3);
+          border-radius: 16px;
+          padding: 32px;
+          max-width: 480px;
+          width: 90%;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(100, 100, 255, 0.2);
+          animation: slideUp 0.3s ease-out;
+        }
+
+        .draft-modal-title {
+          font-size: 22px;
+          font-weight: 600;
+          margin-bottom: 12px;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .draft-modal-card p {
+          color: rgba(255, 255, 255, 0.8);
+          margin-bottom: 20px;
+          line-height: 1.5;
+        }
+
+        .draft-modal-card small {
+          display: block;
+          color: rgba(100, 200, 255, 0.9);
+          font-size: 13px;
+          margin-bottom: 24px;
+          padding: 8px 12px;
+          background: rgba(100, 150, 255, 0.1);
+          border-radius: 6px;
+          border-left: 3px solid rgba(100, 150, 255, 0.6);
+        }
+
+        .draft-modal-card .d-flex {
+          gap: 12px;
+        }
+
+        .draft-btn-discard {
+          flex: 1;
+          padding: 12px 24px;
+          background: rgba(255, 100, 100, 0.15);
+          border: 1px solid rgba(255, 100, 100, 0.4);
+          color: #ff6666;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 500;
+          transition: all 0.2s;
+        }
+
+        .draft-btn-discard:hover {
+          background: rgba(255, 100, 100, 0.25);
+          border-color: rgba(255, 100, 100, 0.6);
+          transform: translateY(-1px);
+        }
+
+        .draft-btn-restore {
+          flex: 1;
+          padding: 12px 24px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          color: white;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.2s;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .draft-btn-restore:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .draft-control-btn {
+          padding: 8px 16px;
+          background: rgba(100, 150, 255, 0.15);
+          border: 1px solid rgba(100, 150, 255, 0.3);
+          color: rgba(100, 180, 255, 0.95);
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 13px;
+          font-weight: 500;
+          transition: all 0.2s;
+        }
+
+        .draft-control-btn:hover {
+          background: rgba(100, 150, 255, 0.25);
+          border-color: rgba(100, 150, 255, 0.5);
+          transform: translateY(-1px);
+        }
+
+        .draft-indicator {
+          padding: 6px 12px;
+          background: rgba(76, 175, 80, 0.15);
+          border: 1px solid rgba(76, 175, 80, 0.3);
+          color: rgba(76, 200, 80, 0.95);
+          border-radius: 6px;
+          font-size: 12px;
+          font-weight: 500;
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
+        }
+        /* ===== END DRAFT MANAGEMENT STYLES ===== */
         
         .ai-modal-backdrop {
           position: fixed;
@@ -1699,7 +1928,19 @@ export default function MultiItemCalculator() {
                     <div key={template.id} className="col-md-4">
                       <div className="card h-100">
                         <div className="card-body">
-                          <h6 className="card-title">{template.name}</h6>
+                          <div className="d-flex justify-content-between align-items-start mb-2">
+                            <h6 className="card-title mb-0">{template.name}</h6>
+                            <button 
+                              className="btn btn-sm btn-outline-danger"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                deleteTemplate(template.id)
+                              }}
+                              title="Delete template"
+                            >
+                              <i className="bi bi-trash"></i>
+                            </button>
+                          </div>
                           <p className="card-text small text-muted mb-2">
                             {template.width}m × {template.height}m | {template.glassType}
                           </p>
@@ -1774,6 +2015,30 @@ export default function MultiItemCalculator() {
           </div>
         </div>
       )}
+
+      {/* Draft Management Controls */}
+      <div className="row mb-3">
+        <div className="col-12">
+          <div className="d-flex justify-content-end align-items-center gap-2">
+            {draftTimestamp && (
+              <span className="draft-indicator">
+                💾 Draft saved {new Date(draftTimestamp).toLocaleTimeString('en-IN', {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </span>
+            )}
+            <button className="draft-control-btn" onClick={saveDraft}>
+              💾 Save Template
+            </button>
+            {draftTimestamp && (
+              <button className="draft-control-btn" onClick={clearDraft}>
+                🗑️ Clear Template
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Customer Information */}
       <div className="row mb-4">

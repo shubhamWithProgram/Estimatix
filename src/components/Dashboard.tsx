@@ -39,7 +39,7 @@ function AnimatedCounter({ value, duration = 2000, prefix = '', suffix = '' }: {
 
 export default function Dashboard() {
   const { user, userProfile } = useAuth()
-  const [searchQuery, setSearchQuery] = useState('')
+  // const [searchQuery, setSearchQuery] = useState('')
   const [showSearch, setShowSearch] = useState(false)
   const [stats, setStats] = useState<QuotationStats>({
     totalQuotations: 0,
@@ -138,254 +138,357 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container-fluid py-4" style={{ maxWidth: '1400px' }}>
-      {/* Enhanced Header with Profile and Search */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="row mb-4"
-      >
-        <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
-            {/* Personalized Greeting */}
+    <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom, #0F172A, #1E293B)' }}>
+      <div className="container-fluid py-6 px-4 md:px-6" style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        {/* Premium Header with Greeting */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6"
+        >
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-4">
+            {/* Personalized Greeting with Accent */}
             <div>
-              <h2 className="mb-1">
-                {getGreeting()}, {userProfile?.displayName || user?.email?.split('@')[0]}! 👋
-              </h2>
-              <p className="text-muted mb-0">Here's your activity summary today.</p>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <h2 className="text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: '600', letterSpacing: '-0.5px' }}>
+                  {getGreeting()}, {userProfile?.displayName || user?.email?.split('@')[0]}! 👋
+                </h2>
+                {/* Gradient Underline */}
+                <div style={{
+                  height: '3px',
+                  width: '60%',
+                  background: 'linear-gradient(90deg, #6366F1, #8B5CF6)',
+                  borderRadius: '2px',
+                  marginTop: '4px'
+                }} />
+              </div>
+              <p className="text-sm mb-0" style={{ color: '#94A3B8', marginTop: '8px' }}>
+                Here's your activity summary today.
+              </p>
             </div>
 
-            {/* Search Bar and Profile */}
+            {/* Search and Profile Section */}
             <div className="d-flex align-items-center gap-3">
-              {/* Global Search */}
-              <motion.div 
-                initial={{ width: showSearch ? 300 : 40 }}
-                animate={{ width: showSearch ? 300 : 40 }}
-                className="position-relative"
+              {/* Compact Search Button */}
+              <button
+                className="btn rounded-circle d-flex align-items-center justify-content-center"
+                onClick={() => setShowSearch(!showSearch)}
+                style={{ 
+                  width: '44px', 
+                  height: '44px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: 'white'
+                }}
               >
-                {showSearch ? (
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search quotations, clients, invoices..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onBlur={() => !searchQuery && setShowSearch(false)}
-                    autoFocus
-                    style={{
-                      borderRadius: '20px',
-                      paddingLeft: '40px'
-                    }}
-                  />
-                ) : (
-                  <button
-                    className="btn btn-light rounded-circle"
-                    onClick={() => setShowSearch(true)}
-                    style={{ width: '40px', height: '40px' }}
-                  >
-                    <i className="bi bi-search"></i>
-                  </button>
-                )}
-                <i className="bi bi-search position-absolute" style={{ 
-                  left: '12px', 
-                  top: '50%', 
-                  transform: 'translateY(-50%)',
-                  pointerEvents: 'none',
-                  display: showSearch ? 'block' : 'none'
-                }}></i>
-              </motion.div>
+                <i className="bi bi-search"></i>
+              </button>
 
-              {/* Profile Dropdown */}
-              <div className="dropdown">
-                <button
-                  className="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  style={{ width: '40px', height: '40px' }}
-                >
-                  <i className="bi bi-person-circle fs-5"></i>
-                </button>
-                <ul className="dropdown-menu dropdown-menu-end shadow">
-                  <li>
-                    <span className="dropdown-item-text">
-                      <div className="fw-bold">{userProfile?.displayName || 'User'}</div>
-                      <small className="text-muted">{user?.email}</small>
-                    </span>
-                  </li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><Link className="dropdown-item" to="/profile"><i className="bi bi-person me-2"></i>Profile</Link></li>
-                  <li><Link className="dropdown-item" to="/billing"><i className="bi bi-credit-card me-2"></i>Subscription</Link></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><button className="dropdown-item text-danger"><i className="bi bi-box-arrow-right me-2"></i>Logout</button></li>
-                </ul>
-              </div>
+              {/* Profile Button */}
+              <button
+                className="btn rounded-circle d-flex align-items-center justify-content-center"
+                style={{ 
+                  width: '44px', 
+                  height: '44px',
+                  background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                  border: 'none',
+                  color: 'white'
+                }}
+              >
+                <i className="bi bi-person-circle fs-5"></i>
+              </button>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
 
-      {/* KPI Stats Bar */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="row g-3 mb-4"
-      >
-        <div className="col-md-6 col-lg-3">
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className="card border-0 shadow-sm h-100"
-            style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white'
-            }}
-          >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                  <p className="mb-1 opacity-75" style={{ fontSize: '14px' }}>Total Quotations</p>
-                  <h3 className="mb-0 fw-bold">
-                    <AnimatedCounter value={stats.totalQuotations} />
-                  </h3>
+        {/* Premium Glassmorphic Stats Cards */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="row g-4 mb-5"
+        >
+          {/* Total Quotations Card */}
+          <div className="col-md-6 col-lg-3">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="card border-0 h-100"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '1.5rem',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Gradient Accent Bar */}
+              <div style={{
+                height: '4px',
+                background: 'linear-gradient(90deg, #6366F1, #06B6D4)',
+                borderRadius: '1.5rem 1.5rem 0 0'
+              }} />
+              
+              <div className="card-body p-4">
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
+                      Total Quotations
+                    </p>
+                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
+                      <AnimatedCounter value={stats.totalQuotations} />
+                    </h3>
+                  </div>
+                  <div 
+                    className="d-flex align-items-center justify-content-center"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
+                    }}
+                  >
+                    <i className="bi bi-file-earmark-text text-white" style={{ fontSize: '20px' }}></i>
+                  </div>
                 </div>
-                <div className="bg-white bg-opacity-25 rounded p-2">
-                  <i className="bi bi-file-earmark-text fs-4"></i>
+                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#10B981' }}>
+                  <i className="bi bi-arrow-up me-1"></i>
+                  <span>+12% from last month</span>
                 </div>
               </div>
-              <small className="opacity-75">
-                <i className="bi bi-arrow-up me-1"></i>+12% from last month
-              </small>
-            </div>
-          </motion.div>
-        </div>
+            </motion.div>
+          </div>
 
-        <div className="col-md-6 col-lg-3">
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className="card border-0 shadow-sm h-100"
-            style={{
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-              color: 'white'
-            }}
-          >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                  <p className="mb-1 opacity-75" style={{ fontSize: '14px' }}>Total Value</p>
-                  <h3 className="mb-0 fw-bold">
-                    <AnimatedCounter value={stats.totalValue} prefix="₹" />
-                  </h3>
+          {/* Total Value Card */}
+          <div className="col-md-6 col-lg-3">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="card border-0 h-100"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '1.5rem',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Gradient Accent Bar */}
+              <div style={{
+                height: '4px',
+                background: 'linear-gradient(90deg, #8B5CF6, #EC4899)',
+                borderRadius: '1.5rem 1.5rem 0 0'
+              }} />
+              
+              <div className="card-body p-4">
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
+                      Total Value
+                    </p>
+                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
+                      <AnimatedCounter value={stats.totalValue} prefix="₹" />
+                    </h3>
+                  </div>
+                  <div 
+                    className="d-flex align-items-center justify-content-center"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 12px rgba(236, 72, 153, 0.4)'
+                    }}
+                  >
+                    <i className="bi bi-currency-rupee text-white" style={{ fontSize: '20px' }}></i>
+                  </div>
                 </div>
-                <div className="bg-white bg-opacity-25 rounded p-2">
-                  <i className="bi bi-currency-rupee fs-4"></i>
+                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#10B981' }}>
+                  <i className="bi bi-arrow-up me-1"></i>
+                  <span>+8% from last month</span>
                 </div>
               </div>
-              <small className="opacity-75">
-                <i className="bi bi-arrow-up me-1"></i>+8% from last month
-              </small>
-            </div>
-          </motion.div>
-        </div>
+            </motion.div>
+          </div>
 
-        <div className="col-md-6 col-lg-3">
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className="card border-0 shadow-sm h-100"
-            style={{
-              background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-              color: 'white'
-            }}
-          >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                  <p className="mb-1 opacity-75" style={{ fontSize: '14px' }}>Pending Quotations</p>
-                  <h3 className="mb-0 fw-bold">
-                    <AnimatedCounter value={stats.pendingQuotations} />
-                  </h3>
+          {/* Pending Quotations Card */}
+          <div className="col-md-6 col-lg-3">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="card border-0 h-100"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '1.5rem',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Gradient Accent Bar */}
+              <div style={{
+                height: '4px',
+                background: 'linear-gradient(90deg, #3B82F6, #06B6D4)',
+                borderRadius: '1.5rem 1.5rem 0 0'
+              }} />
+              
+              <div className="card-body p-4">
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
+                      Pending
+                    </p>
+                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
+                      <AnimatedCounter value={stats.pendingQuotations} />
+                    </h3>
+                  </div>
+                  <div 
+                    className="d-flex align-items-center justify-content-center"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      background: 'linear-gradient(135deg, #3B82F6, #06B6D4)',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.4)'
+                    }}
+                  >
+                    <i className="bi bi-hourglass-split text-white" style={{ fontSize: '20px' }}></i>
+                  </div>
                 </div>
-                <div className="bg-white bg-opacity-25 rounded p-2">
-                  <i className="bi bi-hourglass-split fs-4"></i>
+                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#F59E0B' }}>
+                  <i className="bi bi-exclamation-circle me-1"></i>
+                  <span>Awaiting response</span>
                 </div>
               </div>
-              <small className="opacity-75">
-                <i className="bi bi-exclamation-circle me-1"></i>Awaiting response
-              </small>
-            </div>
-          </motion.div>
-        </div>
+            </motion.div>
+          </div>
 
-        <div className="col-md-6 col-lg-3">
-          <motion.div 
-            whileHover={{ scale: 1.03 }}
-            className="card border-0 shadow-sm h-100"
-            style={{
-              background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-              color: 'white'
-            }}
-          >
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                  <p className="mb-1 opacity-75" style={{ fontSize: '14px' }}>Approved This Month</p>
-                  <h3 className="mb-0 fw-bold">
-                    <AnimatedCounter value={stats.thisMonthQuotations} />
-                  </h3>
+          {/* Approved This Month Card */}
+          <div className="col-md-6 col-lg-3">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="card border-0 h-100"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '1.5rem',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Gradient Accent Bar */}
+              <div style={{
+                height: '4px',
+                background: 'linear-gradient(90deg, #10B981, #14B8A6)',
+                borderRadius: '1.5rem 1.5rem 0 0'
+              }} />
+              
+              <div className="card-body p-4">
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
+                      Approved This Month
+                    </p>
+                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
+                      <AnimatedCounter value={stats.thisMonthQuotations} />
+                    </h3>
+                  </div>
+                  <div 
+                    className="d-flex align-items-center justify-content-center"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      background: 'linear-gradient(135deg, #10B981, #14B8A6)',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
+                    }}
+                  >
+                    <i className="bi bi-check-circle text-white" style={{ fontSize: '20px' }}></i>
+                  </div>
                 </div>
-                <div className="bg-white bg-opacity-25 rounded p-2">
-                  <i className="bi bi-check-circle fs-4"></i>
+                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#10B981' }}>
+                  <i className="bi bi-trophy me-1"></i>
+                  <span>₹{stats.thisMonthValue.toLocaleString()} revenue</span>
                 </div>
               </div>
-              <small className="opacity-75">
-                <i className="bi bi-trophy me-1"></i>₹{stats.thisMonthValue.toLocaleString()} revenue
-              </small>
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
+            </motion.div>
+          </div>
+        </motion.div>
 
       {/* Main Content Grid */}
       <div className="row g-4">
-        {/* Left Column - Quick Actions */}
+        {/* Premium Quick Actions Section */}
         <div className="col-lg-8">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h5 className="mb-3">
-              <i className="bi bi-lightning-charge me-2 text-warning"></i>
-              Quick Actions
+            {/* Section Title with Gradient */}
+            <h5 className="mb-4 d-flex align-items-center" style={{ fontSize: '1.25rem' }}>
+              <span style={{ marginRight: '8px', fontSize: '1.5rem' }}>⚡</span>
+              <span style={{
+                background: 'linear-gradient(90deg, #6366F1, #8B5CF6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: '600'
+              }}>
+                Quick Actions
+              </span>
             </h5>
 
-            <div className="row g-3 mb-4">
-              {/* Multi-Item Calculator */}
+            <div className="row g-4">
+              {/* Multi-Item Calculator - Purple Gradient */}
               <div className="col-md-6">
                 <Link to="/multi-calculator" className="text-decoration-none">
                   <motion.div
-                    whileHover={{ scale: 1.05, rotateY: 5 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="card h-100 border-0 shadow-sm"
+                    whileHover={{ y: -4, scale: 1.01 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className="card h-100 border-0"
                     style={{ 
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      color: 'white',
-                      transformStyle: 'preserve-3d'
+                      background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                      borderRadius: '1.5rem',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)'
                     }}
                   >
-                    <div className="card-body">
-                      <motion.div 
-                        whileHover={{ rotate: 360, scale: 1.2 }}
-                        transition={{ duration: 0.6 }}
-                        className="mb-3"
+                    <div className="card-body p-4" style={{ color: 'white' }}>
+                      <div 
+                        className="d-flex align-items-center justify-content-center mb-3"
+                        style={{
+                          width: '64px',
+                          height: '64px',
+                          background: 'rgba(255, 255, 255, 0.2)',
+                          borderRadius: '16px',
+                          backdropFilter: 'blur(10px)'
+                        }}
                       >
-                        <i className="bi bi-calculator display-4"></i>
-                      </motion.div>
-                      <h5 className="card-title fw-bold">Multi-Item Calculator</h5>
-                      <p className="card-text opacity-75 mb-3">
-                        Create detailed quotations with multiple windows and doors
+                        <motion.i 
+                          whileHover={{ rotate: 360 }}
+                          transition={{ duration: 0.6 }}
+                          className="bi bi-calculator" 
+                          style={{ fontSize: '32px' }}
+                        ></motion.i>
+                      </div>
+                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
+                        Multi-Item Calculator
+                      </h5>
+                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+                        Create detailed quotations with multiple items
                       </p>
-                      <div className="d-flex align-items-center">
-                        <span>Start New Project</span>
+                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
+                        <span>Start Project</span>
                         <i className="bi bi-arrow-right ms-2"></i>
                       </div>
                     </div>
@@ -393,32 +496,45 @@ export default function Dashboard() {
                 </Link>
               </div>
 
-              {/* Simple Calculator */}
+              {/* Simple Calculator - Blue/Cyan Gradient */}
               <div className="col-md-6">
                 <Link to="/calculator" className="text-decoration-none">
                   <motion.div
-                    whileHover={{ scale: 1.05, rotateY: 5 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="card h-100 border-0 shadow-sm"
+                    whileHover={{ y: -4, scale: 1.01 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className="card h-100 border-0"
                     style={{ 
-                      background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                      color: 'white',
-                      transformStyle: 'preserve-3d'
+                      background: 'linear-gradient(135deg, #3B82F6, #06B6D4)',
+                      borderRadius: '1.5rem',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 24px rgba(59, 130, 246, 0.3)'
                     }}
                   >
-                    <div className="card-body">
-                      <motion.div 
-                        whileHover={{ rotate: 360, scale: 1.2 }}
-                        transition={{ duration: 0.6 }}
-                        className="mb-3"
+                    <div className="card-body p-4" style={{ color: 'white' }}>
+                      <div 
+                        className="d-flex align-items-center justify-content-center mb-3"
+                        style={{
+                          width: '64px',
+                          height: '64px',
+                          background: 'rgba(255, 255, 255, 0.2)',
+                          borderRadius: '16px',
+                          backdropFilter: 'blur(10px)'
+                        }}
                       >
-                        <i className="bi bi-grid-3x2-gap display-4"></i>
-                      </motion.div>
-                      <h5 className="card-title fw-bold">Simple Calculator</h5>
-                      <p className="card-text opacity-75 mb-3">
-                        Quick calculations for single windows or doors
+                        <motion.i 
+                          whileHover={{ rotate: 360 }}
+                          transition={{ duration: 0.6 }}
+                          className="bi bi-grid-3x2-gap" 
+                          style={{ fontSize: '32px' }}
+                        ></motion.i>
+                      </div>
+                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
+                        Simple Calculator
+                      </h5>
+                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+                        Quick calculations for single items
                       </p>
-                      <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
                         <span>Quick Calculate</span>
                         <i className="bi bi-arrow-right ms-2"></i>
                       </div>
@@ -427,32 +543,45 @@ export default function Dashboard() {
                 </Link>
               </div>
 
-              {/* Admin Settings */}
+              {/* Admin Settings - Pink Gradient */}
               <div className="col-md-6">
                 <Link to="/admin" className="text-decoration-none">
                   <motion.div
-                    whileHover={{ scale: 1.05, rotateY: 5 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="card h-100 border-0 shadow-sm"
+                    whileHover={{ y: -4, scale: 1.01 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className="card h-100 border-0"
                     style={{ 
-                      background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                      color: 'white',
-                      transformStyle: 'preserve-3d'
+                      background: 'linear-gradient(135deg, #EC4899, #F472B6)',
+                      borderRadius: '1.5rem',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 24px rgba(236, 72, 153, 0.3)'
                     }}
                   >
-                    <div className="card-body">
-                      <motion.div 
-                        whileHover={{ rotate: 360, scale: 1.2 }}
-                        transition={{ duration: 0.6 }}
-                        className="mb-3"
+                    <div className="card-body p-4" style={{ color: 'white' }}>
+                      <div 
+                        className="d-flex align-items-center justify-content-center mb-3"
+                        style={{
+                          width: '64px',
+                          height: '64px',
+                          background: 'rgba(255, 255, 255, 0.2)',
+                          borderRadius: '16px',
+                          backdropFilter: 'blur(10px)'
+                        }}
                       >
-                        <i className="bi bi-gear display-4"></i>
-                      </motion.div>
-                      <h5 className="card-title fw-bold">Admin Settings</h5>
-                      <p className="card-text opacity-75 mb-3">
-                        Configure pricing, invoice settings, and preferences
+                        <motion.i 
+                          whileHover={{ rotate: 360 }}
+                          transition={{ duration: 0.6 }}
+                          className="bi bi-gear" 
+                          style={{ fontSize: '32px' }}
+                        ></motion.i>
+                      </div>
+                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
+                        Admin Settings
+                      </h5>
+                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+                        Configure pricing and preferences
                       </p>
-                      <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
                         <span>Manage Settings</span>
                         <i className="bi bi-arrow-right ms-2"></i>
                       </div>
@@ -461,32 +590,45 @@ export default function Dashboard() {
                 </Link>
               </div>
 
-              {/* Billing */}
+              {/* Billing - Green/Teal Gradient */}
               <div className="col-md-6">
                 <Link to="/billing" className="text-decoration-none">
                   <motion.div
-                    whileHover={{ scale: 1.05, rotateY: 5 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="card h-100 border-0 shadow-sm"
+                    whileHover={{ y: -4, scale: 1.01 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className="card h-100 border-0"
                     style={{ 
-                      background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-                      color: 'white',
-                      transformStyle: 'preserve-3d'
+                      background: 'linear-gradient(135deg, #10B981, #14B8A6)',
+                      borderRadius: '1.5rem',
+                      overflow: 'hidden',
+                      boxShadow: '0 8px 24px rgba(16, 185, 129, 0.3)'
                     }}
                   >
-                    <div className="card-body">
-                      <motion.div 
-                        whileHover={{ rotate: 360, scale: 1.2 }}
-                        transition={{ duration: 0.6 }}
-                        className="mb-3"
+                    <div className="card-body p-4" style={{ color: 'white' }}>
+                      <div 
+                        className="d-flex align-items-center justify-content-center mb-3"
+                        style={{
+                          width: '64px',
+                          height: '64px',
+                          background: 'rgba(255, 255, 255, 0.2)',
+                          borderRadius: '16px',
+                          backdropFilter: 'blur(10px)'
+                        }}
                       >
-                        <i className="bi bi-credit-card display-4"></i>
-                      </motion.div>
-                      <h5 className="card-title fw-bold">Billing & Subscription</h5>
-                      <p className="card-text opacity-75 mb-3">
-                        Manage your subscription and payment methods
+                        <motion.i 
+                          whileHover={{ rotate: 360 }}
+                          transition={{ duration: 0.6 }}
+                          className="bi bi-credit-card" 
+                          style={{ fontSize: '32px' }}
+                        ></motion.i>
+                      </div>
+                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
+                        Billing & Subscription
+                      </h5>
+                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+                        Manage subscription and payments
                       </p>
-                      <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
                         <span>View Billing</span>
                         <i className="bi bi-arrow-right ms-2"></i>
                       </div>
@@ -498,62 +640,145 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        {/* Right Column - Recent Activity Feed */}
+        {/* Premium Recent Activity Panel */}
         <div className="col-lg-4">
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <h5 className="mb-3">
-              <i className="bi bi-clock-history me-2 text-info"></i>
+            {/* Section Title */}
+            <h5 className="mb-4" style={{ fontSize: '1.25rem', color: 'white', fontWeight: '600' }}>
+              <i className="bi bi-clock-history me-2" style={{ color: '#06B6D4' }}></i>
               Recent Activity
             </h5>
 
-            <div className="card border-0 shadow-sm">
+            {/* Glass Activity Card */}
+            <div 
+              className="card border-0"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '1.5rem',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Blue Glow Top Border */}
+              <div style={{
+                height: '3px',
+                background: 'linear-gradient(90deg, #3B82F6, #06B6D4)',
+                borderRadius: '1.5rem 1.5rem 0 0'
+              }} />
+
               <div className="card-body p-0">
                 <div className="list-group list-group-flush">
                   <AnimatePresence>
-                    {recentActivities.map((activity, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 + index * 0.1 }}
-                        className="list-group-item border-0 py-3"
-                      >
-                        <div className="d-flex align-items-start">
-                          <div 
-                            className={`bg-${activity.color} bg-opacity-10 rounded p-2 me-3`}
-                            style={{ minWidth: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                          >
-                            <i className={`bi ${activity.icon} text-${activity.color} fs-5`}></i>
+                    {recentActivities.length > 0 ? (
+                      recentActivities.map((activity, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.4 + index * 0.1 }}
+                          className="list-group-item border-0 py-3 px-4"
+                          style={{ 
+                            background: 'transparent',
+                            borderBottom: index < recentActivities.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none'
+                          }}
+                        >
+                          <div className="d-flex align-items-start">
+                            <div 
+                              className="d-flex align-items-center justify-content-center me-3"
+                              style={{ 
+                                minWidth: '40px', 
+                                height: '40px',
+                                background: activity.color === 'success' ? 'rgba(16, 185, 129, 0.2)' : 
+                                           activity.color === 'info' ? 'rgba(59, 130, 246, 0.2)' : 
+                                           activity.color === 'danger' ? 'rgba(239, 68, 68, 0.2)' : 
+                                           'rgba(139, 92, 246, 0.2)',
+                                borderRadius: '10px',
+                                border: '1px solid rgba(255, 255, 255, 0.1)'
+                              }}
+                            >
+                              <i 
+                                className={`bi ${activity.icon}`} 
+                                style={{ 
+                                  fontSize: '18px',
+                                  color: activity.color === 'success' ? '#10B981' : 
+                                         activity.color === 'info' ? '#3B82F6' : 
+                                         activity.color === 'danger' ? '#EF4444' : 
+                                         '#8B5CF6'
+                                }}
+                              ></i>
+                            </div>
+                            <div className="flex-grow-1">
+                              <p className="mb-1" style={{ fontSize: '14px', color: 'white', fontWeight: '500' }}>
+                                {activity.text}
+                              </p>
+                              <small style={{ color: '#94A3B8', fontSize: '12px' }}>
+                                <i className="bi bi-clock me-1"></i>
+                                {activity.time}
+                              </small>
+                            </div>
                           </div>
-                          <div className="flex-grow-1">
-                            <p className="mb-1 fw-medium" style={{ fontSize: '14px' }}>
-                              {activity.text}
-                            </p>
-                            <small className="text-muted">
-                              <i className="bi bi-clock me-1"></i>
-                              {activity.time}
-                            </small>
-                          </div>
+                        </motion.div>
+                      ))
+                    ) : (
+                      <div className="text-center py-5 px-4">
+                        <div 
+                          className="d-flex align-items-center justify-content-center mx-auto mb-3"
+                          style={{
+                            width: '80px',
+                            height: '80px',
+                            background: 'rgba(99, 102, 241, 0.1)',
+                            borderRadius: '50%'
+                          }}
+                        >
+                          <i className="bi bi-inbox" style={{ fontSize: '36px', color: '#6366F1' }}></i>
                         </div>
-                      </motion.div>
-                    ))}
+                        <p style={{ color: '#94A3B8', fontSize: '14px', marginBottom: '16px' }}>
+                          No recent activity yet
+                        </p>
+                        <Link 
+                          to="/multi-calculator"
+                          className="btn btn-sm"
+                          style={{
+                            background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '10px',
+                            padding: '8px 16px',
+                            fontSize: '13px',
+                            fontWeight: '600'
+                          }}
+                        >
+                          Create First Quotation
+                        </Link>
+                      </div>
+                    )}
                   </AnimatePresence>
                 </div>
-                <div className="p-3 text-center border-top">
-                  <button className="btn btn-link text-decoration-none">
-                    View All Activity <i className="bi bi-arrow-right ms-1"></i>
-                  </button>
-                </div>
+                
+                {recentActivities.length > 0 && (
+                  <div className="p-3 text-center" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                    <button 
+                      className="btn btn-link text-decoration-none"
+                      style={{ color: '#6366F1', fontSize: '14px', fontWeight: '600' }}
+                    >
+                      View All Activity <i className="bi bi-arrow-right ms-1"></i>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
         </div>
       </div>
-
+      
+      </div>
     </div>
   )
 }

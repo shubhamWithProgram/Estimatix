@@ -1,0 +1,31 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Estimatix Favicon - Compact Calculator Icon -->
+  <defs>
+    <linearGradient id="favicon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main Calculator Shape -->
+  <rect x="6" y="4" width="20" height="24" rx="3" fill="url(#favicon-gradient)"/>
+  
+  <!-- Calculator Screen -->
+  <rect x="8" y="6" width="16" height="6" rx="1.5" fill="#ffffff" opacity="0.95"/>
+  
+  <!-- Display -->
+  <text x="22" y="11" font-family="Arial, sans-serif" font-size="4" font-weight="bold" fill="#4f46e5" text-anchor="end">123</text>
+  
+  <!-- Calculator Buttons -->
+  <circle cx="10" cy="17" r="1.5" fill="#ffffff" opacity="0.3"/>
+  <circle cx="16" cy="17" r="1.5" fill="#ffffff" opacity="0.3"/>
+  <circle cx="22" cy="17" r="1.5" fill="#06b6d4"/>
+  
+  <circle cx="10" cy="21" r="1.5" fill="#ffffff" opacity="0.3"/>
+  <circle cx="16" cy="21" r="1.5" fill="#ffffff" opacity="0.3"/>
+  <circle cx="22" cy="21" r="1.5" fill="#06b6d4"/>
+  
+  <rect x="9" y="24" width="5" height="2.5" rx="1" fill="#ffffff" opacity="0.3"/>
+  <circle cx="16" cy="25.5" r="1.5" fill="#ffffff" opacity="0.3"/>
+  <circle cx="22" cy="25.5" r="1.5" fill="#10b981"/>
+</svg>
