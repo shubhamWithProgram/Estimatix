@@ -2,6 +2,80 @@
 html, body, #app { height: 100%; }
 body { margin: 0; }
 
+/* ============================================
+   ENHANCED THEME TRANSITIONS & BUTTON STYLING
+   ============================================ */
+
+/* Smooth theme transitions for all elements */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Modern card styling */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.rounded-3 {
+  border-radius: 0.5rem !important;
+}
+
+/* Light mode card backgrounds */
+[data-bs-theme="light"] .card-header.bg-body-tertiary {
+  background-color: #f8f9fa !important;
+}
+
+/* Dark mode card backgrounds */
+[data-bs-theme="dark"] .card-header.bg-body-tertiary {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-bs-theme="dark"] .bg-light {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Custom pastel yellow for AI Estimate buttons */
+.btn-ai-estimate {
+  background-color: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.btn-ai-estimate:hover {
+  background-color: #fde68a;
+  color: #78350f;
+  border-color: #fcd34d;
+}
+
+[data-bs-theme="dark"] .btn-ai-estimate {
+  background-color: rgba(254, 243, 199, 0.15);
+  color: #fde68a;
+  border-color: #fde68a;
+}
+
+[data-bs-theme="dark"] .btn-ai-estimate:hover {
+  background-color: rgba(254, 243, 199, 0.25);
+  color: #fef3c7;
+}
+
+/* Icon consistency */
+.bi {
+  font-size: inherit;
+}
+
+/* Spacing refinements */
+.gap-3 {
+  gap: 1rem !important;
+}
+
 /* Theme Toggle Animations */
 @keyframes theme-pulse {
   0% {

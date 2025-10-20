@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Configuration - Estimatix Premium</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Google Fonts - Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========================================
+       PRICING CONFIGURATION - PREMIUM DESIGN
+       Estimatix Style with Glassmorphism
+       ======================================== */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============= WRAPPER & BACKGROUND ============= */
+    .pricing-configuration-wrapper {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated Background Gradient */
+    .pricing-bg-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at top, rgba(139, 92, 246, 0.15), transparent 50%),
+                  radial-gradient(ellipse at bottom, rgba(124, 58, 237, 0.1), transparent 50%);
+      z-index: 0;
+      animation: gradientShift 10s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    /* Glowing Orbs */
+    .pricing-glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      animation: float 8s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    .pricing-glow-orb-1 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      top: -100px;
+      left: -100px;
+    }
+
+    .pricing-glow-orb-2 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      bottom: -50px;
+      right: -50px;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, 30px) scale(1.1); }
+    }
+
+    /* ============= MAIN CARD ============= */
+    .pricing-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 24px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      animation: cardEntrance 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes cardEntrance {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Gradient Border Effect */
+    .pricing-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.5), rgba(124, 58, 237, 0.5));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ============= HEADER ============= */
+    .pricing-card-header {
+      padding: 3rem 2rem 2rem;
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.15) 0%, transparent 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Icon Wrapper with Glow */
+    .pricing-icon-wrapper {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .pricing-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        0 0 30px rgba(139, 92, 246, 0.5),
+        0 0 60px rgba(124, 58, 237, 0.3),
+        inset 0 2px 10px rgba(255, 255, 255, 0.2);
+      animation: iconPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% {
+        box-shadow: 
+          0 0 30px rgba(139, 92, 246, 0.5),
+          0 0 60px rgba(124, 58, 237, 0.3),
+          inset 0 2px 10px rgba(255, 255, 255, 0.2);
+      }
+      50% {
+        box-shadow: 
+          0 0 40px rgba(139, 92, 246, 0.7),
+          0 0 80px rgba(124, 58, 237, 0.5),
+          inset 0 2px 10px rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    .pricing-icon-symbol {
+      font-size: 2.5rem;
+      animation: iconBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes iconBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .pricing-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+    }
+
+    .pricing-subtitle {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* ============= FORM FIELDS ============= */
+    .pricing-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .pricing-label i {
+      color: #8b5cf6;
+    }
+
+    /* Value Badge */
+    .pricing-value-badge {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: #ffffff;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 
+        0 4px 15px rgba(139, 92, 246, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+
+    /* ============= RANGE SLIDER ============= */
+    .pricing-slider {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-slider:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .pricing-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      cursor: pointer;
+      box-shadow: 
+        0 0 0 4px rgba(139, 92, 246, 0.2),
+        0 0 20px rgba(139, 92, 246, 0.6),
+        inset 0 2px 5px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .pricing-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 
+        0 0 0 6px rgba(139, 92, 246, 0.3),
+        0 0 30px rgba(139, 92, 246, 0.8),
+        inset 0 2px 5px rgba(255, 255, 255, 0.4);
+    }
+
+    .pricing-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        0 0 0 4px rgba(139, 92, 246, 0.2),
+        0 0 20px rgba(139, 92, 246, 0.6),
+        inset 0 2px 5px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .pricing-slider-labels small {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 500;
+    }
+
+    /* ============= DROPDOWN ============= */
+    .pricing-dropdown-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.9);
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-dropdown-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(139, 92, 246, 0.5);
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+      color: #ffffff;
+    }
+
+    .pricing-dropdown-menu {
+      background: rgba(30, 30, 40, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 0.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .pricing-dropdown-item {
+      color: rgba(255, 255, 255, 0.8);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .pricing-dropdown-item:hover {
+      background: rgba(139, 92, 246, 0.2);
+      color: #ffffff;
+    }
+
+    .pricing-dropdown-item.active {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: #ffffff;
+    }
+
+    /* ============= SUMMARY CARD ============= */
+    .pricing-summary {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 16px;
+    }
+
+    .pricing-summary-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .pricing-summary-item small {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .pricing-summary-item .fw-semibold {
+      color: #ffffff;
+    }
+
+    /* ============= BUTTONS ============= */
+    .pricing-btn-back {
+      background: linear-gradient(135deg, rgba(100, 100, 120, 0.3), rgba(80, 80, 100, 0.3));
+      color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-btn-back:hover {
+      background: linear-gradient(135deg, rgba(120, 120, 140, 0.4), rgba(100, 100, 120, 0.4));
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .pricing-btn-continue {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: #ffffff;
+      border: none;
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 20px rgba(139, 92, 246, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    }
+
+    .pricing-btn-continue:hover {
+      background: linear-gradient(135deg, #9f7aea, #8b5cf6);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 0 30px rgba(139, 92, 246, 0.6),
+        0 8px 25px rgba(139, 92, 246, 0.4);
+    }
+
+    .pricing-card-footer {
+      background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.05) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pricing-configuration-wrapper">
+    <!-- Animated Background -->
+    <div class="pricing-bg-gradient"></div>
+    <div class="pricing-glow-orb pricing-glow-orb-1"></div>
+    <div class="pricing-glow-orb pricing-glow-orb-2"></div>
+
+    <div class="container">
+      <div class="row justify-content-center align-items-center min-vh-100 py-5">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+          
+          <!-- Main Card -->
+          <div class="pricing-card card border-0">
+            
+            <!-- Header with Icon -->
+            <div class="pricing-card-header text-center">
+              <div class="pricing-icon-wrapper">
+                <div class="pricing-icon">
+                  <span class="pricing-icon-symbol">💰</span>
+                </div>
+              </div>
+              <h2 class="pricing-title">Pricing Configuration</h2>
+              <p class="pricing-subtitle">
+                Customize your pricing parameters for accurate quotations
+              </p>
+            </div>
+
+            <!-- Card Body -->
+            <div class="pricing-card-body card-body px-4 px-md-5 py-4">
+              
+              <!-- Labor Cost Slider -->
+              <div class="pricing-field mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <label class="pricing-label">
+                    <i class="bi bi-tools me-2"></i>
+                    Labor Cost per Hour
+                  </label>
+                  <span class="badge pricing-value-badge" id="laborValue">₹50</span>
+                </div>
+                <input
+                  type="range"
+                  class="form-range pricing-slider"
+                  min="0"
+                  max="200"
+                  step="5"
+                  value="50"
+                  id="laborCost"
+                />
+                <div class="d-flex justify-content-between pricing-slider-labels mt-2">
+                  <small>0</small>
+                  <small>100</small>
+                  <small>200</small>
+                </div>
+              </div>
+
+              <!-- Profit Margin Slider -->
+              <div class="pricing-field mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <label class="pricing-label">
+                    <i class="bi bi-graph-up-arrow me-2"></i>
+                    Profit Margin
+                  </label>
+                  <span class="badge pricing-value-badge" id="profitValue">20%</span>
+                </div>
+                <input
+                  type="range"
+                  class="form-range pricing-slider"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value="20"
+                  id="profitMargin"
+                />
+                <div class="d-flex justify-content-between pricing-slider-labels mt-2">
+                  <small>0%</small>
+                  <small>50%</small>
+                  <small>100%</small>
+                </div>
+              </div>
+
+              <!-- Tax Rate Slider -->
+              <div class="pricing-field mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <label class="pricing-label">
+                    <i class="bi bi-receipt me-2"></i>
+                    Tax Rate (GST/VAT)
+                  </label>
+                  <span class="badge pricing-value-badge" id="taxValue">18%</span>
+                </div>
+                <input
+                  type="range"
+                  class="form-range pricing-slider"
+                  min="0"
+                  max="50"
+                  step="0.5"
+                  value="18"
+                  id="taxRate"
+                />
+                <div class="d-flex justify-content-between pricing-slider-labels mt-2">
+                  <small>0%</small>
+                  <small>25%</small>
+                  <small>50%</small>
+                </div>
+              </div>
+
+              <!-- Currency Dropdown -->
+              <div class="pricing-field mb-4">
+                <label class="pricing-label mb-3">
+                  <i class="bi bi-currency-exchange me-2"></i>
+                  Currency
+                </label>
+                <div class="dropdown w-100">
+                  <button
+                    class="btn pricing-dropdown-btn w-100 d-flex justify-content-between align-items-center"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span id="currencyDisplay">₹ Indian Rupee</span>
+                    <i class="bi bi-chevron-down"></i>
+                  </button>
+                  <ul class="dropdown-menu pricing-dropdown-menu w-100">
+                    <li><a class="dropdown-item pricing-dropdown-item active" href="#" data-currency="INR" data-symbol="₹">₹ Indian Rupee (INR)</a></li>
+                    <li><a class="dropdown-item pricing-dropdown-item" href="#" data-currency="USD" data-symbol="$">$ US Dollar (USD)</a></li>
+                    <li><a class="dropdown-item pricing-dropdown-item" href="#" data-currency="EUR" data-symbol="€">€ Euro (EUR)</a></li>
+                    <li><a class="dropdown-item pricing-dropdown-item" href="#" data-currency="GBP" data-symbol="£">£ British Pound (GBP)</a></li>
+                    <li><a class="dropdown-item pricing-dropdown-item" href="#" data-currency="AED" data-symbol="د.إ">د.إ UAE Dirham (AED)</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Summary Card -->
+              <div class="pricing-summary mt-4 p-3">
+                <h6 class="pricing-summary-title mb-3">
+                  <i class="bi bi-calculator me-2"></i>
+                  Configuration Summary
+                </h6>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="pricing-summary-item text-center">
+                      <small class="d-block mb-1">Labor Cost</small>
+                      <div class="fw-semibold" id="summaryLabor">₹50/hr</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="pricing-summary-item text-center">
+                      <small class="d-block mb-1">Profit Margin</small>
+                      <div class="fw-semibold" id="summaryProfit">20%</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="pricing-summary-item text-center">
+                      <small class="d-block mb-1">Tax Rate</small>
+                      <div class="fw-semibold" id="summaryTax">18%</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="pricing-summary-item text-center">
+                      <small class="d-block mb-1">Currency</small>
+                      <div class="fw-semibold" id="summaryCurrency">INR</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pricing-card-footer card-footer border-0 px-4 px-md-5 py-4">
+              <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                  <button class="btn pricing-btn-back w-100">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Back
+                  </button>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <button class="btn pricing-btn-continue w-100">
+                    Continue
+                    <i class="bi bi-arrow-right ms-2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Configuration state
+    let config = {
+      laborCost: 50,
+      profitMargin: 20,
+      taxRate: 18,
+      currency: 'INR',
+      currencySymbol: '₹'
+    };
+
+    // Update labor cost
+    document.getElementById('laborCost').addEventListener('input', function() {
+      config.laborCost = this.value;
+      document.getElementById('laborValue').textContent = config.currencySymbol + this.value;
+      document.getElementById('summaryLabor').textContent = config.currencySymbol + this.value + '/hr';
+    });
+
+    // Update profit margin
+    document.getElementById('profitMargin').addEventListener('input', function() {
+      config.profitMargin = this.value;
+      document.getElementById('profitValue').textContent = this.value + '%';
+      document.getElementById('summaryProfit').textContent = this.value + '%';
+    });
+
+    // Update tax rate
+    document.getElementById('taxRate').addEventListener('input', function() {
+      config.taxRate = this.value;
+      document.getElementById('taxValue').textContent = this.value + '%';
+      document.getElementById('summaryTax').textContent = this.value + '%';
+    });
+
+    // Handle currency selection
+    document.querySelectorAll('.pricing-dropdown-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Remove active class from all items
+        document.querySelectorAll('.pricing-dropdown-item').forEach(el => el.classList.remove('active'));
+        
+        // Add active class to clicked item
+        this.classList.add('active');
+        
+        // Update config
+        config.currency = this.dataset.currency;
+        config.currencySymbol = this.dataset.symbol;
+        
+        // Update displays
+        document.getElementById('currencyDisplay').textContent = this.textContent.trim();
+        document.getElementById('laborValue').textContent = config.currencySymbol + config.laborCost;
+        document.getElementById('summaryLabor').textContent = config.currencySymbol + config.laborCost + '/hr';
+        document.getElementById('summaryCurrency').textContent = config.currency;
+      });
+    });
+
+    // Continue button
+    document.querySelector('.pricing-btn-continue').addEventListener('click', function() {
+      console.log('✅ Configuration saved:', config);
+      alert('Configuration saved successfully!\n\n' + JSON.stringify(config, null, 2));
+    });
+
+    // Back button
+    document.querySelector('.pricing-btn-back').addEventListener('click', function() {
+      window.history.back();
+    });
+  </script>
+
+</body>
+</html>

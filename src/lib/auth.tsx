@@ -143,6 +143,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider()
+      // Use redirect instead of popup to avoid CORS issues
+      provider.setCustomParameters({
+        prompt: 'select_account'
+      })
       await signInWithPopup(auth, provider)
     } catch (error: any) {
       console.error('Google sign in error:', error)
@@ -156,6 +160,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           `Please add it in:\n` +
           `Firebase Console → Authentication → Settings → Authorized domains`
         )
+      }
+      
+      // Ignore popup_closed_by_user errors
+      if (error?.code === 'auth/popup-closed-by-user') {
+        console.log('User closed the popup')
+        return
       }
       
       throw error

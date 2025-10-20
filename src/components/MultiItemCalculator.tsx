@@ -1053,6 +1053,268 @@ export default function MultiItemCalculator() {
           color: #e2e8f0 !important;
         }
         
+        /* ===== RESPONSIVE ACTION TOOLBAR STYLES ===== */
+        .card-toolbar {
+          background: linear-gradient(135deg, rgba(86, 61, 124, 0.08) 0%, rgba(59, 42, 89, 0.12) 100%);
+          backdrop-filter: blur(10px);
+          padding: 0.875rem 1.25rem;
+          border-radius: 14px;
+          border: 1px solid rgba(86, 61, 124, 0.15);
+          box-shadow: 
+            0 4px 12px rgba(86, 61, 124, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          margin-bottom: 1rem;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-bs-theme="dark"] .card-toolbar {
+          background: linear-gradient(135deg, rgba(86, 61, 124, 0.15) 0%, rgba(59, 42, 89, 0.25) 100%);
+          border-color: rgba(139, 92, 246, 0.2);
+          box-shadow: 
+            0 4px 16px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .card-toolbar:hover {
+          box-shadow: 
+            0 6px 18px rgba(86, 61, 124, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        [data-bs-theme="dark"] .card-toolbar:hover {
+          box-shadow: 
+            0 6px 20px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Action Button Base Styles */
+        .action-btn {
+          padding: 0.5rem 1rem !important;
+          font-weight: 500 !important;
+          font-size: 0.875rem !important;
+          border-radius: 10px !important;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+          border-width: 1.5px !important;
+          min-height: 44px; /* Touch-friendly */
+          white-space: nowrap;
+        }
+
+        .action-btn:hover:not(:disabled) {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .action-btn:active:not(:disabled) {
+          transform: translateY(0) scale(0.98);
+        }
+
+        /* Primary button with gradient */
+        .btn-primary.action-btn {
+          background: linear-gradient(135deg, #563d7c 0%, #3b2a59 100%) !important;
+          border-color: #563d7c !important;
+        }
+
+        .btn-primary.action-btn:hover:not(:disabled) {
+          background: linear-gradient(135deg, #6a4a96 0%, #4a366e 100%) !important;
+          box-shadow: 0 6px 20px rgba(86, 61, 124, 0.35) !important;
+        }
+
+        /* Success button */
+        .btn-success.action-btn {
+          background: linear-gradient(135deg, #28a745 0%, #218838 100%) !important;
+          border-color: #28a745 !important;
+        }
+
+        .btn-success.action-btn:hover:not(:disabled) {
+          background: linear-gradient(135deg, #34ce57 0%, #28a745 100%) !important;
+          box-shadow: 0 6px 20px rgba(40, 167, 69, 0.35) !important;
+        }
+
+        /* Danger button */
+        .btn-danger.action-btn {
+          background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+          border-color: #dc3545 !important;
+        }
+
+        .btn-danger.action-btn:hover:not(:disabled) {
+          background: linear-gradient(135deg, #e4606d 0%, #dc3545 100%) !important;
+          box-shadow: 0 6px 20px rgba(220, 53, 69, 0.35) !important;
+        }
+
+        /* Warning subtle button */
+        .btn-warning-subtle.action-btn {
+          background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%) !important;
+          color: #856404 !important;
+          border-color: #ffc107 !important;
+          font-weight: 600 !important;
+        }
+
+        [data-bs-theme="dark"] .btn-warning-subtle.action-btn {
+          background: linear-gradient(135deg, #b8860b 0%, #daa520 100%) !important;
+          color: #fff8dc !important;
+          border-color: #ffc107 !important;
+        }
+
+        .btn-warning-subtle.action-btn:hover:not(:disabled) {
+          background: linear-gradient(135deg, #ffe082 0%, #ffd54f 100%) !important;
+          box-shadow: 0 6px 20px rgba(255, 193, 7, 0.35) !important;
+          transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Outline secondary button */
+        .btn-outline-secondary.action-btn {
+          background: rgba(255, 255, 255, 0.5) !important;
+          backdrop-filter: blur(8px);
+          border-color: rgba(108, 117, 125, 0.5) !important;
+          color: #495057 !important;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-secondary.action-btn {
+          background: rgba(52, 58, 64, 0.5) !important;
+          border-color: rgba(173, 181, 189, 0.3) !important;
+          color: #adb5bd !important;
+        }
+
+        .btn-outline-secondary.action-btn:hover:not(:disabled) {
+          background: rgba(108, 117, 125, 0.15) !important;
+          border-color: rgba(108, 117, 125, 0.7) !important;
+          color: #495057 !important;
+        }
+
+        /* Outline primary button (More Actions) */
+        .btn-outline-primary.action-btn {
+          background: rgba(255, 255, 255, 0.5) !important;
+          backdrop-filter: blur(8px);
+          border-color: rgba(86, 61, 124, 0.5) !important;
+          color: #563d7c !important;
+        }
+
+        [data-bs-theme="dark"] .btn-outline-primary.action-btn {
+          background: rgba(86, 61, 124, 0.2) !important;
+          border-color: rgba(139, 92, 246, 0.4) !important;
+          color: #a78bfa !important;
+        }
+
+        .btn-outline-primary.action-btn:hover:not(:disabled) {
+          background: linear-gradient(135deg, #563d7c 0%, #3b2a59 100%) !important;
+          border-color: #563d7c !important;
+          color: white !important;
+        }
+
+        /* Disabled state */
+        .action-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none !important;
+        }
+
+        /* Icon spacing */
+        .action-btn i {
+          font-size: 1rem;
+          vertical-align: middle;
+        }
+
+        /* Dropdown menu styling */
+        .card-toolbar .dropdown-menu {
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+          padding: 0.5rem;
+          min-width: 240px;
+        }
+
+        [data-bs-theme="dark"] .card-toolbar .dropdown-menu {
+          background: #2d3748;
+          border-color: rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-toolbar .dropdown-item {
+          border-radius: 8px;
+          padding: 0.625rem 1rem;
+          transition: all 0.2s;
+          font-size: 0.875rem;
+        }
+
+        .card-toolbar .dropdown-item:hover {
+          background: rgba(86, 61, 124, 0.1);
+          transform: translateX(4px);
+        }
+
+        [data-bs-theme="dark"] .card-toolbar .dropdown-item:hover {
+          background: rgba(139, 92, 246, 0.2);
+        }
+
+        .card-toolbar .dropdown-item i {
+          font-size: 1rem;
+          width: 20px;
+          text-align: center;
+        }
+
+        .card-toolbar .dropdown-header {
+          font-weight: 700;
+          color: #563d7c;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          padding: 0.5rem 1rem;
+        }
+
+        [data-bs-theme="dark"] .card-toolbar .dropdown-header {
+          color: #a78bfa;
+        }
+
+        .card-toolbar .dropdown-divider {
+          margin: 0.5rem 0;
+          opacity: 0.2;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+          .card-toolbar {
+            padding: 0.75rem 1rem;
+          }
+
+          .action-btn {
+            font-size: 0.8125rem !important;
+            padding: 0.5rem 0.875rem !important;
+          }
+        }
+
+        @media (max-width: 575.98px) {
+          .card-toolbar {
+            padding: 0.625rem 0.875rem;
+            gap: 0.5rem !important;
+          }
+
+          .action-btn {
+            font-size: 0.75rem !important;
+            padding: 0.5rem 0.75rem !important;
+          }
+
+          .action-btn i {
+            font-size: 0.875rem;
+          }
+        }
+
+        /* Animation for toolbar appearance */
+        @keyframes toolbarSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .card-toolbar {
+          animation: toolbarSlideIn 0.4s ease-out;
+        }
+        /* ===== END TOOLBAR STYLES ===== */
+        
         /* Special styling for icon labels */
         .form-label i {
           color: #2196f3 !important;
@@ -1763,18 +2025,18 @@ export default function MultiItemCalculator() {
         </div>
       )}
       
-      <div className="container-fluid py-4">
+      <div className="container-fluid py-3">
       {/* Header */}
-      <div className="row mb-4">
+      <div className="row mb-3">
         <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="d-flex justify-content-between align-items-center gap-3">
             <div>
-              <h1 className="h3 text-primary mb-1">
-                <i className="bi bi-calculator me-2"></i>
+              <h1 className="h3 fw-semibold mb-1" style={{ color: '#563d7c' }}>
+                <i className="bi bi-calculator me-2 fs-6"></i>
                 Multi-Item Quotation
                 {autoSaving && <span className="badge bg-info ms-2 small">Auto-saving...</span>}
               </h1>
-              <p className="text-muted mb-0">
+              <p className="text-muted small mb-0">
                 Quotation ID: <strong className="text-primary">{quotation.quotationId}</strong> | 
                 Status: <span className={`badge bg-${quotation.status === 'draft' ? 'secondary' : quotation.status === 'finalized' ? 'success' : 'info'}`}>
                   {quotation.status?.toUpperCase()}
@@ -1788,14 +2050,21 @@ export default function MultiItemCalculator() {
                 </span>
               </p>
             </div>
-            <div className="d-flex gap-2 flex-wrap">
-              <button className="btn btn-outline-primary" onClick={addNewItem}>
-                <i className="bi bi-plus-circle me-1"></i>
+            {/* 🎯 RESPONSIVE ACTION TOOLBAR */}
+            <div className="card-toolbar d-flex align-items-center gap-2 flex-wrap">
+              {/* PRIMARY ACTIONS - Always visible */}
+              <button 
+                className="btn btn-sm btn-primary action-btn"
+                onClick={addNewItem}
+              >
+                <i className="bi bi-plus-circle me-2"></i>
                 Add Item
               </button>
+
+              {/* AI ESTIMATE DROPDOWN - Always visible */}
               <div className="btn-group">
                 <button 
-                  className="btn btn-warning" 
+                  className="btn btn-sm btn-warning-subtle action-btn" 
                   onClick={() => {
                     const lastItem = quotation.items[quotation.items.length - 1]
                     if (lastItem) {
@@ -1807,11 +2076,11 @@ export default function MultiItemCalculator() {
                   disabled={quotation.items.length === 0}
                   title="AI-Assisted Estimation for last item"
                 >
-                  <i className="bi bi-lightbulb-fill me-1"></i>
-                  💡 AI Estimate
+                  <i className="bi bi-lightbulb-fill me-2"></i>
+                  AI Estimate
                 </button>
                 <button 
-                  className="btn btn-warning dropdown-toggle dropdown-toggle-split" 
+                  className="btn btn-sm btn-warning-subtle dropdown-toggle dropdown-toggle-split action-btn" 
                   data-bs-toggle="dropdown"
                   title="Change AI Mode"
                 ></button>
@@ -1822,7 +2091,8 @@ export default function MultiItemCalculator() {
                       className={`dropdown-item ${aiMode === 'residential' ? 'active' : ''}`}
                       onClick={() => setAiMode('residential')}
                     >
-                      🏠 Residential<br/>
+                      <i className="bi bi-house-door me-2"></i>
+                      Residential<br/>
                       <small className="text-muted">Cost-efficient materials</small>
                     </button>
                   </li>
@@ -1831,7 +2101,8 @@ export default function MultiItemCalculator() {
                       className={`dropdown-item ${aiMode === 'commercial' ? 'active' : ''}`}
                       onClick={() => setAiMode('commercial')}
                     >
-                      🏢 Commercial<br/>
+                      <i className="bi bi-building me-2"></i>
+                      Commercial<br/>
                       <small className="text-muted">Maximum durability</small>
                     </button>
                   </li>
@@ -1840,7 +2111,8 @@ export default function MultiItemCalculator() {
                       className={`dropdown-item ${aiMode === 'thermal' ? 'active' : ''}`}
                       onClick={() => setAiMode('thermal')}
                     >
-                      🌡️ Thermal Efficiency<br/>
+                      <i className="bi bi-thermometer-half me-2"></i>
+                      Thermal Efficiency<br/>
                       <small className="text-muted">Insulation optimized</small>
                     </button>
                   </li>
@@ -1849,7 +2121,8 @@ export default function MultiItemCalculator() {
                       className={`dropdown-item ${aiMode === 'premium' ? 'active' : ''}`}
                       onClick={() => setAiMode('premium')}
                     >
-                      💎 Premium Aesthetic<br/>
+                      <i className="bi bi-gem me-2"></i>
+                      Premium Aesthetic<br/>
                       <small className="text-muted">Superior quality</small>
                     </button>
                   </li>
@@ -1865,15 +2138,37 @@ export default function MultiItemCalculator() {
                   </li>
                 </ul>
               </div>
+
+              {/* GENERATE PDF - Always visible */}
               <button 
-                className="btn btn-outline-secondary" 
+                className="btn btn-sm btn-danger action-btn" 
+                onClick={generatePDF}
+                disabled={generatingPDF || quotation.items.length === 0}
+              >
+                {generatingPDF ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-file-earmark-pdf me-2"></i>
+                    Generate PDF
+                  </>
+                )}
+              </button>
+
+              {/* DESKTOP-ONLY ACTIONS (>=992px) */}
+              <button 
+                className="btn btn-sm btn-outline-secondary action-btn d-none d-lg-inline-flex"
                 onClick={() => setShowTemplateModal(!showTemplateModal)}
               >
-                <i className="bi bi-bookmark-star me-1"></i>
+                <i className="bi bi-bookmark-star me-2"></i>
                 Templates ({savedTemplates.length})
               </button>
+
               <button 
-                className="btn btn-success" 
+                className="btn btn-sm btn-success action-btn d-none d-lg-inline-flex"
                 onClick={saveQuotation}
                 disabled={savingQuotation || quotation.items.length === 0}
               >
@@ -1884,28 +2179,54 @@ export default function MultiItemCalculator() {
                   </>
                 ) : (
                   <>
-                    <i className="bi bi-cloud-check me-1"></i>
+                    <i className="bi bi-cloud-check me-2"></i>
                     Save to Firebase
                   </>
                 )}
               </button>
-              <button 
-                className="btn btn-danger" 
-                onClick={generatePDF}
-                disabled={generatingPDF || quotation.items.length === 0}
-              >
-                {generatingPDF ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2"></span>
-                    Generating PDF...
-                  </>
-                ) : (
-                  <>
-                    <i className="bi bi-file-earmark-pdf me-1"></i>
-                    Generate PDF
-                  </>
-                )}
-              </button>
+
+              {/* MOBILE DROPDOWN - More Actions (<992px) */}
+              <div className="btn-group d-lg-none ms-auto">
+                <button 
+                  className="btn btn-sm btn-outline-primary action-btn dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i className="bi bi-three-dots-vertical me-2"></i>
+                  More Actions
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <button 
+                      className="dropdown-item"
+                      onClick={() => setShowTemplateModal(!showTemplateModal)}
+                    >
+                      <i className="bi bi-bookmark-star me-2"></i>
+                      Templates ({savedTemplates.length})
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      className="dropdown-item"
+                      onClick={saveQuotation}
+                      disabled={savingQuotation || quotation.items.length === 0}
+                    >
+                      <i className="bi bi-cloud-check me-2"></i>
+                      {savingQuotation ? 'Saving...' : 'Save to Firebase'}
+                    </button>
+                  </li>
+                  <li><hr className="dropdown-divider" /></li>
+                  <li>
+                    <button 
+                      className="dropdown-item text-primary"
+                      onClick={() => setShowAIHistory(!showAIHistory)}
+                    >
+                      <i className="bi bi-clock-history me-2"></i>
+                      AI History ({aiHistory.length})
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -1913,23 +2234,25 @@ export default function MultiItemCalculator() {
 
       {/* Template Modal */}
       {showTemplateModal && savedTemplates.length > 0 && (
-        <div className="row mb-4">
+        <div className="row mb-3">
           <div className="col-12">
-            <div className="card border-primary">
+            <div className="card border-primary shadow-sm rounded-3">
               <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 className="mb-0"><i className="bi bi-bookmark-star me-2"></i>Item Templates</h5>
+                <h5 className="mb-0 fw-semibold">
+                  <i className="bi bi-bookmark-star me-2 fs-6"></i>Item Templates
+                </h5>
                 <button className="btn btn-sm btn-light" onClick={() => setShowTemplateModal(false)}>
-                  <i className="bi bi-x"></i>
+                  <i className="bi bi-x fs-6"></i>
                 </button>
               </div>
               <div className="card-body">
                 <div className="row g-3">
                   {savedTemplates.map(template => (
                     <div key={template.id} className="col-md-4">
-                      <div className="card h-100">
+                      <div className="card h-100 shadow-sm rounded-3">
                         <div className="card-body">
                           <div className="d-flex justify-content-between align-items-start mb-2">
-                            <h6 className="card-title mb-0">{template.name}</h6>
+                            <h6 className="card-title mb-0 fw-semibold">{template.name}</h6>
                             <button 
                               className="btn btn-sm btn-outline-danger"
                               onClick={(e) => {
@@ -1938,7 +2261,7 @@ export default function MultiItemCalculator() {
                               }}
                               title="Delete template"
                             >
-                              <i className="bi bi-trash"></i>
+                              <i className="bi bi-trash fs-6"></i>
                             </button>
                           </div>
                           <p className="card-text small text-muted mb-2">
@@ -1964,31 +2287,31 @@ export default function MultiItemCalculator() {
 
       {/* AI History Panel */}
       {showAIHistory && aiHistory.length > 0 && (
-        <div className="row mb-4">
+        <div className="row mb-3">
           <div className="col-12">
-            <div className="card border-warning">
+            <div className="card border-warning shadow-sm rounded-3">
               <div className="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">
-                  <i className="bi bi-clock-history me-2"></i>
+                <h5 className="mb-0 fw-semibold">
+                  <i className="bi bi-clock-history me-2 fs-6"></i>
                   🤖 AI Estimation History
                 </h5>
                 <button className="btn btn-sm btn-dark" onClick={() => setShowAIHistory(false)}>
-                  <i className="bi bi-x"></i>
+                  <i className="bi bi-x fs-6"></i>
                 </button>
               </div>
               <div className="card-body">
                 <div className="row g-3">
                   {aiHistory.map(entry => (
                     <div key={entry.id} className="col-md-6">
-                      <div className="card h-100 border-start border-warning border-4">
+                      <div className="card h-100 border-start border-warning border-4 shadow-sm rounded-3">
                         <div className="card-body">
                           <div className="d-flex justify-content-between align-items-start mb-2">
-                            <h6 className="card-title mb-0">
+                            <h6 className="card-title mb-0 fw-semibold">
                               {entry.type === 'window' ? '🪟' : '🚪'} {entry.itemName}
                             </h6>
                             <span className="badge bg-secondary">{entry.mode}</span>
                           </div>
-                          <p className="card-text small mb-2">
+                          <p className="card-text small text-muted mb-2">
                             <strong>Dimensions:</strong> {entry.dimensions}<br/>
                             <strong>Applied:</strong> {new Date(entry.appliedAt).toLocaleString()}<br/>
                             <strong>Confidence:</strong> {entry.result.confidence}%
@@ -2001,7 +2324,7 @@ export default function MultiItemCalculator() {
                                 setShowAIModal(true)
                               }}
                             >
-                              <i className="bi bi-eye me-1"></i>
+                              <i className="bi bi-eye me-1 fs-6"></i>
                               View Details
                             </button>
                           </div>
@@ -2041,19 +2364,19 @@ export default function MultiItemCalculator() {
       </div>
 
       {/* Customer Information */}
-      <div className="row mb-4">
+      <div className="row mb-3">
         <div className="col-12">
-          <div className="card">
+          <div className="card shadow-sm rounded-3">
             <div className="card-header bg-info text-white">
-              <h5 className="card-title mb-0">
-                <i className="bi bi-person-fill me-2"></i>
+              <h5 className="card-title mb-0 fw-semibold">
+                <i className="bi bi-person-fill me-2 fs-6"></i>
                 Customer Information
               </h5>
             </div>
             <div className="card-body">
               <div className="row g-3">
                 <div className="col-md-4">
-                  <label className="form-label">Customer Name *</label>
+                  <label className="form-label small text-muted">Customer Name *</label>
                   <input
                     type="text"
                     className="form-control"
@@ -2063,7 +2386,7 @@ export default function MultiItemCalculator() {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Phone Number</label>
+                  <label className="form-label small text-muted">Phone Number</label>
                   <input
                     type="tel"
                     className="form-control"
@@ -2073,7 +2396,7 @@ export default function MultiItemCalculator() {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Email Address</label>
+                  <label className="form-label small text-muted">Email Address</label>
                   <input
                     type="email"
                     className="form-control"
@@ -2089,17 +2412,17 @@ export default function MultiItemCalculator() {
       </div>
 
       {/* Items List */}
-      <div className="row mb-4">
+      <div className="row mb-3">
         <div className="col-12">
-          <div className="card">
+          <div className="card shadow-sm rounded-3">
             <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-              <h5 className="card-title mb-0">
-                <i className="bi bi-list-ul me-2"></i>
+              <h5 className="card-title mb-0 fw-semibold">
+                <i className="bi bi-list-ul me-2 fs-6"></i>
                 Quotation Items ({quotation.items.length})
               </h5>
               {quotation.items.length === 0 && (
-                <button className="btn btn-light btn-sm" onClick={addNewItem}>
-                  <i className="bi bi-plus me-1"></i>
+                <button className="btn btn-sm btn-light" onClick={addNewItem}>
+                  <i className="bi bi-plus me-1 fs-6"></i>
                   Add First Item
                 </button>
               )}
@@ -2125,10 +2448,10 @@ export default function MultiItemCalculator() {
                       onDrop={() => handleDrop(item.id)}
                       style={{ cursor: 'move' }}
                     >
-                      <div className="card border-secondary shadow-sm">
-                        <div className="card-header bg-light d-flex justify-content-between align-items-center">
-                          <h6 className="mb-0">
-                            <i className="bi bi-grip-vertical me-2 text-muted" title="Drag to reorder"></i>
+                      <div className="card border-secondary shadow-sm rounded-3">
+                        <div className="card-header bg-body-tertiary d-flex justify-content-between align-items-center">
+                          <h6 className="mb-0 fw-semibold">
+                            <i className="bi bi-grip-vertical me-2 text-muted fs-6" title="Drag to reorder"></i>
                             <span className="badge bg-secondary me-2">{index + 1}</span>
                             {item.name}
                             {item.glassArea && item.glassArea > 0 && (
@@ -2139,40 +2462,45 @@ export default function MultiItemCalculator() {
                           </h6>
                           <div className="btn-group btn-group-sm">
                             <button 
-                              className="btn btn-warning"
+                              className="btn btn-sm"
+                              style={{
+                                backgroundColor: '#fef3c7',
+                                color: '#92400e',
+                                borderColor: '#fde68a'
+                              }}
                               onClick={() => estimateAutomatically(item.id, item.type)}
                               title="AI-Assisted Estimation - Auto-fill with smart defaults"
                             >
-                              <i className="bi bi-lightbulb-fill me-1"></i>
+                              <i className="bi bi-lightbulb-fill me-1 fs-6"></i>
                               Estimate
                             </button>
                             <button 
-                              className="btn btn-outline-primary"
+                              className="btn btn-sm btn-outline-primary"
                               onClick={() => toggleItemBreakdown(item.id)}
                               title="View Cost Breakdown"
                             >
-                              <i className="bi bi-receipt"></i>
+                              <i className="bi bi-receipt fs-6"></i>
                             </button>
                             <button 
-                              className="btn btn-outline-info"
+                              className="btn btn-sm btn-outline-info"
                               onClick={() => duplicateItem(item.id)}
                               title="Duplicate Item"
                             >
-                              <i className="bi bi-files"></i>
+                              <i className="bi bi-files fs-6"></i>
                             </button>
                             <button 
-                              className="btn btn-outline-success"
+                              className="btn btn-sm btn-outline-success"
                               onClick={() => saveAsTemplate(item)}
                               title="Save as Template"
                             >
-                              <i className="bi bi-bookmark"></i>
+                              <i className="bi bi-bookmark fs-6"></i>
                             </button>
                             <button 
-                              className="btn btn-outline-danger"
+                              className="btn btn-sm btn-outline-danger"
                               onClick={() => removeItem(item.id)}
                               title="Delete Item"
                             >
-                              <i className="bi bi-trash"></i>
+                              <i className="bi bi-trash fs-6"></i>
                             </button>
                           </div>
                         </div>

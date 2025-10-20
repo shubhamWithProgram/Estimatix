@@ -1,0 +1,527 @@
+/* ========================================
+   PRICING CONFIGURATION - PREMIUM DESIGN
+   Estimatix Style with Glassmorphism
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ============= WRAPPER & BACKGROUND ============= */
+.pricing-configuration-wrapper {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+/* Animated Background Gradient */
+.pricing-bg-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at top, rgba(139, 92, 246, 0.15), transparent 50%),
+              radial-gradient(ellipse at bottom, rgba(124, 58, 237, 0.1), transparent 50%);
+  z-index: 0;
+  animation: gradientShift 10s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Glowing Orbs */
+.pricing-glow-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: float 8s ease-in-out infinite;
+  z-index: 0;
+}
+
+.pricing-glow-orb-1 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.pricing-glow-orb-2 {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  bottom: -50px;
+  right: -50px;
+  animation-delay: 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, 30px) scale(1.1); }
+}
+
+/* ============= MAIN CARD ============= */
+.pricing-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  animation: cardEntrance 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Gradient Border Effect */
+.pricing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.5), rgba(124, 58, 237, 0.5));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============= HEADER ============= */
+.pricing-card-header {
+  padding: 3rem 2rem 2rem;
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.15) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Icon Wrapper with Glow */
+.pricing-icon-wrapper {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pricing-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 0 30px rgba(139, 92, 246, 0.5),
+    0 0 60px rgba(124, 58, 237, 0.3),
+    inset 0 2px 10px rgba(255, 255, 255, 0.2);
+  animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px rgba(139, 92, 246, 0.5),
+      0 0 60px rgba(124, 58, 237, 0.3),
+      inset 0 2px 10px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(139, 92, 246, 0.7),
+      0 0 80px rgba(124, 58, 237, 0.5),
+      inset 0 2px 10px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.pricing-icon-symbol {
+  font-size: 2.5rem;
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.pricing-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+.pricing-subtitle {
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============= FORM FIELDS ============= */
+.pricing-field {
+  animation: fieldFadeIn 0.5s ease-out backwards;
+}
+
+.pricing-field:nth-child(1) { animation-delay: 0.1s; }
+.pricing-field:nth-child(2) { animation-delay: 0.2s; }
+.pricing-field:nth-child(3) { animation-delay: 0.3s; }
+.pricing-field:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fieldFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.pricing-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.pricing-label i {
+  color: #8b5cf6;
+}
+
+/* Value Badge */
+.pricing-value-badge {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #ffffff;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 
+    0 4px 15px rgba(139, 92, 246, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ============= RANGE SLIDER ============= */
+.pricing-slider {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  outline: none;
+  -webkit-appearance: none;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pricing-slider:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Slider Fill Effect (via background gradient) */
+.pricing-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  cursor: pointer;
+  box-shadow: 
+    0 0 0 4px rgba(139, 92, 246, 0.2),
+    0 0 20px rgba(139, 92, 246, 0.6),
+    inset 0 2px 5px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.pricing-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 
+    0 0 0 6px rgba(139, 92, 246, 0.3),
+    0 0 30px rgba(139, 92, 246, 0.8),
+    inset 0 2px 5px rgba(255, 255, 255, 0.4);
+}
+
+.pricing-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 0 0 4px rgba(139, 92, 246, 0.2),
+    0 0 20px rgba(139, 92, 246, 0.6),
+    inset 0 2px 5px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.pricing-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 
+    0 0 0 6px rgba(139, 92, 246, 0.3),
+    0 0 30px rgba(139, 92, 246, 0.8),
+    inset 0 2px 5px rgba(255, 255, 255, 0.4);
+}
+
+/* Track Fill Color */
+.pricing-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 50px;
+  background: linear-gradient(
+    to right,
+    #8b5cf6 0%,
+    #7c3aed var(--value, 50%),
+    rgba(255, 255, 255, 0.1) var(--value, 50%)
+  );
+}
+
+.pricing-slider::-moz-range-track {
+  height: 8px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pricing-slider::-moz-range-progress {
+  height: 8px;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+/* Slider Labels */
+.pricing-slider-labels {
+  margin-top: 0.5rem;
+}
+
+.pricing-slider-labels small {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+/* ============= DROPDOWN ============= */
+.pricing-dropdown-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.pricing-dropdown-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  color: #ffffff;
+}
+
+.pricing-dropdown-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
+}
+
+.pricing-dropdown-menu {
+  background: rgba(30, 30, 40, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  margin-top: 0.5rem;
+}
+
+.pricing-dropdown-item {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.pricing-dropdown-item:hover {
+  background: rgba(139, 92, 246, 0.2);
+  color: #ffffff;
+}
+
+.pricing-dropdown-item.active {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #ffffff;
+}
+
+/* ============= SUMMARY CARD ============= */
+.pricing-summary {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.pricing-summary-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.pricing-summary-title i {
+  color: #8b5cf6;
+}
+
+.pricing-summary-item {
+  text-align: center;
+}
+
+.pricing-summary-item small {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.25rem;
+}
+
+.pricing-summary-item .fw-semibold {
+  font-size: 1.1rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ============= FOOTER BUTTONS ============= */
+.pricing-card-footer {
+  background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.05) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Back Button */
+.pricing-btn-back {
+  background: linear-gradient(135deg, rgba(100, 100, 120, 0.3), rgba(80, 80, 100, 0.3));
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricing-btn-back:hover {
+  background: linear-gradient(135deg, rgba(120, 120, 140, 0.4), rgba(100, 100, 120, 0.4));
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Continue Button */
+.pricing-btn-continue {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #ffffff;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 20px rgba(139, 92, 246, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricing-btn-continue:hover {
+  background: linear-gradient(135deg, #9f7aea, #8b5cf6);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 0 30px rgba(139, 92, 246, 0.6),
+    0 8px 25px rgba(139, 92, 246, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.pricing-btn-continue:active {
+  transform: translateY(0);
+}
+
+/* ============= RESPONSIVE ============= */
+@media (max-width: 768px) {
+  .pricing-title {
+    font-size: 1.75rem;
+  }
+
+  .pricing-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .pricing-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .pricing-icon-symbol {
+    font-size: 2rem;
+  }
+
+  .pricing-card-header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .pricing-card-body {
+    padding: 1.5rem !important;
+  }
+
+  .pricing-card-footer {
+    padding: 1.5rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .pricing-btn-back,
+  .pricing-btn-continue {
+    font-size: 0.95rem;
+    padding: 0.8rem 1.25rem;
+  }
+}
+
+/* ============= DARK THEME COMPATIBILITY ============= */
+@media (prefers-color-scheme: dark) {
+  .pricing-card {
+    background: rgba(20, 20, 30, 0.6);
+  }
+}

@@ -10,7 +10,6 @@ import {
   getDoc,
   query, 
   where, 
-  orderBy, 
   limit,
   Timestamp,
   serverTimestamp 
@@ -136,10 +135,10 @@ class QuotationsService {
   // Get all quotations for a user
   async getUserQuotations(userId: string, limitCount: number = 50): Promise<SavedQuotation[]> {
     try {
+      // First try without orderBy to avoid index requirement
       const q = query(
         collection(db, this.quotationsCollection),
         where('userId', '==', userId),
-        orderBy('createdAt', 'desc'),
         limit(limitCount)
       )
 
@@ -153,37 +152,33 @@ class QuotationsService {
         } as SavedQuotation)
       })
 
+      // Sort client-side by createdAt
+      quotations.sort((a, b) => {
+        const aDate = a.createdAt instanceof Timestamp ? a.createdAt.toDate() : new Date(a.createdAt)
+        const bDate = b.createdAt instanceof Timestamp ? b.createdAt.toDate() : new Date(b.createdAt)
+        return bDate.getTime() - aDate.getTime()
+      })
+
+      console.log(`✅ Loaded ${quotations.length} quotations (client-side sorting)`)
       return quotations
-    } catch (error) {
+      
+    } catch (error: any) {
       console.error('Error getting user quotations:', error)
-      throw new Error('Failed to get quotations')
+      return []
     }
   }
 
   // Get quotations by status
   async getQuotationsByStatus(userId: string, status: SavedQuotation['status']): Promise<SavedQuotation[]> {
     try {
-      const q = query(
-        collection(db, this.quotationsCollection),
-        where('userId', '==', userId),
-        where('status', '==', status),
-        orderBy('createdAt', 'desc')
-      )
-
-      const querySnapshot = await getDocs(q)
-      const quotations: SavedQuotation[] = []
-
-      querySnapshot.forEach((doc) => {
-        quotations.push({
-          id: doc.id,
-          ...doc.data()
-        } as SavedQuotation)
-      })
-
-      return quotations
-    } catch (error) {
+      // Use simple query and filter client-side to avoid index requirement
+      const allQuotations = await this.getUserQuotations(userId, 100)
+      const filtered = allQuotations.filter(q => q.status === status)
+      console.log(`✅ Found ${filtered.length} quotations with status: ${status}`)
+      return filtered
+    } catch (error: any) {
       console.error('Error getting quotations by status:', error)
-      throw new Error('Failed to get quotations by status')
+      return []
     }
   }
 
@@ -264,25 +259,11 @@ class QuotationsService {
   // Get recent quotations (for activity feed)
   async getRecentQuotations(userId: string, limitCount: number = 10): Promise<SavedQuotation[]> {
     try {
-      const q = query(
-        collection(db, this.quotationsCollection),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc'),
-        limit(limitCount)
-      )
-
-      const querySnapshot = await getDocs(q)
-      const quotations: SavedQuotation[] = []
-
-      querySnapshot.forEach((doc) => {
-        quotations.push({
-          id: doc.id,
-          ...doc.data()
-        } as SavedQuotation)
-      })
-
+      // Use getUserQuotations which already handles client-side sorting
+      const quotations = await this.getUserQuotations(userId, limitCount)
+      console.log(`✅ Loaded ${quotations.length} recent quotations`)
       return quotations
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting recent quotations:', error)
       return []
     }
