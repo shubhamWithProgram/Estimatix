@@ -52,28 +52,28 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
       {children}
 
-      {/* Modern PWA Footer */}
-      <footer className="estimatix-footer mt-auto border-top border-secondary">
-        <div className="container py-4">
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      {/* Modern PWA Footer - Light & Dark Mode */}
+      <footer className="estimatix-footer mt-auto border-top">
+        <div className="container py-4 py-md-3">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 gap-md-4">
             
             {/* Brand Section */}
             <div className="text-center text-md-start">
               <div className="mb-2">
                 <span className="text-info fw-bold fs-5">Estimatix</span>
-                <span className="text-muted ms-2">v1.0</span>
+                <span className="footer-version ms-2">v1.0</span>
               </div>
-              <p className="mb-0 small text-secondary">
+              <p className="mb-1 footer-description">
                 Professional Estimation & Quotation Platform
               </p>
-              <small className="text-muted" style={{ fontSize: '0.75rem' }}>
+              <small className="footer-tech d-block">
                 Powered by Firebase & Advanced SaaS Technology
               </small>
             </div>
 
             {/* Copyright */}
             <div className="text-center text-md-end">
-              <small className="text-muted">
+              <small className="footer-copyright">
                 © 2025 Estimatix. All rights reserved.
               </small>
             </div>
