@@ -44,13 +44,15 @@ export default defineConfig(({ mode }) => {
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            // Large libraries get their own chunks
             if (id.includes('xlsx')) return 'vendor-xlsx'
             if (id.includes('jspdf')) return 'vendor-jspdf'
-            // Keep React, React-DOM, and Scheduler together to avoid duplicate instances
-            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
-              return 'vendor-react'
+            // Let Vite handle React bundling automatically to avoid circular dependency issues
+            // All other node_modules go into vendor chunk
+            if (!id.includes('react')) {
+              return 'vendor'
             }
-            return 'vendor'
+            // React packages handled automatically by Vite
           }
         }
       }
