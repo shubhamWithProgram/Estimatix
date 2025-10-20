@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
-  const base = isDev ? '/' : '/estimatix/'
+  const base = isDev ? '/' : '/Estimatix/'
   
   return {
     plugins: [
@@ -22,8 +22,6 @@ export default defineConfig(({ mode }) => {
           scope: base,
           start_url: base,
         icons: [
-          { src: 'logo192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'logo512.png', sizes: '512x512', type: 'image/png' },
           { src: 'logo.svg', sizes: 'any', type: 'image/svg+xml' }
         ]
       },
