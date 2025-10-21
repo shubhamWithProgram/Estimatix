@@ -1053,6 +1053,1773 @@ export default function MultiItemCalculator() {
           color: #e2e8f0 !important;
         }
         
+        /* ===== SAAS-GRADE HEADER & ACTIONS STYLES ===== */
+        .saas-header-container {
+          background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(147, 51, 234, 0.05) 100%);
+          border: 1px solid rgba(124, 58, 237, 0.12);
+          border-radius: 24px;
+          padding: 2rem;
+          position: relative;
+          overflow: hidden;
+          backdrop-filter: blur(10px);
+          box-shadow: 
+            0 8px 32px rgba(124, 58, 237, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          animation: fadeInScale 0.8s ease-out;
+        }
+
+        @keyframes fadeInScale {
+          0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        .saas-header-container::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, transparent 30%, rgba(124, 58, 237, 0.02) 50%, transparent 70%);
+          pointer-events: none;
+        }
+
+        [data-bs-theme="dark"] .saas-header-container {
+          background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.95) 100%);
+          border-color: rgba(124, 58, 237, 0.2);
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* Title Section */
+        .saas-title-wrapper {
+          margin-bottom: 2rem;
+        }
+
+        .saas-title-content {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .saas-main-title {
+          font-size: 2.5rem;
+          font-weight: 650;
+          line-height: 1.15;
+          letter-spacing: -0.025em;
+          background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f472b6 100%);
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin: 0;
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+          cursor: default;
+          transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          animation: gradientFlow 8s ease-in-out infinite;
+          filter: drop-shadow(0 8px 32px rgba(168, 85, 247, 0.2));
+        }
+
+        .saas-main-title::after {
+          content: '';
+          position: absolute;
+          bottom: -12px;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, #a855f7, #ec4899, #f472b6, #ec4899, #a855f7);
+          background-size: 300% 100%;
+          border-radius: 1.5px;
+          opacity: 0.8;
+          animation: neonUnderline 4s ease-in-out infinite;
+          box-shadow: 
+            0 0 10px rgba(168, 85, 247, 0.5),
+            0 0 20px rgba(236, 72, 153, 0.3),
+            0 0 30px rgba(244, 114, 182, 0.2);
+        }
+
+        .saas-main-title::before {
+          content: '';
+          position: absolute;
+          inset: -2px;
+          background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1));
+          border-radius: 16px;
+          z-index: -1;
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          blur: 20px;
+        }
+
+        .saas-main-title:hover {
+          font-weight: 700;
+          letter-spacing: -0.015em;
+          animation-duration: 3s;
+          filter: drop-shadow(0 12px 48px rgba(168, 85, 247, 0.3)) 
+                  drop-shadow(0 0 32px rgba(236, 72, 153, 0.2));
+          transform: translateY(-2px);
+        }
+
+        .saas-main-title:hover::before {
+          opacity: 1;
+        }
+
+        .saas-main-title:hover::after {
+          height: 4px;
+          animation-duration: 1.5s;
+          box-shadow: 
+            0 0 15px rgba(168, 85, 247, 0.8),
+            0 0 30px rgba(236, 72, 153, 0.5),
+            0 0 45px rgba(244, 114, 182, 0.3);
+        }
+
+        @keyframes gradientFlow {
+          0%, 100% { 
+            background-position: 0% 50%; 
+            filter: drop-shadow(0 8px 32px rgba(168, 85, 247, 0.2));
+          }
+          25% { 
+            background-position: 100% 50%; 
+            filter: drop-shadow(0 8px 32px rgba(236, 72, 153, 0.25));
+          }
+          50% { 
+            background-position: 100% 100%; 
+            filter: drop-shadow(0 8px 32px rgba(244, 114, 182, 0.2));
+          }
+          75% { 
+            background-position: 0% 100%; 
+            filter: drop-shadow(0 8px 32px rgba(168, 85, 247, 0.2));
+          }
+        }
+
+        @keyframes neonUnderline {
+          0%, 100% { 
+            background-position: 0% 50%;
+            opacity: 0.8;
+          }
+          25% { 
+            background-position: 50% 50%;
+            opacity: 0.9;
+          }
+          50% { 
+            background-position: 100% 50%;
+            opacity: 1;
+          }
+          75% { 
+            background-position: 150% 50%;
+            opacity: 0.9;
+          }
+        }
+
+        .saas-auto-save-indicator {
+          display: inline-flex;
+          align-items: center;
+          background: rgba(16, 185, 129, 0.1);
+          color: #059669;
+          font-size: 0.875rem;
+          font-weight: 600;
+          padding: 0.5rem 0.875rem;
+          border-radius: 12px;
+          border: 1px solid rgba(16, 185, 129, 0.2);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.8; }
+        }
+
+        /* Meta Information Row */
+        .saas-meta-row {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(124, 58, 237, 0.1);
+          border-radius: 16px;
+          backdrop-filter: blur(5px);
+        }
+
+        [data-bs-theme="dark"] .saas-meta-row {
+          background: rgba(0, 0, 0, 0.2);
+          border-color: rgba(124, 58, 237, 0.15);
+        }
+
+        .saas-meta-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.875rem;
+        }
+
+        .saas-meta-icon {
+          color: #7c3aed;
+          font-size: 0.875rem;
+        }
+
+        .saas-status-dot {
+          font-size: 0.5rem;
+          color: #7c3aed;
+        }
+
+        .saas-meta-label {
+          color: #64748b;
+          font-weight: 500;
+        }
+
+        [data-bs-theme="dark"] .saas-meta-label {
+          color: #94a3b8;
+        }
+
+        .saas-meta-value {
+          color: #1e293b;
+          font-weight: 600;
+        }
+
+        [data-bs-theme="dark"] .saas-meta-value {
+          color: #f1f5f9;
+        }
+
+        .saas-meta-divider {
+          width: 4px;
+          height: 4px;
+          background: #d1d5db;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        [data-bs-theme="dark"] .saas-meta-divider {
+          background: #6b7280;
+        }
+
+        .saas-status-badge {
+          font-size: 0.75rem;
+          font-weight: 700;
+          padding: 0.375rem 0.75rem;
+          border-radius: 8px;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .saas-status-draft {
+          background: rgba(107, 114, 128, 0.15);
+          color: #4b5563;
+          border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .saas-status-finalized {
+          background: rgba(16, 185, 129, 0.15);
+          color: #047857;
+          border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .saas-status-info {
+          background: rgba(59, 130, 246, 0.15);
+          color: #1d4ed8;
+          border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .saas-meta-expired {
+          color: #dc2626 !important;
+          font-weight: 700;
+        }
+
+        .saas-meta-valid {
+          color: #059669 !important;
+          font-weight: 600;
+        }
+
+        /* Action Card */
+        .saas-action-wrapper {
+          display: flex;
+          justify-content: center;
+        }
+
+        .saas-action-card {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 20px;
+          padding: 1.5rem;
+          box-shadow: 
+            0 12px 40px rgba(124, 58, 237, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          transition: all 0.3s ease;
+          width: 100%;
+          max-width: 800px;
+        }
+
+        .saas-action-card:hover {
+          box-shadow: 
+            0 16px 50px rgba(124, 58, 237, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+          transform: translateY(-2px);
+        }
+
+        [data-bs-theme="dark"] .saas-action-card {
+          background: rgba(31, 41, 55, 0.8);
+          border-color: rgba(124, 58, 237, 0.2);
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* Action Rows */
+        .saas-action-row {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .saas-secondary-row {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(124, 58, 237, 0.1);
+          justify-content: center;
+          gap: 0.75rem;
+          align-items: stretch;
+        }
+
+        .saas-secondary-row .saas-action-btn {
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        [data-bs-theme="dark"] .saas-secondary-row {
+          border-top-color: rgba(124, 58, 237, 0.2);
+        }
+
+        /* Action Buttons */
+        .saas-action-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.25rem;
+          font-size: 0.875rem;
+          font-weight: 600;
+          border: none;
+          border-radius: 14px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none;
+          white-space: nowrap;
+          min-height: 48px;
+          position: relative;
+          overflow: hidden;
+          cursor: pointer;
+        }
+
+        .saas-action-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none !important;
+        }
+
+        .saas-action-btn:not(:disabled):hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .saas-action-btn:not(:disabled):active {
+          transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Button Variants */
+        .saas-btn-primary {
+          background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+          color: white;
+          box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .saas-btn-primary:hover:not(:disabled) {
+          background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+          box-shadow: 0 12px 35px rgba(124, 58, 237, 0.4);
+          color: white;
+        }
+
+        .saas-btn-ai {
+          background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+          color: #92400e;
+          box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .saas-btn-ai:hover:not(:disabled) {
+          background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+          box-shadow: 0 12px 35px rgba(245, 158, 11, 0.4);
+          color: #92400e;
+        }
+
+        .saas-btn-danger {
+          background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+          color: white;
+          box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .saas-btn-danger:hover:not(:disabled) {
+          background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+          box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+          color: white;
+        }
+
+        .saas-btn-success {
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .saas-btn-success:hover:not(:disabled) {
+          background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+          box-shadow: 0 12px 35px rgba(16, 185, 129, 0.4);
+          color: white;
+        }
+
+        .saas-btn-secondary {
+          background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+          color: white;
+          box-shadow: 0 6px 20px rgba(107, 114, 128, 0.25);
+        }
+
+        .saas-btn-secondary:hover:not(:disabled) {
+          background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
+          box-shadow: 0 12px 35px rgba(107, 114, 128, 0.35);
+          color: white;
+        }
+
+        .saas-btn-outline {
+          background: rgba(124, 58, 237, 0.08);
+          color: #7c3aed;
+          border: 1px solid rgba(124, 58, 237, 0.2);
+          box-shadow: 0 4px 15px rgba(124, 58, 237, 0.1);
+        }
+
+        .saas-btn-outline:hover:not(:disabled) {
+          background: rgba(124, 58, 237, 0.15);
+          border-color: rgba(124, 58, 237, 0.3);
+          color: #6d28d9;
+        }
+
+        [data-bs-theme="dark"] .saas-btn-outline {
+          background: rgba(168, 85, 247, 0.1);
+          color: #a855f7;
+          border-color: rgba(168, 85, 247, 0.25);
+        }
+
+        [data-bs-theme="dark"] .saas-btn-outline:hover:not(:disabled) {
+          background: rgba(168, 85, 247, 0.2);
+          color: #c084fc;
+        }
+
+        /* Button Groups and Dropdown */
+        .saas-btn-group {
+          display: inline-flex;
+        }
+
+        .saas-dropdown-toggle {
+          padding-left: 0.75rem;
+          padding-right: 0.75rem;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-left: 1px solid rgba(255, 255, 255, 0.2);
+          min-width: auto;
+        }
+
+        .saas-dropdown-menu {
+          background: linear-gradient(145deg, 
+            rgba(255, 255, 255, 0.9) 0%,
+            rgba(248, 250, 252, 0.95) 50%,
+            rgba(241, 245, 249, 0.9) 100%);
+          backdrop-filter: blur(32px) saturate(1.8);
+          border: 1px solid rgba(124, 58, 237, 0.2);
+          border-radius: 24px;
+          box-shadow: 
+            0 32px 80px rgba(124, 58, 237, 0.15),
+            0 16px 40px rgba(0, 0, 0, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(124, 58, 237, 0.1);
+          padding: 1.25rem;
+          margin-top: 0.75rem;
+          min-width: 360px;
+          max-width: 420px;
+          position: relative;
+          overflow: hidden;
+          animation: premiumDropdownSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .saas-dropdown-menu::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(145deg, 
+            rgba(124, 58, 237, 0.03) 0%,
+            rgba(168, 85, 247, 0.02) 50%,
+            rgba(139, 92, 246, 0.03) 100%);
+          pointer-events: none;
+          z-index: -1;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-menu {
+          background: linear-gradient(145deg,
+            rgba(17, 24, 39, 0.95) 0%,
+            rgba(31, 41, 55, 0.98) 50%,
+            rgba(55, 65, 81, 0.95) 100%);
+          border-color: rgba(168, 85, 247, 0.3);
+          box-shadow: 
+            0 32px 80px rgba(0, 0, 0, 0.4),
+            0 16px 40px rgba(124, 58, 237, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            inset 0 -1px 0 rgba(168, 85, 247, 0.2);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-menu::before {
+          background: linear-gradient(145deg,
+            rgba(124, 58, 237, 0.08) 0%,
+            rgba(168, 85, 247, 0.05) 50%,
+            rgba(139, 92, 246, 0.08) 100%);
+        }
+
+        @keyframes premiumDropdownSlide {
+          0% {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.92) rotateX(-10deg);
+            filter: blur(4px);
+          }
+          60% {
+            opacity: 0.8;
+            transform: translateY(-5px) scale(0.98) rotateX(-2deg);
+            filter: blur(1px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0deg);
+            filter: blur(0);
+          }
+        }
+
+        .saas-dropdown-header {
+          padding: 1rem 1.25rem 1.25rem 1.25rem;
+          font-size: 0.9rem;
+          font-weight: 700;
+          background: linear-gradient(135deg, #8b5cf6, #a855f7);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-bottom: 0.75rem;
+          display: flex;
+          align-items: center;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          position: relative;
+        }
+
+        .saas-dropdown-header::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 1.25rem;
+          right: 1.25rem;
+          height: 3px;
+          background: linear-gradient(90deg, #8b5cf6, #a855f7, #c084fc);
+          border-radius: 1.5px;
+          box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-header {
+          background: linear-gradient(135deg, #a78bfa, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-header::after {
+          background: linear-gradient(90deg, #a78bfa, #c084fc, #e879f9);
+          box-shadow: 0 2px 8px rgba(167, 139, 250, 0.5);
+        }
+
+        .saas-dropdown-item {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: 1.125rem 1.25rem;
+          border: 1px solid transparent;
+          background: rgba(255, 255, 255, 0.4);
+          backdrop-filter: blur(8px);
+          border-radius: 16px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          text-align: left;
+          gap: 1rem;
+          margin: 0.375rem 0;
+          position: relative;
+          overflow: hidden;
+          cursor: pointer;
+        }
+
+        .saas-dropdown-item::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+          transition: left 0.5s ease;
+        }
+
+        .saas-dropdown-item:hover {
+          background: rgba(139, 92, 246, 0.1);
+          border-color: rgba(139, 92, 246, 0.2);
+          transform: translateX(6px) scale(1.02);
+          box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+        }
+
+        .saas-dropdown-item:hover::before {
+          left: 100%;
+        }
+
+        .saas-dropdown-item.active {
+          background: linear-gradient(135deg, 
+            rgba(139, 92, 246, 0.15) 0%, 
+            rgba(168, 85, 247, 0.12) 100%);
+          border-color: rgba(139, 92, 246, 0.3);
+          color: #7c3aed;
+          box-shadow: 
+            0 8px 32px rgba(139, 92, 246, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .saas-dropdown-item.active::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: linear-gradient(180deg, #8b5cf6, #a855f7);
+          border-radius: 0 2px 2px 0;
+          box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item {
+          background: rgba(31, 41, 55, 0.6);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item:hover {
+          background: rgba(168, 85, 247, 0.15);
+          border-color: rgba(168, 85, 247, 0.3);
+          box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item.active {
+          background: linear-gradient(135deg,
+            rgba(168, 85, 247, 0.2) 0%,
+            rgba(192, 132, 252, 0.15) 100%);
+          border-color: rgba(168, 85, 247, 0.4);
+          color: #a855f7;
+          box-shadow: 
+            0 8px 32px rgba(168, 85, 247, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item.active::after {
+          background: linear-gradient(180deg, #a78bfa, #c084fc);
+          box-shadow: 0 0 12px rgba(167, 139, 250, 0.8);
+        }
+
+        .saas-dropdown-icon {
+          width: 48px;
+          height: 48px;
+          background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 20px;
+          flex-shrink: 0;
+          position: relative;
+          box-shadow: 
+            0 6px 20px rgba(139, 92, 246, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+        }
+
+        .saas-dropdown-icon::before {
+          content: '';
+          position: absolute;
+          inset: -1px;
+          background: linear-gradient(135deg, #8b5cf6, #a855f7, #c084fc);
+          border-radius: inherit;
+          z-index: -1;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .saas-dropdown-item:hover .saas-dropdown-icon {
+          transform: scale(1.1) rotate(2deg);
+          box-shadow: 
+            0 8px 28px rgba(139, 92, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .saas-dropdown-item:hover .saas-dropdown-icon::before {
+          opacity: 1;
+        }
+
+        .saas-dropdown-item.active .saas-dropdown-icon {
+          box-shadow: 
+            0 8px 32px rgba(139, 92, 246, 0.5),
+            inset 0 2px 4px rgba(255, 255, 255, 0.2);
+          transform: scale(1.05);
+        }
+
+        .saas-icon-special {
+          background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+          box-shadow: 
+            0 6px 20px rgba(16, 185, 129, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .saas-icon-special::before {
+          background: linear-gradient(135deg, #059669, #10b981, #34d399);
+        }
+
+        .saas-dropdown-item:hover .saas-icon-special {
+          box-shadow: 
+            0 8px 28px rgba(16, 185, 129, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-icon {
+          background: linear-gradient(135deg, #a78bfa 0%, #c084fc 50%, #e879f9 100%);
+          box-shadow: 
+            0 6px 20px rgba(167, 139, 250, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item:hover .saas-dropdown-icon {
+          box-shadow: 
+            0 8px 28px rgba(167, 139, 250, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .saas-dropdown-content {
+          flex: 1;
+          min-width: 0;
+          padding-left: 0.5rem;
+        }
+
+        .saas-dropdown-title {
+          display: block;
+          font-weight: 650;
+          font-size: 1rem;
+          color: #1e293b;
+          margin-bottom: 0.375rem;
+          line-height: 1.25;
+          transition: all 0.3s ease;
+        }
+
+        .saas-dropdown-item:hover .saas-dropdown-title {
+          color: #7c3aed;
+          transform: translateX(2px);
+        }
+
+        .saas-dropdown-item.active .saas-dropdown-title {
+          color: #7c3aed;
+          font-weight: 700;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-title {
+          color: #f1f5f9;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item:hover .saas-dropdown-title {
+          color: #a855f7;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item.active .saas-dropdown-title {
+          color: #a855f7;
+        }
+
+        .saas-dropdown-desc {
+          display: block;
+          font-size: 0.8125rem;
+          color: #64748b;
+          line-height: 1.4;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          opacity: 0.85;
+        }
+
+        .saas-dropdown-item:hover .saas-dropdown-desc {
+          color: #475569;
+          opacity: 1;
+          transform: translateX(2px);
+        }
+
+        .saas-dropdown-item.active .saas-dropdown-desc {
+          color: #7c3aed;
+          opacity: 0.9;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-desc {
+          color: #94a3b8;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item:hover .saas-dropdown-desc {
+          color: #cbd5e1;
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-item.active .saas-dropdown-desc {
+          color: #a855f7;
+        }
+
+        .saas-dropdown-check {
+          color: #10b981;
+          font-size: 1.25rem;
+          margin-left: auto;
+          padding-left: 0.75rem;
+          opacity: 0;
+          animation: checkmarkAppear 0.4s ease forwards;
+        }
+
+        @keyframes checkmarkAppear {
+          0% {
+            opacity: 0;
+            transform: scale(0.5) rotate(-90deg);
+          }
+          50% {
+            opacity: 0.7;
+            transform: scale(1.2) rotate(0deg);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+          }
+        }
+
+        .saas-dropdown-divider {
+          height: 1px;
+          background: linear-gradient(90deg, 
+            transparent 0%, 
+            rgba(139, 92, 246, 0.2) 20%, 
+            rgba(168, 85, 247, 0.3) 50%, 
+            rgba(139, 92, 246, 0.2) 80%, 
+            transparent 100%);
+          margin: 1rem 1.25rem;
+          position: relative;
+        }
+
+        .saas-dropdown-divider::after {
+          content: '';
+          position: absolute;
+          top: -1px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, 
+            transparent 0%, 
+            rgba(255, 255, 255, 0.4) 50%, 
+            transparent 100%);
+        }
+
+        [data-bs-theme="dark"] .saas-dropdown-divider {
+          background: linear-gradient(90deg, 
+            transparent 0%, 
+            rgba(167, 139, 250, 0.3) 20%, 
+            rgba(192, 132, 252, 0.4) 50%, 
+            rgba(167, 139, 250, 0.3) 80%, 
+            transparent 100%);
+        }
+
+        .saas-dropdown-special {
+          position: relative;
+          margin-top: 1rem;
+          padding-top: 1.25rem;
+        }
+
+        .saas-dropdown-special::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 1.25rem;
+          right: 1.25rem;
+          height: 2px;
+          background: linear-gradient(90deg, #10b981, #34d399);
+          border-radius: 1px;
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Utilities */
+        .saas-count-badge {
+          background: rgba(255, 255, 255, 0.25);
+          color: currentColor;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.25rem 0.5rem;
+          border-radius: 8px;
+          margin-left: 0.5rem;
+        }
+
+        .saas-spinner {
+          width: 16px;
+          height: 16px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top: 2px solid currentColor;
+          border-radius: 50%;
+          animation: saasSpinnerRotate 1s linear infinite;
+        }
+
+        @keyframes saasSpinnerRotate {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Dark Theme Enhancements */
+        [data-bs-theme="dark"] .saas-main-title {
+          background: linear-gradient(135deg, #a78bfa 0%, #c084fc 35%, #e879f9 70%, #f472b6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          filter: drop-shadow(0 8px 32px rgba(167, 139, 250, 0.2));
+        }
+
+        [data-bs-theme="dark"] .saas-main-title:hover {
+          filter: drop-shadow(0 12px 48px rgba(167, 139, 250, 0.35)) 
+                  drop-shadow(0 0 32px rgba(244, 114, 182, 0.2));
+        }
+
+        [data-bs-theme="dark"] .saas-main-title::before {
+          background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(244, 114, 182, 0.1));
+        }
+
+        /* Premium Accent Line */
+        .saas-title-accent {
+          width: 120px;
+          height: 4px;
+          background: linear-gradient(90deg, #8b5cf6, #a855f7, #c084fc, #ec4899);
+          background-size: 200% 100%;
+          border-radius: 2px;
+          margin: 0.75rem 0 1.5rem 0;
+          position: relative;
+          animation: accentFlow 6s ease-in-out infinite;
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+          transition: all 0.4s ease;
+        }
+
+        .saas-title-accent::after {
+          content: '';
+          position: absolute;
+          inset: -2px;
+          background: inherit;
+          border-radius: inherit;
+          opacity: 0.4;
+          filter: blur(8px);
+          z-index: -1;
+        }
+
+        [data-bs-theme="dark"] .saas-title-accent {
+          background: linear-gradient(90deg, #a78bfa, #c084fc, #e879f9, #f472b6);
+          box-shadow: 0 4px 12px rgba(167, 139, 250, 0.4);
+        }
+
+        .saas-main-title:hover + .saas-title-accent {
+          width: 180px;
+          animation-duration: 2s;
+          box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+        }
+
+        [data-bs-theme="dark"] .saas-main-title:hover + .saas-title-accent {
+          box-shadow: 0 6px 20px rgba(167, 139, 250, 0.6);
+        }
+
+        @keyframes accentFlow {
+          0%, 100% { 
+            background-position: 0% 50%;
+            transform: scaleX(1);
+          }
+          25% { 
+            background-position: 100% 50%;
+            transform: scaleX(1.05);
+          }
+          50% { 
+            background-position: 200% 50%;
+            transform: scaleX(1);
+          }
+          75% { 
+            background-position: 100% 50%;
+            transform: scaleX(1.05);
+          }
+        }
+
+        /* Premium Container Enhancement */
+        .saas-title-wrapper {
+          margin-bottom: 2rem;
+          position: relative;
+        }
+
+        .saas-title-content {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          text-align: left;
+        }
+
+        /* UI Improvements & Fixes */
+        .saas-btn-group {
+          position: relative;
+          z-index: 1050;
+        }
+
+        .saas-dropdown-menu {
+          z-index: 1060 !important;
+          position: absolute !important;
+          transform: translateZ(0);
+          will-change: transform;
+        }
+
+        .saas-more-actions {
+          position: relative;
+          z-index: 1050;
+        }
+
+        /* Fix dropdown positioning */
+        .saas-header-container {
+          position: relative;
+          z-index: 10;
+          overflow: visible;
+        }
+
+        .saas-action-card {
+          overflow: visible;
+          position: relative;
+          z-index: 20;
+        }
+
+        .saas-action-wrapper {
+          overflow: visible;
+        }
+
+        /* Button Alignment Improvements */
+        .saas-action-row {
+          align-items: stretch;
+        }
+
+        .saas-action-btn {
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .saas-action-btn:focus {
+          outline: 2px solid rgba(139, 92, 246, 0.5);
+          outline-offset: 2px;
+        }
+
+        .saas-dropdown-toggle {
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Smooth Button Group Integration */
+        .saas-btn-group .saas-action-btn:first-child {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+
+        .saas-btn-group .saas-dropdown-toggle {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hover State Consistency */
+        .saas-action-btn:hover:not(:disabled) {
+          z-index: 2;
+        }
+
+        /* Loading State Improvements */
+        .saas-spinner {
+          display: inline-block;
+        }
+
+        /* Enhanced Responsive Design */
+        @media (max-width: 991.98px) {
+          .saas-dropdown-menu {
+            min-width: 340px;
+            max-width: 380px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .saas-header-container {
+            padding: 1.5rem 1.25rem;
+            margin-bottom: 2rem;
+            border-radius: 20px;
+            box-shadow: 
+              0 12px 40px rgba(124, 58, 237, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15);
+          }
+          
+          .saas-title-wrapper {
+            margin-bottom: 1.75rem;
+          }
+          
+          .saas-title-content {
+            text-align: center;
+            align-items: center;
+            gap: 1.25rem;
+          }
+          
+          .saas-main-title {
+            font-size: 1.875rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 0.5rem;
+          }
+
+          .saas-main-title::after {
+            bottom: -8px;
+            height: 2.5px;
+            left: 10%;
+            right: 10%;
+          }
+
+          .saas-title-accent {
+            display: none;
+          }
+          
+          .saas-meta-row {
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            border-radius: 16px;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(124, 58, 237, 0.15);
+          }
+          
+          .saas-meta-item {
+            font-size: 0.8125rem;
+            gap: 0.375rem;
+          }
+          
+          .saas-action-card {
+            padding: 1.25rem;
+            border-radius: 18px;
+            box-shadow: 
+              0 8px 32px rgba(124, 58, 237, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12);
+          }
+          
+          .saas-action-row {
+            justify-content: center;
+            gap: 0.625rem;
+          }
+          
+          .saas-action-btn {
+            flex: 1;
+            max-width: 100px;
+            justify-content: center;
+            min-width: auto;
+            padding: 0.75rem 0.5rem;
+            border-radius: 12px;
+            height: 44px;
+            font-size: 0.875rem;
+          }
+          
+          .saas-btn-group .saas-action-btn {
+            max-width: none;
+            flex: 1;
+          }
+          
+          .saas-dropdown-toggle {
+            padding: 0.75rem 0.5rem;
+            min-width: 40px;
+            border-radius: 0 12px 12px 0;
+          }
+          
+          .saas-btn-text {
+            display: none;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .saas-header-container {
+            padding: 1rem;
+          }
+          
+          .saas-main-title {
+            font-size: 1.625rem;
+            font-weight: 600;
+            letter-spacing: -0.015em;
+          }
+          
+          .saas-title-accent {
+            width: 60px;
+          }
+          
+          .saas-meta-row {
+            padding: 0.625rem;
+          }
+          
+          .saas-action-card {
+            padding: 0.875rem;
+          }
+          
+          .saas-action-btn {
+            padding: 0.625rem 0.375rem;
+            font-size: 0.8rem;
+            height: 44px;
+          }
+          
+          .saas-dropdown-menu {
+            min-width: 260px;
+            padding: 1rem;
+          }
+          
+          .saas-dropdown-item {
+            padding: 0.875rem 1rem;
+            gap: 0.75rem;
+          }
+          
+          .saas-dropdown-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+          }
+        }
+
+        @media (min-width: 576px) {
+          .saas-btn-text {
+            display: inline;
+          }
+        }
+        /* ===== END SAAS-GRADE HEADER & ACTIONS STYLES ===== */
+        
+        /* ===== PREMIUM HEADER & ACTIONS STYLES ===== */
+        .premium-header-wrapper {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 2rem;
+          margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 991.98px) {
+          .premium-header-wrapper {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1.5rem;
+          }
+        }
+
+        /* Title Section */
+        .premium-title-section {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .premium-title-icon {
+          width: 56px;
+          height: 56px;
+          background: linear-gradient(135deg, #7c3aed, #9333ea);
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 24px;
+          box-shadow: 0 8px 32px rgba(124, 58, 237, 0.25);
+          transition: all 0.3s ease;
+        }
+
+        .premium-title-icon:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 40px rgba(124, 58, 237, 0.35);
+        }
+
+        .premium-main-title {
+          font-size: 2.5rem;
+          font-weight: 800;
+          line-height: 1.2;
+          background: linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #a855f7 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin: 0;
+          text-shadow: 0 4px 16px rgba(124, 58, 237, 0.2);
+        }
+
+        .premium-subtitle {
+          color: #64748b;
+          font-size: 1rem;
+          font-weight: 500;
+          margin: 0.25rem 0 0 0;
+          opacity: 0.8;
+        }
+
+        [data-bs-theme="dark"] .premium-subtitle {
+          color: #94a3b8;
+        }
+
+        .premium-auto-save-badge {
+          display: inline-block;
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.375rem 0.75rem;
+          border-radius: 8px;
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
+        }
+
+        .premium-meta-info {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0.75rem;
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        [data-bs-theme="dark"] .premium-meta-info {
+          border-top-color: rgba(168, 85, 247, 0.2);
+        }
+
+        .premium-meta-item {
+          display: flex;
+          align-items: center;
+          gap: 0.375rem;
+        }
+
+        .premium-meta-label {
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: #6b7280;
+        }
+
+        [data-bs-theme="dark"] .premium-meta-label {
+          color: #9ca3af;
+        }
+
+        .premium-meta-value {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #374151;
+        }
+
+        [data-bs-theme="dark"] .premium-meta-value {
+          color: #f3f4f6;
+        }
+
+        .premium-meta-separator {
+          color: #d1d5db;
+          font-weight: bold;
+        }
+
+        [data-bs-theme="dark"] .premium-meta-separator {
+          color: #6b7280;
+        }
+
+        .premium-status-badge {
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.25rem 0.5rem;
+          border-radius: 6px;
+          letter-spacing: 0.025em;
+        }
+
+        /* Actions Section */
+        .premium-actions-section {
+          display: flex;
+          align-items: flex-start;
+        }
+
+        .premium-actions-card {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(124, 58, 237, 0.15);
+          border-radius: 20px;
+          padding: 1.5rem;
+          box-shadow: 
+            0 8px 32px rgba(124, 58, 237, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          transition: all 0.3s ease;
+        }
+
+        [data-bs-theme="dark"] .premium-actions-card {
+          background: linear-gradient(135deg, rgba(31, 41, 55, 0.8) 0%, rgba(17, 24, 39, 0.9) 100%);
+          border-color: rgba(168, 85, 247, 0.2);
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .premium-actions-card:hover {
+          box-shadow: 
+            0 12px 40px rgba(124, 58, 237, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .premium-actions-row {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+        }
+
+        .premium-secondary-actions {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        [data-bs-theme="dark"] .premium-secondary-actions {
+          border-top-color: rgba(168, 85, 247, 0.2);
+        }
+
+        .premium-mobile-actions {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        [data-bs-theme="dark"] .premium-mobile-actions {
+          border-top-color: rgba(168, 85, 247, 0.2);
+        }
+
+        /* Action Buttons */
+        .premium-action-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.75rem 1.25rem;
+          font-weight: 600;
+          font-size: 0.875rem;
+          border: none;
+          border-radius: 12px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          white-space: nowrap;
+          height: 48px;
+          cursor: pointer;
+          text-decoration: none;
+        }
+
+        .premium-action-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none !important;
+        }
+
+        .premium-action-btn:not(:disabled):hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .premium-action-btn:not(:disabled):active {
+          transform: translateY(0);
+        }
+
+        /* Button Variants */
+        .premium-btn-primary {
+          background: linear-gradient(135deg, #7c3aed, #9333ea);
+          color: white;
+          box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .premium-btn-primary:hover:not(:disabled) {
+          background: linear-gradient(135deg, #6d28d9, #7c3aed);
+          box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+          color: white;
+        }
+
+        .premium-btn-warning {
+          background: linear-gradient(135deg, #f59e0b, #fbbf24);
+          color: #92400e;
+          box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .premium-btn-warning:hover:not(:disabled) {
+          background: linear-gradient(135deg, #d97706, #f59e0b);
+          box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+          color: #92400e;
+        }
+
+        .premium-btn-danger {
+          background: linear-gradient(135deg, #ef4444, #f87171);
+          color: white;
+          box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .premium-btn-danger:hover:not(:disabled) {
+          background: linear-gradient(135deg, #dc2626, #ef4444);
+          box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+          color: white;
+        }
+
+        .premium-btn-success {
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .premium-btn-success:hover:not(:disabled) {
+          background: linear-gradient(135deg, #059669, #047857);
+          box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+          color: white;
+        }
+
+        .premium-btn-secondary {
+          background: linear-gradient(135deg, #6b7280, #9ca3af);
+          color: white;
+          box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .premium-btn-secondary:hover:not(:disabled) {
+          background: linear-gradient(135deg, #4b5563, #6b7280);
+          box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4);
+          color: white;
+        }
+
+        .premium-btn-outline {
+          background: rgba(255, 255, 255, 0.1);
+          color: #374151;
+          border: 1px solid rgba(124, 58, 237, 0.3);
+          box-shadow: 0 4px 15px rgba(124, 58, 237, 0.1);
+        }
+
+        [data-bs-theme="dark"] .premium-btn-outline {
+          color: #f3f4f6;
+          border-color: rgba(168, 85, 247, 0.4);
+        }
+
+        .premium-btn-outline:hover:not(:disabled) {
+          background: rgba(124, 58, 237, 0.1);
+          border-color: rgba(124, 58, 237, 0.5);
+          color: #7c3aed;
+        }
+
+        [data-bs-theme="dark"] .premium-btn-outline:hover:not(:disabled) {
+          background: rgba(168, 85, 247, 0.2);
+          color: #a855f7;
+        }
+
+        /* Button Group & Dropdown */
+        .premium-btn-group {
+          display: flex;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .premium-dropdown-toggle {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-left: 1px solid rgba(146, 64, 14, 0.2);
+          padding: 0.75rem 0.875rem;
+          min-width: auto;
+        }
+
+        .premium-dropdown-menu {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(124, 58, 237, 0.2);
+          border-radius: 16px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+          padding: 0.75rem;
+          margin-top: 0.5rem;
+          min-width: 280px;
+          animation: dropdownFade 0.3s ease;
+        }
+
+        [data-bs-theme="dark"] .premium-dropdown-menu {
+          background: rgba(31, 41, 55, 0.95);
+          border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        @keyframes dropdownFade {
+          from {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        .premium-dropdown-header {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #7c3aed;
+          border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+          margin: 0 0 0.5rem 0;
+        }
+
+        [data-bs-theme="dark"] .premium-dropdown-header {
+          color: #a855f7;
+          border-bottom-color: rgba(168, 85, 247, 0.2);
+        }
+
+        .premium-dropdown-item {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: none;
+          background: transparent;
+          border-radius: 10px;
+          transition: all 0.2s ease;
+          text-align: left;
+          margin: 0.125rem 0;
+          color: #374151;
+        }
+
+        [data-bs-theme="dark"] .premium-dropdown-item {
+          color: #f3f4f6;
+        }
+
+        .premium-dropdown-item:hover {
+          background: rgba(124, 58, 237, 0.08);
+          transform: translateX(3px);
+          color: #7c3aed;
+        }
+
+        [data-bs-theme="dark"] .premium-dropdown-item:hover {
+          background: rgba(168, 85, 247, 0.15);
+          color: #a855f7;
+        }
+
+        .premium-dropdown-item.active {
+          background: rgba(124, 58, 237, 0.15);
+          color: #7c3aed;
+          font-weight: 600;
+        }
+
+        [data-bs-theme="dark"] .premium-dropdown-item.active {
+          background: rgba(168, 85, 247, 0.2);
+          color: #a855f7;
+        }
+
+        .premium-dropdown-special {
+          border-top: 1px solid rgba(124, 58, 237, 0.1);
+          margin-top: 0.5rem;
+          padding-top: 1rem;
+        }
+
+        .premium-dropdown-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.2), transparent);
+          margin: 0.75rem 0;
+          border: none;
+        }
+
+        /* Utility Classes */
+        .premium-count-badge {
+          background: rgba(255, 255, 255, 0.25);
+          color: currentColor;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.125rem 0.375rem;
+          border-radius: 6px;
+        }
+
+        .premium-spinner {
+          width: 16px;
+          height: 16px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top: 2px solid currentColor;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+          .premium-main-title {
+            font-size: 2rem;
+          }
+          
+          .premium-title-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 20px;
+          }
+          
+          .premium-actions-card {
+            padding: 1rem;
+          }
+          
+          .premium-actions-row {
+            gap: 0.5rem;
+          }
+          
+          .premium-action-btn {
+            height: 44px;
+            padding: 0.625rem 1rem;
+            font-size: 0.8125rem;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .premium-main-title {
+            font-size: 1.75rem;
+          }
+          
+          .premium-subtitle {
+            font-size: 0.875rem;
+          }
+          
+          .premium-meta-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          
+          .premium-action-btn {
+            padding: 0.75rem;
+            min-width: 48px;
+          }
+        }
+        /* ===== END PREMIUM HEADER & ACTIONS STYLES ===== */
+        
         /* ===== RESPONSIVE ACTION TOOLBAR STYLES ===== */
         .card-toolbar {
           background: linear-gradient(135deg, rgba(86, 61, 124, 0.08) 0%, rgba(59, 42, 89, 0.12) 100%);
@@ -1660,6 +3427,47 @@ export default function MultiItemCalculator() {
             flex-direction: column;
             gap: 1rem;
           }
+
+          /* Draft Controls Mobile Styling */
+          .saas-draft-controls-container {
+            margin: 1.5rem 1rem;
+            padding: 1.25rem;
+            border-radius: 18px;
+          }
+
+          .saas-draft-controls-container .d-flex {
+            gap: 0.75rem;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .draft-control-btn {
+            padding: 0.75rem 2rem;
+            font-size: 0.9rem;
+            border-radius: 14px;
+            min-width: 160px;
+            box-shadow: 
+              0 6px 20px rgba(124, 58, 237, 0.3),
+              0 0 15px rgba(168, 85, 247, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          }
+
+          .draft-control-btn:hover {
+            box-shadow: 
+              0 10px 30px rgba(124, 58, 237, 0.45),
+              0 0 25px rgba(168, 85, 247, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          }
+
+          .draft-indicator {
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            color: rgba(76, 220, 80, 1);
+            text-align: center;
+          }
         }
         
         @media (max-width: 480px) {
@@ -1766,21 +3574,69 @@ export default function MultiItemCalculator() {
         }
 
         .draft-control-btn {
-          padding: 8px 16px;
-          background: rgba(100, 150, 255, 0.15);
-          border: 1px solid rgba(100, 150, 255, 0.3);
-          color: rgba(100, 180, 255, 0.95);
-          border-radius: 6px;
+          padding: 0.625rem 1.5rem;
+          background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%);
+          border: none;
+          color: white;
+          border-radius: 12px;
           cursor: pointer;
-          font-size: 13px;
+          font-size: 0.875rem;
           font-weight: 500;
-          transition: all 0.2s;
+          transition: all 0.3s ease;
+          position: relative;
+          backdrop-filter: blur(20px);
+          box-shadow: 
+            0 4px 16px rgba(124, 58, 237, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .draft-control-btn:hover {
-          background: rgba(100, 150, 255, 0.25);
-          border-color: rgba(100, 150, 255, 0.5);
-          transform: translateY(-1px);
+          background: linear-gradient(135deg, #6d28d9 0%, #9333ea 50%, #a855f7 100%);
+          transform: translateY(-2px);
+          box-shadow: 
+            0 8px 24px rgba(124, 58, 237, 0.4),
+            0 0 20px rgba(168, 85, 247, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .draft-control-btn::before {
+          content: '';
+          position: absolute;
+          top: -1px;
+          left: -1px;
+          right: -1px;
+          bottom: -1px;
+          background: linear-gradient(135deg, rgba(168, 85, 247, 0.4) 0%, rgba(236, 72, 153, 0.2) 100%);
+          border-radius: 13px;
+          z-index: -1;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .draft-control-btn:hover::before {
+          opacity: 1;
+        }
+
+        /* Floating Draft Controls Container */
+        .saas-draft-controls-container {
+          margin: 2rem auto;
+          padding: 1.5rem;
+          max-width: 600px;
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(124, 58, 237, 0.2);
+          border-radius: 20px;
+          box-shadow: 
+            0 12px 40px rgba(124, 58, 237, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+          animation: fadeInUp 0.6s ease-out 1s both;
+          text-align: center;
+        }
+
+        .saas-draft-controls-container .d-flex {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1rem;
         }
 
         .draft-indicator {
@@ -2025,207 +3881,304 @@ export default function MultiItemCalculator() {
         </div>
       )}
       
-      <div className="container-fluid py-3">
-      {/* Header */}
-      <div className="row mb-3">
-        <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center gap-3">
-            <div>
-              <h1 className="h3 fw-semibold mb-1" style={{ color: '#563d7c' }}>
-                <i className="bi bi-calculator me-2 fs-6"></i>
+      <div className="container-fluid py-4">
+        {/* SaaS-Grade Header Section */}
+        <div className="saas-header-container mb-4">
+          {/* Title Section */}
+          <div className="saas-title-wrapper">
+            <div className="saas-title-content">
+              <h1 className="saas-main-title">
                 Multi-Item Quotation
-                {autoSaving && <span className="badge bg-info ms-2 small">Auto-saving...</span>}
+                {autoSaving && (
+                  <span className="saas-auto-save-indicator">
+                    <i className="bi bi-cloud-arrow-up-fill me-1"></i>
+                    Auto-saving...
+                  </span>
+                )}
               </h1>
-              <p className="text-muted small mb-0">
-                Quotation ID: <strong className="text-primary">{quotation.quotationId}</strong> | 
-                Status: <span className={`badge bg-${quotation.status === 'draft' ? 'secondary' : quotation.status === 'finalized' ? 'success' : 'info'}`}>
-                  {quotation.status?.toUpperCase()}
-                </span>
-              </p>
-              <p className="text-muted small mb-0">
-                Created: {new Date(quotation.createdAt).toLocaleDateString()} | 
-                Valid Until: <span className={new Date(quotation.validUntil || '') < new Date() ? 'text-danger fw-bold' : 'text-success'}>
-                  {quotation.validUntil ? new Date(quotation.validUntil).toLocaleDateString() : 'N/A'}
-                  {new Date(quotation.validUntil || '') < new Date() && ' ⚠️ EXPIRED'}
-                </span>
-              </p>
+              
+              {/* Premium Accent Line */}
+              <div className="saas-title-accent"></div>
+              
+              {/* ID and Status Row */}
+              <div className="saas-meta-row">
+                <div className="saas-meta-item">
+                  <i className="bi bi-hash saas-meta-icon"></i>
+                  <span className="saas-meta-label">ID:</span>
+                  <span className="saas-meta-value">{quotation.quotationId}</span>
+                </div>
+                
+                <div className="saas-meta-divider"></div>
+                
+                <div className="saas-meta-item">
+                  <i className="bi bi-circle-fill saas-status-dot"></i>
+                  <span className="saas-meta-label">Status:</span>
+                  <span className={`saas-status-badge saas-status-${quotation.status}`}>
+                    {quotation.status?.toUpperCase()}
+                  </span>
+                </div>
+                
+                {/* Additional meta for larger screens */}
+                <div className="saas-meta-divider d-none d-md-block"></div>
+                <div className="saas-meta-item d-none d-md-flex">
+                  <i className="bi bi-calendar3 saas-meta-icon"></i>
+                  <span className="saas-meta-label">Created:</span>
+                  <span className="saas-meta-value">{new Date(quotation.createdAt).toLocaleDateString()}</span>
+                </div>
+                
+                <div className="saas-meta-divider d-none d-lg-block"></div>
+                <div className="saas-meta-item d-none d-lg-flex">
+                  <i className="bi bi-clock saas-meta-icon"></i>
+                  <span className="saas-meta-label">Valid Until:</span>
+                  <span className={`saas-meta-value ${new Date(quotation.validUntil || '') < new Date() ? 'saas-meta-expired' : 'saas-meta-valid'}`}>
+                    {quotation.validUntil ? new Date(quotation.validUntil).toLocaleDateString() : 'N/A'}
+                    {new Date(quotation.validUntil || '') < new Date() && (
+                      <i className="bi bi-exclamation-triangle-fill ms-1 text-warning"></i>
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
-            {/* 🎯 RESPONSIVE ACTION TOOLBAR */}
-            <div className="card-toolbar d-flex align-items-center gap-2 flex-wrap">
-              {/* PRIMARY ACTIONS - Always visible */}
-              <button 
-                className="btn btn-sm btn-primary action-btn"
-                onClick={addNewItem}
-              >
-                <i className="bi bi-plus-circle me-2"></i>
-                Add Item
-              </button>
+          </div>
 
-              {/* AI ESTIMATE DROPDOWN - Always visible */}
-              <div className="btn-group">
+          {/* Action Card */}
+          <div className="saas-action-wrapper">
+            <div className="saas-action-card">
+              {/* Primary Action Row */}
+              <div className="saas-action-row">
                 <button 
-                  className="btn btn-sm btn-warning-subtle action-btn" 
-                  onClick={() => {
-                    const lastItem = quotation.items[quotation.items.length - 1]
-                    if (lastItem) {
-                      estimateAutomatically(lastItem.id, lastItem.type)
-                    } else {
-                      alert('Please add an item first!')
-                    }
-                  }}
-                  disabled={quotation.items.length === 0}
-                  title="AI-Assisted Estimation for last item"
+                  className="saas-action-btn saas-btn-primary"
+                  onClick={addNewItem}
+                  title="Add New Item"
                 >
-                  <i className="bi bi-lightbulb-fill me-2"></i>
-                  AI Estimate
+                  <i className="bi bi-plus-circle"></i>
+                  <span className="saas-btn-text">Add Item</span>
                 </button>
+
+                {/* AI Estimate Group */}
+                <div className="saas-btn-group">
+                  <button 
+                    className="saas-action-btn saas-btn-ai" 
+                    onClick={() => {
+                      const lastItem = quotation.items[quotation.items.length - 1]
+                      if (lastItem) {
+                        estimateAutomatically(lastItem.id, lastItem.type)
+                      } else {
+                        alert('Please add an item first!')
+                      }
+                    }}
+                    disabled={quotation.items.length === 0}
+                    title="AI-Assisted Estimation"
+                  >
+                    <i className="bi bi-lightbulb-fill"></i>
+                    <span className="saas-btn-text">AI Estimate</span>
+                  </button>
+                  <button 
+                    className="saas-action-btn saas-btn-ai saas-dropdown-toggle" 
+                    data-bs-toggle="dropdown"
+                    title="AI Mode Settings"
+                  >
+                    <i className="bi bi-chevron-down"></i>
+                  </button>
+                  <ul className="dropdown-menu saas-dropdown-menu">
+                    <li className="saas-dropdown-header">
+                      <i className="bi bi-robot me-2"></i>
+                      AI Optimization Mode
+                    </li>
+                    <li>
+                      <button 
+                        className={`saas-dropdown-item ${aiMode === 'residential' ? 'active' : ''}`}
+                        onClick={() => setAiMode('residential')}
+                      >
+                        <div className="saas-dropdown-icon">
+                          <i className="bi bi-house-door"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">Residential</span>
+                          <small className="saas-dropdown-desc">Cost-efficient materials</small>
+                        </div>
+                        {aiMode === 'residential' && <i className="bi bi-check-circle-fill saas-dropdown-check"></i>}
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        className={`saas-dropdown-item ${aiMode === 'commercial' ? 'active' : ''}`}
+                        onClick={() => setAiMode('commercial')}
+                      >
+                        <div className="saas-dropdown-icon">
+                          <i className="bi bi-building"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">Commercial</span>
+                          <small className="saas-dropdown-desc">Maximum durability</small>
+                        </div>
+                        {aiMode === 'commercial' && <i className="bi bi-check-circle-fill saas-dropdown-check"></i>}
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        className={`saas-dropdown-item ${aiMode === 'thermal' ? 'active' : ''}`}
+                        onClick={() => setAiMode('thermal')}
+                      >
+                        <div className="saas-dropdown-icon">
+                          <i className="bi bi-thermometer-half"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">Thermal Efficiency</span>
+                          <small className="saas-dropdown-desc">Insulation optimized</small>
+                        </div>
+                        {aiMode === 'thermal' && <i className="bi bi-check-circle-fill saas-dropdown-check"></i>}
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        className={`saas-dropdown-item ${aiMode === 'premium' ? 'active' : ''}`}
+                        onClick={() => setAiMode('premium')}
+                      >
+                        <div className="saas-dropdown-icon">
+                          <i className="bi bi-gem"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">Premium Aesthetic</span>
+                          <small className="saas-dropdown-desc">Superior quality</small>
+                        </div>
+                        {aiMode === 'premium' && <i className="bi bi-check-circle-fill saas-dropdown-check"></i>}
+                      </button>
+                    </li>
+                    <li><hr className="saas-dropdown-divider" /></li>
+                    <li>
+                      <button 
+                        className="saas-dropdown-item saas-dropdown-special"
+                        onClick={() => setShowAIHistory(!showAIHistory)}
+                      >
+                        <div className="saas-dropdown-icon saas-icon-special">
+                          <i className="bi bi-clock-history"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">View AI History</span>
+                          <small className="saas-dropdown-desc">{aiHistory.length} estimations</small>
+                        </div>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
                 <button 
-                  className="btn btn-sm btn-warning-subtle dropdown-toggle dropdown-toggle-split action-btn" 
-                  data-bs-toggle="dropdown"
-                  title="Change AI Mode"
-                ></button>
-                <ul className="dropdown-menu">
-                  <li><h6 className="dropdown-header">🤖 AI Optimization Mode</h6></li>
-                  <li>
-                    <button 
-                      className={`dropdown-item ${aiMode === 'residential' ? 'active' : ''}`}
-                      onClick={() => setAiMode('residential')}
-                    >
-                      <i className="bi bi-house-door me-2"></i>
-                      Residential<br/>
-                      <small className="text-muted">Cost-efficient materials</small>
-                    </button>
-                  </li>
-                  <li>
-                    <button 
-                      className={`dropdown-item ${aiMode === 'commercial' ? 'active' : ''}`}
-                      onClick={() => setAiMode('commercial')}
-                    >
-                      <i className="bi bi-building me-2"></i>
-                      Commercial<br/>
-                      <small className="text-muted">Maximum durability</small>
-                    </button>
-                  </li>
-                  <li>
-                    <button 
-                      className={`dropdown-item ${aiMode === 'thermal' ? 'active' : ''}`}
-                      onClick={() => setAiMode('thermal')}
-                    >
-                      <i className="bi bi-thermometer-half me-2"></i>
-                      Thermal Efficiency<br/>
-                      <small className="text-muted">Insulation optimized</small>
-                    </button>
-                  </li>
-                  <li>
-                    <button 
-                      className={`dropdown-item ${aiMode === 'premium' ? 'active' : ''}`}
-                      onClick={() => setAiMode('premium')}
-                    >
-                      <i className="bi bi-gem me-2"></i>
-                      Premium Aesthetic<br/>
-                      <small className="text-muted">Superior quality</small>
-                    </button>
-                  </li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li>
-                    <button 
-                      className="dropdown-item text-primary"
-                      onClick={() => setShowAIHistory(!showAIHistory)}
-                    >
-                      <i className="bi bi-clock-history me-2"></i>
-                      View AI History ({aiHistory.length})
-                    </button>
-                  </li>
-                </ul>
+                  className="saas-action-btn saas-btn-danger" 
+                  onClick={generatePDF}
+                  disabled={generatingPDF || quotation.items.length === 0}
+                  title="Generate PDF Report"
+                >
+                  {generatingPDF ? (
+                    <>
+                      <div className="saas-spinner"></div>
+                      <span className="saas-btn-text">Generating...</span>
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-file-earmark-pdf"></i>
+                      <span className="saas-btn-text">Generate PDF</span>
+                    </>
+                  )}
+                </button>
+
+                {/* More Actions - Mobile/Tablet */}
+                <div className="saas-more-actions d-lg-none">
+                  <button 
+                    className="saas-action-btn saas-btn-outline"
+                    data-bs-toggle="dropdown"
+                    title="More Actions"
+                  >
+                    <i className="bi bi-three-dots"></i>
+                    <span className="saas-btn-text d-none d-md-inline">More</span>
+                  </button>
+                  <ul className="dropdown-menu saas-dropdown-menu dropdown-menu-end">
+                    <li>
+                      <button 
+                        className="saas-dropdown-item"
+                        onClick={() => setShowTemplateModal(!showTemplateModal)}
+                      >
+                        <div className="saas-dropdown-icon">
+                          <i className="bi bi-bookmark-star"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">Templates</span>
+                          <small className="saas-dropdown-desc">{savedTemplates.length} saved</small>
+                        </div>
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        className="saas-dropdown-item"
+                        onClick={saveDraft}
+                      >
+                        <div className="saas-dropdown-icon">
+                          <i className="bi bi-bookmark-plus"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">Save Template</span>
+                          <small className="saas-dropdown-desc">Create new template</small>
+                        </div>
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        className="saas-dropdown-item"
+                        onClick={saveQuotation}
+                        disabled={savingQuotation || quotation.items.length === 0}
+                      >
+                        <div className="saas-dropdown-icon">
+                          <i className="bi bi-cloud-check"></i>
+                        </div>
+                        <div className="saas-dropdown-content">
+                          <span className="saas-dropdown-title">Save to Firebase</span>
+                          <small className="saas-dropdown-desc">Backup to cloud</small>
+                        </div>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
 
-              {/* GENERATE PDF - Always visible */}
-              <button 
-                className="btn btn-sm btn-danger action-btn" 
-                onClick={generatePDF}
-                disabled={generatingPDF || quotation.items.length === 0}
-              >
-                {generatingPDF ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2"></span>
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <i className="bi bi-file-earmark-pdf me-2"></i>
-                    Generate PDF
-                  </>
-                )}
-              </button>
-
-              {/* DESKTOP-ONLY ACTIONS (>=992px) */}
-              <button 
-                className="btn btn-sm btn-outline-secondary action-btn d-none d-lg-inline-flex"
-                onClick={() => setShowTemplateModal(!showTemplateModal)}
-              >
-                <i className="bi bi-bookmark-star me-2"></i>
-                Templates ({savedTemplates.length})
-              </button>
-
-              <button 
-                className="btn btn-sm btn-success action-btn d-none d-lg-inline-flex"
-                onClick={saveQuotation}
-                disabled={savingQuotation || quotation.items.length === 0}
-              >
-                {savingQuotation ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2"></span>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <i className="bi bi-cloud-check me-2"></i>
-                    Save to Firebase
-                  </>
-                )}
-              </button>
-
-              {/* MOBILE DROPDOWN - More Actions (<992px) */}
-              <div className="btn-group d-lg-none ms-auto">
+              {/* Secondary Action Row - Desktop Only */}
+              <div className="saas-secondary-row d-none d-lg-flex">
                 <button 
-                  className="btn btn-sm btn-outline-primary action-btn dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  className="saas-action-btn saas-btn-secondary"
+                  onClick={() => setShowTemplateModal(!showTemplateModal)}
+                  title="Manage Templates"
                 >
-                  <i className="bi bi-three-dots-vertical me-2"></i>
-                  More Actions
+                  <i className="bi bi-bookmark-star"></i>
+                  <span className="saas-btn-text">Templates</span>
+                  <span className="saas-count-badge">{savedTemplates.length}</span>
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <button 
-                      className="dropdown-item"
-                      onClick={() => setShowTemplateModal(!showTemplateModal)}
-                    >
-                      <i className="bi bi-bookmark-star me-2"></i>
-                      Templates ({savedTemplates.length})
-                    </button>
-                  </li>
-                  <li>
-                    <button 
-                      className="dropdown-item"
-                      onClick={saveQuotation}
-                      disabled={savingQuotation || quotation.items.length === 0}
-                    >
-                      <i className="bi bi-cloud-check me-2"></i>
-                      {savingQuotation ? 'Saving...' : 'Save to Firebase'}
-                    </button>
-                  </li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li>
-                    <button 
-                      className="dropdown-item text-primary"
-                      onClick={() => setShowAIHistory(!showAIHistory)}
-                    >
-                      <i className="bi bi-clock-history me-2"></i>
-                      AI History ({aiHistory.length})
-                    </button>
-                  </li>
-                </ul>
+
+                <button 
+                  className="saas-action-btn saas-btn-outline"
+                  onClick={saveDraft}
+                  title="Save as Template"
+                >
+                  <i className="bi bi-bookmark-plus"></i>
+                  <span className="saas-btn-text">Save Template</span>
+                </button>
+
+                <button 
+                  className="saas-action-btn saas-btn-success"
+                  onClick={saveQuotation}
+                  disabled={savingQuotation || quotation.items.length === 0}
+                  title="Save to Firebase"
+                >
+                  {savingQuotation ? (
+                    <>
+                      <div className="saas-spinner"></div>
+                      <span className="saas-btn-text">Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-cloud-check"></i>
+                      <span className="saas-btn-text">Save to Firebase</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           </div>
@@ -2340,26 +4293,24 @@ export default function MultiItemCalculator() {
       )}
 
       {/* Draft Management Controls */}
-      <div className="row mb-3">
-        <div className="col-12">
-          <div className="d-flex justify-content-end align-items-center gap-2">
-            {draftTimestamp && (
-              <span className="draft-indicator">
-                💾 Draft saved {new Date(draftTimestamp).toLocaleTimeString('en-IN', {
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
-              </span>
-            )}
-            <button className="draft-control-btn" onClick={saveDraft}>
-              💾 Save Template
+      <div className="saas-draft-controls-container">
+        <div className="d-flex justify-content-center align-items-center gap-3">
+          {draftTimestamp && (
+            <span className="draft-indicator">
+              💾 Draft saved {new Date(draftTimestamp).toLocaleTimeString('en-IN', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </span>
+          )}
+          <button className="draft-control-btn" onClick={saveDraft}>
+            💾 Save Template
+          </button>
+          {draftTimestamp && (
+            <button className="draft-control-btn" onClick={clearDraft}>
+              🗑️ Clear Template
             </button>
-            {draftTimestamp && (
-              <button className="draft-control-btn" onClick={clearDraft}>
-                🗑️ Clear Template
-              </button>
-            )}
-          </div>
+          )}
         </div>
       </div>
 
@@ -3024,7 +4975,6 @@ export default function MultiItemCalculator() {
           </div>
         </div>
       )}
-      </div>
     </>
   )
 }
