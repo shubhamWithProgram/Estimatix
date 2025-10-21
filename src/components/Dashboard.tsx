@@ -138,540 +138,985 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom, #0F172A, #1E293B)' }}>
-      <div className="container-fluid py-6 px-4 md:px-6" style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        {/* Premium Header with Greeting */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
-        >
-          <div className="d-flex justify-content-between align-items-center flex-wrap gap-4">
-            {/* Personalized Greeting with Accent */}
-            <div>
-              <div style={{ position: 'relative', display: 'inline-block' }}>
-                <h2 className="text-white mb-2" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: '600', letterSpacing: '-0.5px' }}>
-                  {getGreeting()}, {userProfile?.displayName || user?.email?.split('@')[0]}! 👋
-                </h2>
-                {/* Gradient Underline */}
-                <div style={{
-                  height: '3px',
-                  width: '60%',
-                  background: 'linear-gradient(90deg, #6366F1, #8B5CF6)',
-                  borderRadius: '2px',
-                  marginTop: '4px'
-                }} />
+    <>
+      {/* Fixed Premium Mobile Header */}
+      <motion.header 
+        initial={{ y: -80 }}
+        animate={{ y: 0 }}
+        className="fixed-top"
+        style={{
+          background: 'rgba(15, 23, 42, 0.95)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(124, 58, 237, 0.2)',
+          zIndex: 1050,
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+        }}
+      >
+        <div className="container-fluid px-3 py-2" style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div className="d-flex justify-content-between align-items-center">
+            {/* Logo and Brand */}
+            <div className="d-flex align-items-center gap-3">
+              <div 
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(124, 58, 237, 0.3)'
+                }}
+              >
+                <i className="bi bi-calculator text-white" style={{ fontSize: '20px' }}></i>
               </div>
-              <p className="text-sm mb-0" style={{ color: '#94A3B8', marginTop: '8px' }}>
-                Here's your activity summary today.
-              </p>
+              <span 
+                className="d-none d-sm-block fw-bold" 
+                style={{ 
+                  color: 'white', 
+                  fontSize: '1.1rem',
+                  background: 'linear-gradient(90deg, #a855f7, #ec4899)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}
+              >
+                Estimatix
+              </span>
             </div>
 
-            {/* Search and Profile Section */}
-            <div className="d-flex align-items-center gap-3">
-              {/* Compact Search Button */}
+            {/* Header Actions */}
+            <div className="d-flex align-items-center gap-2">
+              {/* Theme Toggle */}
+              <button
+                className="btn rounded-circle d-flex align-items-center justify-content-center"
+                style={{ 
+                  width: '36px', 
+                  height: '36px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: 'white'
+                }}
+              >
+                <i className="bi bi-moon-stars" style={{ fontSize: '14px' }}></i>
+              </button>
+
+              {/* Search Toggle */}
               <button
                 className="btn rounded-circle d-flex align-items-center justify-content-center"
                 onClick={() => setShowSearch(!showSearch)}
                 style={{ 
-                  width: '44px', 
-                  height: '44px',
+                  width: '36px', 
+                  height: '36px',
                   background: 'rgba(255, 255, 255, 0.1)',
                   backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
                   color: 'white'
                 }}
               >
-                <i className="bi bi-search"></i>
+                <i className="bi bi-search" style={{ fontSize: '14px' }}></i>
               </button>
 
-              {/* Profile Button */}
+              {/* Profile Avatar */}
               <button
                 className="btn rounded-circle d-flex align-items-center justify-content-center"
                 style={{ 
-                  width: '44px', 
-                  height: '44px',
+                  width: '36px', 
+                  height: '36px',
                   background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
                   border: 'none',
-                  color: 'white'
+                  color: 'white',
+                  fontSize: '14px',
+                  fontWeight: '600'
                 }}
               >
-                <i className="bi bi-person-circle fs-5"></i>
+                {(userProfile?.displayName || user?.email || 'U')[0].toUpperCase()}
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
+      </motion.header>
 
-        {/* Premium Glassmorphic Stats Cards */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="row g-4 mb-5"
-        >
-          {/* Total Quotations Card */}
-          <div className="col-md-6 col-lg-3">
-            <motion.div 
-              whileHover={{ scale: 1.02, y: -4 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="card border-0 h-100"
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '1.5rem',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Gradient Accent Bar */}
-              <div style={{
-                height: '4px',
-                background: 'linear-gradient(90deg, #6366F1, #06B6D4)',
-                borderRadius: '1.5rem 1.5rem 0 0'
-              }} />
-              
-              <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div>
-                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
-                      Total Quotations
-                    </p>
-                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
-                      <AnimatedCounter value={stats.totalQuotations} />
-                    </h3>
-                  </div>
-                  <div 
-                    className="d-flex align-items-center justify-content-center"
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
-                    }}
-                  >
-                    <i className="bi bi-file-earmark-text text-white" style={{ fontSize: '20px' }}></i>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#10B981' }}>
-                  <i className="bi bi-arrow-up me-1"></i>
-                  <span>+12% from last month</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Total Value Card */}
-          <div className="col-md-6 col-lg-3">
-            <motion.div 
-              whileHover={{ scale: 1.02, y: -4 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="card border-0 h-100"
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '1.5rem',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Gradient Accent Bar */}
-              <div style={{
-                height: '4px',
-                background: 'linear-gradient(90deg, #8B5CF6, #EC4899)',
-                borderRadius: '1.5rem 1.5rem 0 0'
-              }} />
-              
-              <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div>
-                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
-                      Total Value
-                    </p>
-                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
-                      <AnimatedCounter value={stats.totalValue} prefix="₹" />
-                    </h3>
-                  </div>
-                  <div 
-                    className="d-flex align-items-center justify-content-center"
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 12px rgba(236, 72, 153, 0.4)'
-                    }}
-                  >
-                    <i className="bi bi-currency-rupee text-white" style={{ fontSize: '20px' }}></i>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#10B981' }}>
-                  <i className="bi bi-arrow-up me-1"></i>
-                  <span>+8% from last month</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Pending Quotations Card */}
-          <div className="col-md-6 col-lg-3">
-            <motion.div 
-              whileHover={{ scale: 1.02, y: -4 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="card border-0 h-100"
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '1.5rem',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Gradient Accent Bar */}
-              <div style={{
-                height: '4px',
-                background: 'linear-gradient(90deg, #3B82F6, #06B6D4)',
-                borderRadius: '1.5rem 1.5rem 0 0'
-              }} />
-              
-              <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div>
-                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
-                      Pending
-                    </p>
-                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
-                      <AnimatedCounter value={stats.pendingQuotations} />
-                    </h3>
-                  </div>
-                  <div 
-                    className="d-flex align-items-center justify-content-center"
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      background: 'linear-gradient(135deg, #3B82F6, #06B6D4)',
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 12px rgba(59, 130, 246, 0.4)'
-                    }}
-                  >
-                    <i className="bi bi-hourglass-split text-white" style={{ fontSize: '20px' }}></i>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#F59E0B' }}>
-                  <i className="bi bi-exclamation-circle me-1"></i>
-                  <span>Awaiting response</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Approved This Month Card */}
-          <div className="col-md-6 col-lg-3">
-            <motion.div 
-              whileHover={{ scale: 1.02, y: -4 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="card border-0 h-100"
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '1.5rem',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Gradient Accent Bar */}
-              <div style={{
-                height: '4px',
-                background: 'linear-gradient(90deg, #10B981, #14B8A6)',
-                borderRadius: '1.5rem 1.5rem 0 0'
-              }} />
-              
-              <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div>
-                    <p className="mb-1" style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '500' }}>
-                      Approved This Month
-                    </p>
-                    <h3 className="mb-0 text-white" style={{ fontSize: '2rem', fontWeight: '700' }}>
-                      <AnimatedCounter value={stats.thisMonthQuotations} />
-                    </h3>
-                  </div>
-                  <div 
-                    className="d-flex align-items-center justify-content-center"
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      background: 'linear-gradient(135deg, #10B981, #14B8A6)',
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)'
-                    }}
-                  >
-                    <i className="bi bi-check-circle text-white" style={{ fontSize: '20px' }}></i>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center" style={{ fontSize: '13px', color: '#10B981' }}>
-                  <i className="bi bi-trophy me-1"></i>
-                  <span>₹{stats.thisMonthValue.toLocaleString()} revenue</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </motion.div>
-
-      {/* Main Content Grid */}
-      <div className="row g-4">
-        {/* Premium Quick Actions Section */}
-        <div className="col-lg-8">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
+      {/* Slide-down Search Panel */}
+      <AnimatePresence>
+        {showSearch && (
+          <motion.div
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -100 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed-top"
+            style={{
+              top: '72px',
+              zIndex: 1040,
+              background: 'rgba(15, 23, 42, 0.98)',
+              backdropFilter: 'blur(20px)',
+              borderBottom: '1px solid rgba(124, 58, 237, 0.3)'
+            }}
           >
-            {/* Section Title with Gradient */}
-            <h5 className="mb-4 d-flex align-items-center" style={{ fontSize: '1.25rem' }}>
-              <span style={{ marginRight: '8px', fontSize: '1.5rem' }}>⚡</span>
-              <span style={{
-                background: 'linear-gradient(90deg, #6366F1, #8B5CF6)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: '600'
-              }}>
-                Quick Actions
-              </span>
-            </h5>
-
-            <div className="row g-4">
-              {/* Multi-Item Calculator - Purple Gradient */}
-              <div className="col-md-6">
-                <Link to="/multi-calculator" className="text-decoration-none">
-                  <motion.div
-                    whileHover={{ y: -4, scale: 1.01 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className="card h-100 border-0"
-                    style={{ 
-                      background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
-                      borderRadius: '1.5rem',
-                      overflow: 'hidden',
-                      boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)'
-                    }}
-                  >
-                    <div className="card-body p-4" style={{ color: 'white' }}>
-                      <div 
-                        className="d-flex align-items-center justify-content-center mb-3"
-                        style={{
-                          width: '64px',
-                          height: '64px',
-                          background: 'rgba(255, 255, 255, 0.2)',
-                          borderRadius: '16px',
-                          backdropFilter: 'blur(10px)'
-                        }}
-                      >
-                        <motion.i 
-                          whileHover={{ rotate: 360 }}
-                          transition={{ duration: 0.6 }}
-                          className="bi bi-calculator" 
-                          style={{ fontSize: '32px' }}
-                        ></motion.i>
-                      </div>
-                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
-                        Multi-Item Calculator
-                      </h5>
-                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
-                        Create detailed quotations with multiple items
-                      </p>
-                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
-                        <span>Start Project</span>
-                        <i className="bi bi-arrow-right ms-2"></i>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              </div>
-
-              {/* Simple Calculator - Blue/Cyan Gradient */}
-              <div className="col-md-6">
-                <Link to="/calculator" className="text-decoration-none">
-                  <motion.div
-                    whileHover={{ y: -4, scale: 1.01 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className="card h-100 border-0"
-                    style={{ 
-                      background: 'linear-gradient(135deg, #3B82F6, #06B6D4)',
-                      borderRadius: '1.5rem',
-                      overflow: 'hidden',
-                      boxShadow: '0 8px 24px rgba(59, 130, 246, 0.3)'
-                    }}
-                  >
-                    <div className="card-body p-4" style={{ color: 'white' }}>
-                      <div 
-                        className="d-flex align-items-center justify-content-center mb-3"
-                        style={{
-                          width: '64px',
-                          height: '64px',
-                          background: 'rgba(255, 255, 255, 0.2)',
-                          borderRadius: '16px',
-                          backdropFilter: 'blur(10px)'
-                        }}
-                      >
-                        <motion.i 
-                          whileHover={{ rotate: 360 }}
-                          transition={{ duration: 0.6 }}
-                          className="bi bi-grid-3x2-gap" 
-                          style={{ fontSize: '32px' }}
-                        ></motion.i>
-                      </div>
-                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
-                        Simple Calculator
-                      </h5>
-                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
-                        Quick calculations for single items
-                      </p>
-                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
-                        <span>Quick Calculate</span>
-                        <i className="bi bi-arrow-right ms-2"></i>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              </div>
-
-              {/* Admin Settings - Pink Gradient */}
-              <div className="col-md-6">
-                <Link to="/admin" className="text-decoration-none">
-                  <motion.div
-                    whileHover={{ y: -4, scale: 1.01 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className="card h-100 border-0"
-                    style={{ 
-                      background: 'linear-gradient(135deg, #EC4899, #F472B6)',
-                      borderRadius: '1.5rem',
-                      overflow: 'hidden',
-                      boxShadow: '0 8px 24px rgba(236, 72, 153, 0.3)'
-                    }}
-                  >
-                    <div className="card-body p-4" style={{ color: 'white' }}>
-                      <div 
-                        className="d-flex align-items-center justify-content-center mb-3"
-                        style={{
-                          width: '64px',
-                          height: '64px',
-                          background: 'rgba(255, 255, 255, 0.2)',
-                          borderRadius: '16px',
-                          backdropFilter: 'blur(10px)'
-                        }}
-                      >
-                        <motion.i 
-                          whileHover={{ rotate: 360 }}
-                          transition={{ duration: 0.6 }}
-                          className="bi bi-gear" 
-                          style={{ fontSize: '32px' }}
-                        ></motion.i>
-                      </div>
-                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
-                        Admin Settings
-                      </h5>
-                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
-                        Configure pricing and preferences
-                      </p>
-                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
-                        <span>Manage Settings</span>
-                        <i className="bi bi-arrow-right ms-2"></i>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
-              </div>
-
-              {/* Billing - Green/Teal Gradient */}
-              <div className="col-md-6">
-                <Link to="/billing" className="text-decoration-none">
-                  <motion.div
-                    whileHover={{ y: -4, scale: 1.01 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className="card h-100 border-0"
-                    style={{ 
-                      background: 'linear-gradient(135deg, #10B981, #14B8A6)',
-                      borderRadius: '1.5rem',
-                      overflow: 'hidden',
-                      boxShadow: '0 8px 24px rgba(16, 185, 129, 0.3)'
-                    }}
-                  >
-                    <div className="card-body p-4" style={{ color: 'white' }}>
-                      <div 
-                        className="d-flex align-items-center justify-content-center mb-3"
-                        style={{
-                          width: '64px',
-                          height: '64px',
-                          background: 'rgba(255, 255, 255, 0.2)',
-                          borderRadius: '16px',
-                          backdropFilter: 'blur(10px)'
-                        }}
-                      >
-                        <motion.i 
-                          whileHover={{ rotate: 360 }}
-                          transition={{ duration: 0.6 }}
-                          className="bi bi-credit-card" 
-                          style={{ fontSize: '32px' }}
-                        ></motion.i>
-                      </div>
-                      <h5 className="fw-bold mb-2" style={{ fontSize: '1.1rem' }}>
-                        Billing & Subscription
-                      </h5>
-                      <p className="mb-3" style={{ fontSize: '0.9rem', opacity: 0.9 }}>
-                        Manage subscription and payments
-                      </p>
-                      <div className="d-flex align-items-center" style={{ fontSize: '0.9rem', fontWeight: '600' }}>
-                        <span>View Billing</span>
-                        <i className="bi bi-arrow-right ms-2"></i>
-                      </div>
-                    </div>
-                  </motion.div>
-                </Link>
+            <div className="container-fluid px-3 py-3" style={{ maxWidth: '1400px', margin: '0 auto' }}>
+              <div className="d-flex align-items-center gap-3">
+                <div className="flex-grow-1">
+                  <div className="position-relative">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search quotations, customers, or projects..."
+                      autoFocus
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        border: '1px solid rgba(124, 58, 237, 0.3)',
+                        borderRadius: '12px',
+                        color: 'white',
+                        padding: '0.75rem 3rem 0.75rem 1rem',
+                        fontSize: '1rem'
+                      }}
+                    />
+                    <i 
+                      className="bi bi-search position-absolute text-white"
+                      style={{
+                        right: '1rem',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        opacity: 0.7
+                      }}
+                    ></i>
+                  </div>
+                </div>
+                <button
+                  className="btn text-white d-flex align-items-center justify-content-center"
+                  onClick={() => setShowSearch(false)}
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '10px'
+                  }}
+                >
+                  <i className="bi bi-x-lg"></i>
+                </button>
               </div>
             </div>
           </motion.div>
-        </div>
+        )}
+      </AnimatePresence>
 
-        {/* Premium Recent Activity Panel */}
-        <div className="col-lg-4">
+      <div 
+        className="min-h-screen" 
+        style={{ 
+          background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #1a1a2e 100%)',
+          paddingTop: showSearch ? '144px' : '72px', // Account for fixed header and search panel
+          transition: 'padding-top 0.3s ease'
+        }}
+      >
+        <div className="container-fluid px-3 py-4" style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          {/* Premium Greeting Section */}
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4"
           >
-            {/* Section Title */}
-            <h5 className="mb-4" style={{ fontSize: '1.25rem', color: 'white', fontWeight: '600' }}>
-              <i className="bi bi-clock-history me-2" style={{ color: '#06B6D4' }}></i>
-              Recent Activity
-            </h5>
+            <div className="text-center text-md-start mb-4">
+              {/* Enhanced Greeting */}
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <h1 
+                  className="text-white mb-2" 
+                  style={{ 
+                    fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', 
+                    fontWeight: '700', 
+                    letterSpacing: '-0.02em',
+                    lineHeight: '1.2'
+                  }}
+                >
+                  {getGreeting()}, {(userProfile?.displayName || user?.email?.split('@')[0] || 'User')}! 
+                  <span className="ms-2">👋</span>
+                </h1>
+                {/* Animated Gradient Underline */}
+                <div 
+                  style={{
+                    height: '4px',
+                    width: '100%',
+                    background: 'linear-gradient(90deg, #7c3aed, #a855f7, #ec4899)',
+                    borderRadius: '2px',
+                    marginTop: '8px',
+                    animation: 'gradientShift 3s ease-in-out infinite'
+                  }} 
+                />
+              </div>
+              <p 
+                className="mb-0 mt-3" 
+                style={{ 
+                  color: '#94A3B8', 
+                  fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+                  fontWeight: '500'
+                }}
+              >
+                Welcome back to your dashboard. Here's what's happening today.
+              </p>
+            </div>
+          </motion.div>
 
-            {/* Glass Activity Card */}
-            <div 
-              className="card border-0"
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '1.5rem',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Blue Glow Top Border */}
-              <div style={{
-                height: '3px',
-                background: 'linear-gradient(90deg, #3B82F6, #06B6D4)',
-                borderRadius: '1.5rem 1.5rem 0 0'
-              }} />
+          <style jsx>{`
+            @keyframes gradientShift {
+              0% { background: linear-gradient(90deg, #7c3aed, #a855f7, #ec4899); }
+              50% { background: linear-gradient(90deg, #ec4899, #7c3aed, #a855f7); }
+              100% { background: linear-gradient(90deg, #7c3aed, #a855f7, #ec4899); }
+            }
+
+            .premium-stats-card {
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              transform-origin: center;
+            }
+
+            .premium-stats-card:hover {
+              transform: translateY(-8px) scale(1.02);
+            }
+
+            .premium-action-card {
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              transform-origin: center;
+            }
+
+            .premium-action-card:hover {
+              transform: translateY(-8px) scale(1.02);
+            }
+
+            .premium-activity-card {
+              transition: all 0.3s ease;
+            }
+
+            /* Mobile-specific optimizations */
+            @media (max-width: 576px) {
+              .premium-stats-card {
+                border-radius: 1rem !important;
+              }
+              
+              .premium-action-card {
+                border-radius: 1rem !important;
+              }
+              
+              .premium-activity-card {
+                border-radius: 1rem !important;
+              }
+            }
+
+            /* Reduce motion for accessibility */
+            @media (prefers-reduced-motion: reduce) {
+              .premium-stats-card,
+              .premium-action-card,
+              .premium-activity-card {
+                transition: none;
+              }
+              
+              .premium-stats-card:hover,
+              .premium-action-card:hover {
+                transform: none;
+              }
+            }
+          `}</style>
+
+          {/* Premium Glassmorphic Stats Cards */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="row g-3 mb-4"
+          >
+            {/* Total Quotations Card */}
+            <div className="col-6 col-lg-3">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
+                whileHover={{ scale: 1.03, y: -6 }}
+                className="premium-stats-card"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  boxShadow: '0 12px 40px rgba(99, 102, 241, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(99, 102, 241, 0.2)',
+                  borderRadius: '1.25rem',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+              >
+                {/* Gradient Glow Border */}
+                <div style={{
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #6366F1 0%, #06B6D4 50%, #8B5CF6 100%)',
+                  borderRadius: '1.25rem 1.25rem 0 0'
+                }} />
+                
+                <div className="p-3">
+                  <div className="d-flex justify-content-between align-items-start mb-2">
+                    <div className="flex-grow-1">
+                      <p className="mb-1" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: '600' }}>
+                        Total Quotations
+                      </p>
+                      <h3 
+                        className="mb-0 text-white" 
+                        style={{ 
+                          fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
+                          fontWeight: '700',
+                          lineHeight: '1.1'
+                        }}
+                      >
+                        <AnimatedCounter value={stats.totalQuotations} />
+                      </h3>
+                    </div>
+                    <div 
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)'
+                      }}
+                    >
+                      <i className="bi bi-file-earmark-text text-white" style={{ fontSize: '16px' }}></i>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center mt-2" style={{ fontSize: '11px', color: '#10B981' }}>
+                    <i className="bi bi-arrow-up me-1"></i>
+                    <span>+12% this month</span>
+                  </div>
+                </div>
+                
+                {/* Subtle glow effect */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05))',
+                  pointerEvents: 'none'
+                }} />
+              </motion.div>
+            </div>
+
+            {/* Total Value Card */}
+            <div className="col-6 col-lg-3">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
+                whileHover={{ scale: 1.03, y: -6 }}
+                className="premium-stats-card"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  boxShadow: '0 12px 40px rgba(236, 72, 153, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(236, 72, 153, 0.2)',
+                  borderRadius: '1.25rem',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+              >
+                {/* Gradient Glow Border */}
+                <div style={{
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #8B5CF6 0%, #EC4899 50%, #F472B6 100%)',
+                  borderRadius: '1.25rem 1.25rem 0 0'
+                }} />
+                
+                <div className="p-3">
+                  <div className="d-flex justify-content-between align-items-start mb-2">
+                    <div className="flex-grow-1">
+                      <p className="mb-1" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: '600' }}>
+                        Total Value
+                      </p>
+                      <h3 
+                        className="mb-0 text-white" 
+                        style={{ 
+                          fontSize: 'clamp(1.25rem, 3.5vw, 1.75rem)', 
+                          fontWeight: '700',
+                          lineHeight: '1.1'
+                        }}
+                      >
+                        <AnimatedCounter value={stats.totalValue} prefix="₹" />
+                      </h3>
+                    </div>
+                    <div 
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        background: 'linear-gradient(135deg, #8B5CF6, #EC4899)',
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(236, 72, 153, 0.3)'
+                      }}
+                    >
+                      <i className="bi bi-currency-rupee text-white" style={{ fontSize: '16px' }}></i>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center mt-2" style={{ fontSize: '11px', color: '#10B981' }}>
+                    <i className="bi bi-arrow-up me-1"></i>
+                    <span>+8% this month</span>
+                  </div>
+                </div>
+                
+                {/* Subtle glow effect */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(236, 72, 153, 0.05))',
+                  pointerEvents: 'none'
+                }} />
+              </motion.div>
+            </div>
+
+            {/* Pending Quotations Card */}
+            <div className="col-6 col-lg-3">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
+                whileHover={{ scale: 1.03, y: -6 }}
+                className="premium-stats-card"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  boxShadow: '0 12px 40px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(59, 130, 246, 0.2)',
+                  borderRadius: '1.25rem',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+              >
+                {/* Gradient Glow Border */}
+                <div style={{
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #3B82F6 0%, #06B6D4 50%, #0EA5E9 100%)',
+                  borderRadius: '1.25rem 1.25rem 0 0'
+                }} />
+                
+                <div className="p-3">
+                  <div className="d-flex justify-content-between align-items-start mb-2">
+                    <div className="flex-grow-1">
+                      <p className="mb-1" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: '600' }}>
+                        Pending
+                      </p>
+                      <h3 
+                        className="mb-0 text-white" 
+                        style={{ 
+                          fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
+                          fontWeight: '700',
+                          lineHeight: '1.1'
+                        }}
+                      >
+                        <AnimatedCounter value={stats.pendingQuotations} />
+                      </h3>
+                    </div>
+                    <div 
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        background: 'linear-gradient(135deg, #3B82F6, #06B6D4)',
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                      }}
+                    >
+                      <i className="bi bi-hourglass-split text-white" style={{ fontSize: '16px' }}></i>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center mt-2" style={{ fontSize: '11px', color: '#F59E0B' }}>
+                    <i className="bi bi-clock me-1"></i>
+                    <span>Needs attention</span>
+                  </div>
+                </div>
+                
+                {/* Subtle glow effect */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(6, 182, 212, 0.05))',
+                  pointerEvents: 'none'
+                }} />
+              </motion.div>
+            </div>
+
+            {/* Approved This Month Card */}
+            <div className="col-6 col-lg-3">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, type: 'spring', stiffness: 200 }}
+                whileHover={{ scale: 1.03, y: -6 }}
+                className="premium-stats-card"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  boxShadow: '0 12px 40px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(16, 185, 129, 0.2)',
+                  borderRadius: '1.25rem',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  position: 'relative'
+                }}
+              >
+                {/* Gradient Glow Border */}
+                <div style={{
+                  height: '3px',
+                  background: 'linear-gradient(90deg, #10B981 0%, #14B8A6 50%, #06B6D4 100%)',
+                  borderRadius: '1.25rem 1.25rem 0 0'
+                }} />
+                
+                <div className="p-3">
+                  <div className="d-flex justify-content-between align-items-start mb-2">
+                    <div className="flex-grow-1">
+                      <p className="mb-1" style={{ fontSize: '12px', color: '#94A3B8', fontWeight: '600' }}>
+                        This Month
+                      </p>
+                      <h3 
+                        className="mb-0 text-white" 
+                        style={{ 
+                          fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
+                          fontWeight: '700',
+                          lineHeight: '1.1'
+                        }}
+                      >
+                        <AnimatedCounter value={stats.thisMonthQuotations} />
+                      </h3>
+                    </div>
+                    <div 
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        background: 'linear-gradient(135deg, #10B981, #14B8A6)',
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                      }}
+                    >
+                      <i className="bi bi-check-circle text-white" style={{ fontSize: '16px' }}></i>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center mt-2" style={{ fontSize: '11px', color: '#10B981' }}>
+                    <i className="bi bi-trophy me-1"></i>
+                    <span>₹{stats.thisMonthValue.toLocaleString()}</span>
+                  </div>
+                </div>
+                
+                {/* Subtle glow effect */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(20, 184, 166, 0.05))',
+                  pointerEvents: 'none'
+                }} />
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Main Content Grid */}
+          <div className="row g-3">
+            {/* Premium Quick Actions Section */}
+            <div className="col-lg-8">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 }}
+              >
+                {/* Section Title with Gradient */}
+                <h5 className="mb-3 d-flex align-items-center" style={{ fontSize: 'clamp(1.1rem, 3vw, 1.25rem)' }}>
+                  <span style={{ marginRight: '8px', fontSize: '1.25rem' }}>⚡</span>
+                  <span style={{
+                    background: 'linear-gradient(90deg, #6366F1, #8B5CF6)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    fontWeight: '700'
+                  }}>
+                    Quick Actions
+                  </span>
+                </h5>
+
+                <div className="row g-3">
+                  {/* Multi-Item Calculator - Purple Gradient */}
+                  <div className="col-sm-6">
+                    <Link to="/multi-calculator" className="text-decoration-none">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        className="premium-action-card"
+                        style={{ 
+                          background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                          borderRadius: '1.25rem',
+                          overflow: 'hidden',
+                          boxShadow: '0 12px 32px rgba(99, 102, 241, 0.25)',
+                          position: 'relative'
+                        }}
+                      >
+                        <div className="p-4" style={{ color: 'white', position: 'relative', zIndex: 2 }}>
+                          <div 
+                            className="d-flex align-items-center justify-content-center mb-3"
+                            style={{
+                              width: 'clamp(48px, 12vw, 56px)',
+                              height: 'clamp(48px, 12vw, 56px)',
+                              background: 'rgba(255, 255, 255, 0.2)',
+                              borderRadius: '14px',
+                              backdropFilter: 'blur(10px)'
+                            }}
+                          >
+                            <motion.i 
+                              whileHover={{ rotate: 360 }}
+                              transition={{ duration: 0.6 }}
+                              className="bi bi-calculator" 
+                              style={{ fontSize: 'clamp(20px, 5vw, 28px)' }}
+                            ></motion.i>
+                          </div>
+                          <h5 
+                            className="fw-bold mb-2" 
+                            style={{ 
+                              fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
+                              lineHeight: '1.3'
+                            }}
+                          >
+                            Multi-Item Calculator
+                          </h5>
+                          <p 
+                            className="mb-3" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              opacity: 0.9,
+                              lineHeight: '1.4'
+                            }}
+                          >
+                            Create detailed quotations with multiple items
+                          </p>
+                          <div 
+                            className="d-flex align-items-center" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              fontWeight: '600' 
+                            }}
+                          >
+                            <span>Start Project</span>
+                            <motion.i 
+                              whileHover={{ x: 4 }}
+                              className="bi bi-arrow-right ms-2"
+                            ></motion.i>
+                          </div>
+                        </div>
+                        
+                        {/* Subtle animated glow */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%)',
+                          pointerEvents: 'none'
+                        }} />
+                      </motion.div>
+                    </Link>
+                  </div>
+
+                  {/* Simple Calculator - Blue/Cyan Gradient */}
+                  <div className="col-sm-6">
+                    <Link to="/calculator" className="text-decoration-none">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.9, type: 'spring', stiffness: 200 }}
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        className="premium-action-card"
+                        style={{ 
+                          background: 'linear-gradient(135deg, #3B82F6, #06B6D4)',
+                          borderRadius: '1.25rem',
+                          overflow: 'hidden',
+                          boxShadow: '0 12px 32px rgba(59, 130, 246, 0.25)',
+                          position: 'relative'
+                        }}
+                      >
+                        <div className="p-4" style={{ color: 'white', position: 'relative', zIndex: 2 }}>
+                          <div 
+                            className="d-flex align-items-center justify-content-center mb-3"
+                            style={{
+                              width: 'clamp(48px, 12vw, 56px)',
+                              height: 'clamp(48px, 12vw, 56px)',
+                              background: 'rgba(255, 255, 255, 0.2)',
+                              borderRadius: '14px',
+                              backdropFilter: 'blur(10px)'
+                            }}
+                          >
+                            <motion.i 
+                              whileHover={{ rotate: 360 }}
+                              transition={{ duration: 0.6 }}
+                              className="bi bi-grid-3x2-gap" 
+                              style={{ fontSize: 'clamp(20px, 5vw, 28px)' }}
+                            ></motion.i>
+                          </div>
+                          <h5 
+                            className="fw-bold mb-2" 
+                            style={{ 
+                              fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
+                              lineHeight: '1.3'
+                            }}
+                          >
+                            Simple Calculator
+                          </h5>
+                          <p 
+                            className="mb-3" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              opacity: 0.9,
+                              lineHeight: '1.4'
+                            }}
+                          >
+                            Quick calculations for single items
+                          </p>
+                          <div 
+                            className="d-flex align-items-center" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              fontWeight: '600' 
+                            }}
+                          >
+                            <span>Quick Calculate</span>
+                            <motion.i 
+                              whileHover={{ x: 4 }}
+                              className="bi bi-arrow-right ms-2"
+                            ></motion.i>
+                          </div>
+                        </div>
+                        
+                        {/* Subtle animated glow */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%)',
+                          pointerEvents: 'none'
+                        }} />
+                      </motion.div>
+                    </Link>
+                  </div>
+
+                  {/* Admin Settings - Pink Gradient */}
+                  <div className="col-sm-6">
+                    <Link to="/admin" className="text-decoration-none">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.0, type: 'spring', stiffness: 200 }}
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        className="premium-action-card"
+                        style={{ 
+                          background: 'linear-gradient(135deg, #EC4899, #F472B6)',
+                          borderRadius: '1.25rem',
+                          overflow: 'hidden',
+                          boxShadow: '0 12px 32px rgba(236, 72, 153, 0.25)',
+                          position: 'relative'
+                        }}
+                      >
+                        <div className="p-4" style={{ color: 'white', position: 'relative', zIndex: 2 }}>
+                          <div 
+                            className="d-flex align-items-center justify-content-center mb-3"
+                            style={{
+                              width: 'clamp(48px, 12vw, 56px)',
+                              height: 'clamp(48px, 12vw, 56px)',
+                              background: 'rgba(255, 255, 255, 0.2)',
+                              borderRadius: '14px',
+                              backdropFilter: 'blur(10px)'
+                            }}
+                          >
+                            <motion.i 
+                              whileHover={{ rotate: 360 }}
+                              transition={{ duration: 0.6 }}
+                              className="bi bi-gear" 
+                              style={{ fontSize: 'clamp(20px, 5vw, 28px)' }}
+                            ></motion.i>
+                          </div>
+                          <h5 
+                            className="fw-bold mb-2" 
+                            style={{ 
+                              fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
+                              lineHeight: '1.3'
+                            }}
+                          >
+                            Admin Settings
+                          </h5>
+                          <p 
+                            className="mb-3" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              opacity: 0.9,
+                              lineHeight: '1.4'
+                            }}
+                          >
+                            Configure pricing and preferences
+                          </p>
+                          <div 
+                            className="d-flex align-items-center" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              fontWeight: '600' 
+                            }}
+                          >
+                            <span>Manage Settings</span>
+                            <motion.i 
+                              whileHover={{ x: 4 }}
+                              className="bi bi-arrow-right ms-2"
+                            ></motion.i>
+                          </div>
+                        </div>
+                        
+                        {/* Subtle animated glow */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%)',
+                          pointerEvents: 'none'
+                        }} />
+                      </motion.div>
+                    </Link>
+                  </div>
+
+                  {/* Billing - Green/Teal Gradient */}
+                  <div className="col-sm-6">
+                    <Link to="/billing" className="text-decoration-none">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.1, type: 'spring', stiffness: 200 }}
+                        whileHover={{ y: -6, scale: 1.02 }}
+                        className="premium-action-card"
+                        style={{ 
+                          background: 'linear-gradient(135deg, #10B981, #14B8A6)',
+                          borderRadius: '1.25rem',
+                          overflow: 'hidden',
+                          boxShadow: '0 12px 32px rgba(16, 185, 129, 0.25)',
+                          position: 'relative'
+                        }}
+                      >
+                        <div className="p-4" style={{ color: 'white', position: 'relative', zIndex: 2 }}>
+                          <div 
+                            className="d-flex align-items-center justify-content-center mb-3"
+                            style={{
+                              width: 'clamp(48px, 12vw, 56px)',
+                              height: 'clamp(48px, 12vw, 56px)',
+                              background: 'rgba(255, 255, 255, 0.2)',
+                              borderRadius: '14px',
+                              backdropFilter: 'blur(10px)'
+                            }}
+                          >
+                            <motion.i 
+                              whileHover={{ rotate: 360 }}
+                              transition={{ duration: 0.6 }}
+                              className="bi bi-credit-card" 
+                              style={{ fontSize: 'clamp(20px, 5vw, 28px)' }}
+                            ></motion.i>
+                          </div>
+                          <h5 
+                            className="fw-bold mb-2" 
+                            style={{ 
+                              fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
+                              lineHeight: '1.3'
+                            }}
+                          >
+                            Billing & Subscription
+                          </h5>
+                          <p 
+                            className="mb-3" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              opacity: 0.9,
+                              lineHeight: '1.4'
+                            }}
+                          >
+                            Manage subscription and payments
+                          </p>
+                          <div 
+                            className="d-flex align-items-center" 
+                            style={{ 
+                              fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)', 
+                              fontWeight: '600' 
+                            }}
+                          >
+                            <span>View Billing</span>
+                            <motion.i 
+                              whileHover={{ x: 4 }}
+                              className="bi bi-arrow-right ms-2"
+                            ></motion.i>
+                          </div>
+                        </div>
+                        
+                        {/* Subtle animated glow */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: 'radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%)',
+                          pointerEvents: 'none'
+                        }} />
+                      </motion.div>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Premium Recent Activity Panel */}
+            <div className="col-lg-4">
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.2 }}
+              >
+                {/* Section Title */}
+                <h5 className="mb-3" style={{ fontSize: 'clamp(1.1rem, 3vw, 1.25rem)', color: 'white', fontWeight: '700' }}>
+                  <i className="bi bi-clock-history me-2" style={{ color: '#06B6D4' }}></i>
+                  Recent Activity
+                </h5>
+
+                {/* Glass Activity Card */}
+                <div 
+                  className="premium-activity-card"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    boxShadow: '0 12px 40px rgba(59, 130, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(59, 130, 246, 0.2)',
+                    borderRadius: '1.25rem',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {/* Multi-colored Glow Top Border */}
+                  <div style={{
+                    height: '3px',
+                    background: 'linear-gradient(90deg, #3B82F6 0%, #06B6D4 50%, #8B5CF6 100%)',
+                    borderRadius: '1.25rem 1.25rem 0 0'
+                  }} />
 
               <div className="card-body p-0">
                 <div className="list-group list-group-flush">
@@ -778,7 +1223,8 @@ export default function Dashboard() {
         </div>
       </div>
       
+        </div>
       </div>
-    </div>
+    </>
   )
 }
